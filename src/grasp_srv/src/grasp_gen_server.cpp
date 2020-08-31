@@ -45,7 +45,7 @@ bool grasp_gen(grasp_srv::GraspGen::Request  &req,
 
 int main(int argc, char **argv) {
     // Get Grasp Generator
-    std::string config_path = "/home/harvey/NewProjects/gpg/cfg/params.cfg";
+    std::string config_path = "/home/harvey/NewProjects/GraspService/src/grasp_srv/cfg/params.cfg";
     ConfigFile config_file(config_path);
     // Config
     double finger_width = config_file.getValueOfKey<double>("finger_width", 0.01);

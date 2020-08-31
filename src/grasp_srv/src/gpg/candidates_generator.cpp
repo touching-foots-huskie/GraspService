@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <gpg/candidates_generator.h>
 
 
@@ -54,7 +55,7 @@ void CandidatesGenerator::preprocessPointCloud(CloudCamera& cloud_cam)
     // 2. Voxelization
     if (params_.voxelize_)
     {
-      cloud_cam.voxelizeCloud(VOXEL_SIZE);
+      cloud_cam.voxelizeCloud(VOXEL_SIZE); // The problem lays here
       std::cout << "After voxelization: " << cloud_cam.getCloudProcessed()->size() << " points left.\n";
     }
 
@@ -113,6 +114,7 @@ void CandidatesGenerator::preprocessPointCloud(CloudCamera& cloud_cam)
 
   if (params_.plot_normals_)
   {
+    printf("Start printing Normals\n");
 	  plotter_.plotNormals(cloud_cam.getCloudProcessed(), cloud_cam.getNormals());
   }
 }
@@ -142,6 +144,7 @@ std::vector<Grasp> CandidatesGenerator::generateGraspCandidates(const CloudCamer
 
   if (params_.plot_grasps_)
   {
+    printf("Start Printing Normals\n");
     const HandSearch::Parameters& params = hand_search_->getParams();
     plotter_.plotFingers3D(candidates, cloud_cam.getCloudOriginal(), "Grasp Candidates", params.hand_outer_diameter_,
       params.finger_width_, params.hand_depth_, params.hand_height_);
@@ -158,6 +161,7 @@ std::vector<GraspSet> CandidatesGenerator::generateGraspCandidateSets(const Clou
 
   if (params_.plot_grasps_)
   {
+    printf("Start printing fingers\n");
     const HandSearch::Parameters& params = hand_search_->getParams();
     plotter_.plotFingers3D(hand_set_list, cloud_cam.getCloudOriginal(), "Grasp Candidates", params.hand_outer_diameter_,
       params.finger_width_, params.hand_depth_, params.hand_height_);
@@ -179,7 +183,8 @@ Call Back Function for a ROS service
 */
 bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                     grasp_srv::GraspGen::Response &res) {
-  std::string model_name = req.model_name;
+  // std::string model_name = req.model_name;
+  std::string model_name = "/home/harvey/NewProjects/gpd/tutorials/krylon.pcd";
   // load pointcloud
   CloudCamera cloud_cam(model_name, view_points);
   if (cloud_cam.getCloudOriginal()->size() == 0)
@@ -189,6 +194,8 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
   }
   // load normals : if possible
   preprocessPointCloud(cloud_cam);
+
+  ROS_INFO("Preprocess Finished");
   // generate grasp candidates
   std::vector<Grasp> candidates = generateGraspCandidates(cloud_cam);
   // Warp it into the msg

@@ -12,7 +12,7 @@ int main(int argc, char **argv)
         = n.serviceClient<grasp_srv::GraspGen>("grasp_gen");
     
     grasp_srv::GraspGen srv;
-    srv.request.model_name = "Model Name";
+    srv.request.model_name = "/home/harvey/NewProjects/gpd/tutorials/krylon.pcd";
     if(client.call(srv)) {
         ROS_INFO("Grasp Pose Generated");
     }

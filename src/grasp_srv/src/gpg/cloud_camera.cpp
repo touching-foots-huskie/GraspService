@@ -285,19 +285,21 @@ void CloudCamera::voxelizeCloud(double cell_size)
     i++;
   }
 
-  voxels.row(0) = voxels.row(0) * cell_size + Eigen::VectorXf::Ones(voxels.cols()) * min_xyz(0);
-  voxels.row(1) = voxels.row(1) * cell_size + Eigen::VectorXf::Ones(voxels.cols()) * min_xyz(1);
-  voxels.row(2) = voxels.row(2) * cell_size + Eigen::VectorXf::Ones(voxels.cols()) * min_xyz(2);
+  voxels.row(0) = voxels.row(0) * float(cell_size) + Eigen::MatrixXf::Ones(1, voxels.cols()) * min_xyz(0);
+  voxels.row(1) = voxels.row(1) * float(cell_size) + Eigen::MatrixXf::Ones(1, voxels.cols()) * min_xyz(1);
+  voxels.row(2) = voxels.row(2) * float(cell_size) + Eigen::MatrixXf::Ones(1, voxels.cols()) * min_xyz(2);
 
+  voxels.row(0) = voxels.row(0) * float(cell_size) + Eigen::MatrixXf::Ones(1, voxels.cols()) * min_xyz(0);
+  voxels.row(1) = voxels.row(1) * float(cell_size) + Eigen::MatrixXf::Ones(1, voxels.cols()) * min_xyz(1);
+  voxels.row(2) = voxels.row(2) * float(cell_size) + Eigen::MatrixXf::Ones(1, voxels.cols()) * min_xyz(2);
+  
   // Copy the voxels into the point cloud.
   cloud_processed_->points.resize(voxels.cols());
   for(int i=0; i < voxels.cols(); i++)
   {
     cloud_processed_->points[i].getVector3fMap() = voxels.col(i).cast<float>();
   }
-
   camera_source_ = camera_source;
-
   if (normals_.cols() > 0)
     normals_ = normals;
 }
