@@ -184,7 +184,7 @@ Call Back Function for a ROS service
 bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                     grasp_srv::GraspGen::Response &res) {
   // std::string model_name = req.model_name;
-  std::string model_name = "/home/harvey/NewProjects/gpd/tutorials/krylon.pcd";
+  std::string model_name = "/root/GraspService/src/grasp_srv/data/krylon.pcd";
   // load pointcloud
   CloudCamera cloud_cam(model_name, view_points);
   if (cloud_cam.getCloudOriginal()->size() == 0)
@@ -210,6 +210,7 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
     res.grasp.label.score = output_grasp.getScore();
     res.grasp.label.full_antipodal = output_grasp.isFullAntipodal();
     res.grasp.label.half_antipodal = output_grasp.isHalfAntipodal();
+    ROS_INFO("Label Written");
 
     // Set Grasp Pose
     Eigen::Vector3d surface = output_grasp.getGraspSurface();
@@ -223,8 +224,9 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
     res.grasp.grasppose.bottom  = {bottom(0) , bottom(1),  bottom(2)};
     res.grasp.grasppose.top     = {top(0),     top(1),     top(2)};
     res.grasp.grasppose.frame   = {approach(0), approach(1), approach(2),
-                                   binormal(3), binormal(4), binormal(5),
-                                   axis(6),     axis(7),     axis(8)};
+                                   binormal(0), binormal(1), binormal(2),
+                                   axis(0),     axis(1),     axis(2)};
+    ROS_INFO("Grasp Written");
     
     // Set 1-D configuration
     res.grasp.configuration1d.center = output_grasp.getCenter();
@@ -232,8 +234,10 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
     res.grasp.configuration1d.right  = output_grasp.getRight();
     res.grasp.configuration1d.top    = output_grasp.getTop();
     res.grasp.configuration1d.bottom = output_grasp.getBottom();
+    ROS_INFO("1DConfiguration Written");
 
     // Set grasp width
     res.grasp.grasp_width = output_grasp.getGraspWidth();
+    ROS_INFO("Width Written");
   } 
 }
