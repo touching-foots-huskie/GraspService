@@ -243,8 +243,12 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
         
         Eigen::Matrix3d object_frame_matrix = object_frame_quat.matrix();
         Eigen::Matrix3d grasp_frame = object_frame_matrix * frame;
-        Eigen::Vector3d grasp_point = object_frame_matrix * bottom;
-        Eigen::Vector3d pre_grasp_point = object_frame_matrix * pre_bottom;
+        Eigen::Vector3d object_position(object_pose.position.x,
+                                        object_pose.position.y,
+                                        object_pose.position.z);
+
+        Eigen::Vector3d grasp_point = object_frame_matrix * bottom + object_position;
+        Eigen::Vector3d pre_grasp_point = object_frame_matrix * pre_bottom + object_position;
 
         Eigen::Quaternion<double> grasp_frame_quat(grasp_frame);
 
