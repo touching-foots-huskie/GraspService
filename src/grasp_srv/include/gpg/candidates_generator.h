@@ -36,6 +36,8 @@
 
 // System
 #include <vector>
+#include <iostream>
+#include <sstream>
 
 // PCL
 #include <pcl/common/common.h>
@@ -54,6 +56,7 @@
 // ROS
 #include "ros/ros.h"
 #include "grasp_srv/GraspGen.h"
+#include "grasp_srv/Grasp.h"
 
 
 /** CandidatesGenerator class

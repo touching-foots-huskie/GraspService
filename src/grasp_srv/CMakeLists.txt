@@ -14,6 +14,7 @@ add_definitions(${PCL_DEFINITIONS})
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  geometry_msgs
   message_generation
 )
 
@@ -32,6 +33,8 @@ add_message_files(
   Configuration1D.msg
   GraspPose.msg
   Grasp.msg 
+  Grasps.msg
+  ObjectPoses.msg
 )
 
 add_service_files(
@@ -42,11 +45,12 @@ add_service_files(
 generate_messages(
    DEPENDENCIES
    std_msgs  # Or other packages containing msgs
+   geometry_msgs
 )
 
 catkin_package(
  INCLUDE_DIRS include
- CATKIN_DEPENDS roscpp std_msgs message_runtime
+ CATKIN_DEPENDS roscpp std_msgs geometry_msgs message_runtime 
 )
 
 set(GRASP "gpg")

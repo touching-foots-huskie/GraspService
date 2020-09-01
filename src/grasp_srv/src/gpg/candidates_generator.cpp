@@ -184,60 +184,70 @@ Call Back Function for a ROS service
 bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                     grasp_srv::GraspGen::Response &res) {
   // std::string model_name = req.model_name;
-  std::string model_name = "/root/GraspService/src/grasp_srv/data/krylon.pcd";
-  // load pointcloud
-  CloudCamera cloud_cam(model_name, view_points);
-  if (cloud_cam.getCloudOriginal()->size() == 0)
-  {
-    std::cout << "Input point cloud is empty or does not exist!\n";
-    return (-1);
+  int object_num = req.object_poses.object_names.size();
+  for(int obj_i = 0; obj_i < object_num; ++obj_i) {
+    std::ostringstream stringStream;
+    std::string model_name = req.object_poses.object_names[obj_i];
+    stringStream << "/root/ocrtoc_materials/models/"
+                 << model_name << "/"
+                 << "meshes/"
+                 << "textured.pcd";
+
+    std::string pcd_file_name = stringStream.str();
+    // load pointcloud
+    CloudCamera cloud_cam(pcd_file_name, view_points);
+    if (cloud_cam.getCloudOriginal()->size() == 0)
+    {
+      std::cout << "Input point cloud is empty or does not exist!\n";
+      return (-1);
+    }
+    // load normals : if possible
+    preprocessPointCloud(cloud_cam);
+
+    ROS_INFO("Preprocess Finished");
+    // generate grasp candidates
+    std::vector<Grasp> candidates = generateGraspCandidates(cloud_cam);
+    // Warp it into the msg
+    if(candidates.size() < 1) {
+      ROS_INFO("No Grasp Pose Found.");
+    }
+    else {
+      ROS_INFO("Grasp Pose Found");      
+      // Save it into the msg
+      for(int grasp_i = 0; grasp_i < candidates.size(); ++grasp_i) {
+        Grasp output_grasp = candidates[grasp_i];
+        grasp_srv::Grasp grasp_msg;
+        // Set Label
+        grasp_msg.label.score = output_grasp.getScore();
+        grasp_msg.label.full_antipodal = output_grasp.isFullAntipodal();
+        grasp_msg.label.half_antipodal = output_grasp.isHalfAntipodal();
+        ROS_INFO("Label Written");
+        // Set Grasp Pose
+        Eigen::Vector3d surface = output_grasp.getGraspSurface();
+        Eigen::Vector3d bottom  = output_grasp.getGraspBottom();
+        Eigen::Vector3d top     = output_grasp.getGraspTop();
+        Eigen::Vector3d approach = output_grasp.getApproach();
+        Eigen::Vector3d binormal = output_grasp.getBinormal();
+        Eigen::Vector3d axis     = output_grasp.getAxis();
+
+        grasp_msg.grasppose.surface = {surface(0), surface(1), surface(2)};
+        grasp_msg.grasppose.bottom  = {bottom(0) , bottom(1),  bottom(2)};
+        grasp_msg.grasppose.top     = {top(0),     top(1),     top(2)};
+        grasp_msg.grasppose.frame   = {approach(0), approach(1), approach(2),
+                                      binormal(0), binormal(1), binormal(2),
+                                      axis(0),     axis(1),     axis(2)};
+        // Set 1-D configuration
+        grasp_msg.configuration1d.center = output_grasp.getCenter();
+        grasp_msg.configuration1d.left   = output_grasp.getLeft();
+        grasp_msg.configuration1d.right  = output_grasp.getRight();
+        grasp_msg.configuration1d.top    = output_grasp.getTop();
+        grasp_msg.configuration1d.bottom = output_grasp.getBottom();
+        // Set grasp width
+        grasp_msg.grasp_width = output_grasp.getGraspWidth();
+        res.grasps.grasps.push_back(grasp_msg);
+        res.grasps.object_poses.push_back(req.object_poses.object_poses[obj_i]);
+      }
+    } 
   }
-  // load normals : if possible
-  preprocessPointCloud(cloud_cam);
-
-  ROS_INFO("Preprocess Finished");
-  // generate grasp candidates
-  std::vector<Grasp> candidates = generateGraspCandidates(cloud_cam);
-  // Warp it into the msg
-  if(candidates.size() < 1) {
-    ROS_INFO("No Grasp Pose Found.");
-  }
-  else {
-    ROS_INFO("Grasp Pose Found");      
-    // Save it into the msg
-    Grasp output_grasp = candidates[0];
-    // Set Label
-    res.grasp.label.score = output_grasp.getScore();
-    res.grasp.label.full_antipodal = output_grasp.isFullAntipodal();
-    res.grasp.label.half_antipodal = output_grasp.isHalfAntipodal();
-    ROS_INFO("Label Written");
-
-    // Set Grasp Pose
-    Eigen::Vector3d surface = output_grasp.getGraspSurface();
-    Eigen::Vector3d bottom  = output_grasp.getGraspBottom();
-    Eigen::Vector3d top     = output_grasp.getGraspTop();
-    Eigen::Vector3d approach = output_grasp.getApproach();
-    Eigen::Vector3d binormal = output_grasp.getBinormal();
-    Eigen::Vector3d axis     = output_grasp.getAxis();
-
-    res.grasp.grasppose.surface = {surface(0), surface(1), surface(2)};
-    res.grasp.grasppose.bottom  = {bottom(0) , bottom(1),  bottom(2)};
-    res.grasp.grasppose.top     = {top(0),     top(1),     top(2)};
-    res.grasp.grasppose.frame   = {approach(0), approach(1), approach(2),
-                                   binormal(0), binormal(1), binormal(2),
-                                   axis(0),     axis(1),     axis(2)};
-    ROS_INFO("Grasp Written");
-    
-    // Set 1-D configuration
-    res.grasp.configuration1d.center = output_grasp.getCenter();
-    res.grasp.configuration1d.left   = output_grasp.getLeft();
-    res.grasp.configuration1d.right  = output_grasp.getRight();
-    res.grasp.configuration1d.top    = output_grasp.getTop();
-    res.grasp.configuration1d.bottom = output_grasp.getBottom();
-    ROS_INFO("1DConfiguration Written");
-
-    // Set grasp width
-    res.grasp.grasp_width = output_grasp.getGraspWidth();
-    ROS_INFO("Width Written");
-  } 
+  
 }
