@@ -221,7 +221,6 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
         grasp_msg.label.score = output_grasp.getScore();
         grasp_msg.label.full_antipodal = output_grasp.isFullAntipodal();
         grasp_msg.label.half_antipodal = output_grasp.isHalfAntipodal();
-        ROS_INFO("Label Written");
         // Set Grasp Pose
         Eigen::Vector3d surface = output_grasp.getGraspSurface();
         Eigen::Vector3d bottom  = output_grasp.getGraspBottom();
