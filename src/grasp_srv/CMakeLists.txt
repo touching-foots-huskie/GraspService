@@ -35,6 +35,7 @@ add_message_files(
   Grasp.msg 
   Grasps.msg
   ObjectPoses.msg
+  GlobalGraspPose.msg
 )
 
 add_service_files(

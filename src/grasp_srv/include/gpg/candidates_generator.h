@@ -58,6 +58,9 @@
 #include "grasp_srv/GraspGen.h"
 #include "grasp_srv/Grasp.h"
 
+// Eigen
+#include <Eigen/Geometry>
+
 
 /** CandidatesGenerator class
  *

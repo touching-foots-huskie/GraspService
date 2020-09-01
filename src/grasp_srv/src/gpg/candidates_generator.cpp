@@ -214,38 +214,70 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
     else {
       ROS_INFO("Grasp Pose Found");      
       // Save it into the msg
+      grasp_srv::GlobalGraspPose global_grasp_msg;  // msg for an object
       for(int grasp_i = 0; grasp_i < candidates.size(); ++grasp_i) {
         Grasp output_grasp = candidates[grasp_i];
-        grasp_srv::Grasp grasp_msg;
-        // Set Label
-        grasp_msg.label.score = output_grasp.getScore();
-        grasp_msg.label.full_antipodal = output_grasp.isFullAntipodal();
-        grasp_msg.label.half_antipodal = output_grasp.isHalfAntipodal();
+
+        float score = output_grasp.getScore();
+        bool full_antipodal = output_grasp.isFullAntipodal();
+        bool half_antipodal = output_grasp.isHalfAntipodal();
+        global_grasp_msg.scores.push_back(score);
+
         // Set Grasp Pose
         Eigen::Vector3d surface = output_grasp.getGraspSurface();
         Eigen::Vector3d bottom  = output_grasp.getGraspBottom();
         Eigen::Vector3d top     = output_grasp.getGraspTop();
-        Eigen::Vector3d approach = output_grasp.getApproach();
-        Eigen::Vector3d binormal = output_grasp.getBinormal();
-        Eigen::Vector3d axis     = output_grasp.getAxis();
+        Eigen::Matrix3d frame   = output_grasp.getFrame();
 
-        grasp_msg.grasppose.surface = {surface(0), surface(1), surface(2)};
-        grasp_msg.grasppose.bottom  = {bottom(0) , bottom(1),  bottom(2)};
-        grasp_msg.grasppose.top     = {top(0),     top(1),     top(2)};
-        grasp_msg.grasppose.frame   = {approach(0), approach(1), approach(2),
-                                      binormal(0), binormal(1), binormal(2),
-                                      axis(0),     axis(1),     axis(2)};
-        // Set 1-D configuration
-        grasp_msg.configuration1d.center = output_grasp.getCenter();
-        grasp_msg.configuration1d.left   = output_grasp.getLeft();
-        grasp_msg.configuration1d.right  = output_grasp.getRight();
-        grasp_msg.configuration1d.top    = output_grasp.getTop();
-        grasp_msg.configuration1d.bottom = output_grasp.getBottom();
+        double pre_distance = 0.1;
+        Eigen::Vector3d pre_bottom = bottom;
+        Eigen::Vector3d pre_vector(0.0, -pre_distance, 0.0);
+        pre_bottom += (frame * pre_vector);
+
+        // Compute global pose
+        geometry_msgs::Pose object_pose = req.object_poses.object_poses[obj_i];
+        Eigen::Quaternion<double> object_frame_quat(object_pose.orientation.w,
+                                                    object_pose.orientation.x,
+                                                    object_pose.orientation.y,
+                                                    object_pose.orientation.z);
+        
+        Eigen::Matrix3d object_frame_matrix = object_frame_quat.matrix();
+        Eigen::Matrix3d grasp_frame = object_frame_matrix * frame;
+        Eigen::Vector3d grasp_point = object_frame_matrix * bottom;
+        Eigen::Vector3d pre_grasp_point = object_frame_matrix * pre_bottom;
+
+        Eigen::Quaternion<double> grasp_frame_quat(grasp_frame);
+
+        geometry_msgs::Pose grasp_pose;
+        geometry_msgs::Pose pre_grasp_pose;
+        // grasp_pose
+        grasp_pose.position.x = grasp_point.x();
+        grasp_pose.position.y = grasp_point.y();
+        grasp_pose.position.z = grasp_point.z();
+        grasp_pose.orientation.x = grasp_frame_quat.x();
+        grasp_pose.orientation.y = grasp_frame_quat.y();
+        grasp_pose.orientation.z = grasp_frame_quat.z();
+        grasp_pose.orientation.w = grasp_frame_quat.w();
+        // pre_grasp_pose
+        pre_grasp_pose.position.x = pre_grasp_point.x();
+        pre_grasp_pose.position.y = pre_grasp_point.y();
+        pre_grasp_pose.position.z = pre_grasp_point.z();
+        pre_grasp_pose.orientation.x = grasp_frame_quat.x();
+        pre_grasp_pose.orientation.y = grasp_frame_quat.y();
+        pre_grasp_pose.orientation.z = grasp_frame_quat.z();
+        pre_grasp_pose.orientation.w = grasp_frame_quat.w();
+
+        global_grasp_msg.grasp_poses.push_back(grasp_pose);
+        global_grasp_msg.pre_grasp_poses.push_back(pre_grasp_pose);
+
+
         // Set grasp width
-        grasp_msg.grasp_width = output_grasp.getGraspWidth();
-        res.grasps.grasps.push_back(grasp_msg);
-        res.grasps.object_poses.push_back(req.object_poses.object_poses[obj_i]);
+        float grasp_width = output_grasp.getGraspWidth();
+        global_grasp_msg.grasp_widths.push_back(grasp_width);
+        global_grasp_msg.model_names.push_back(model_name);
       }
+      // Add one more global grasp poses
+      res.grasps.global_grasp_poses.push_back(global_grasp_msg);
     } 
   }
   

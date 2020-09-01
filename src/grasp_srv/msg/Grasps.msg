@@ -1,2 +1,1 @@
-Grasp[] grasps
-geometry_msgs/Pose[]  object_poses
+GlobalGraspPose[] global_grasp_poses
