@@ -288,10 +288,6 @@ void CloudCamera::voxelizeCloud(double cell_size)
   voxels.row(0) = voxels.row(0) * float(cell_size) + Eigen::MatrixXf::Ones(1, voxels.cols()) * min_xyz(0);
   voxels.row(1) = voxels.row(1) * float(cell_size) + Eigen::MatrixXf::Ones(1, voxels.cols()) * min_xyz(1);
   voxels.row(2) = voxels.row(2) * float(cell_size) + Eigen::MatrixXf::Ones(1, voxels.cols()) * min_xyz(2);
-
-  voxels.row(0) = voxels.row(0) * float(cell_size) + Eigen::MatrixXf::Ones(1, voxels.cols()) * min_xyz(0);
-  voxels.row(1) = voxels.row(1) * float(cell_size) + Eigen::MatrixXf::Ones(1, voxels.cols()) * min_xyz(1);
-  voxels.row(2) = voxels.row(2) * float(cell_size) + Eigen::MatrixXf::Ones(1, voxels.cols()) * min_xyz(2);
   
   // Copy the voxels into the point cloud.
   cloud_processed_->points.resize(voxels.cols());
