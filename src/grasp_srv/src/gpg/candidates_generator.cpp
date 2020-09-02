@@ -186,16 +186,30 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
   // std::string model_name = req.model_name;
   int object_num = req.object_poses.object_names.size();
   for(int obj_i = 0; obj_i < object_num; ++obj_i) {
-    std::ostringstream stringStream;
+    std::ostringstream model_path;
     std::string model_name = req.object_poses.object_names[obj_i];
-    stringStream << "/root/ocrtoc_materials/models/"
+    model_path << "/root/ocrtoc_materials/models/"
                  << model_name << "/"
-                 << "meshes/"
-                 << "textured.pcd";
+                 << "meshes/";
 
-    std::string pcd_file_name = stringStream.str();
+    // If read true, then read instead of computing
+    if(params_.msg_read_) {
+      rosbag::Bag bag;
+      std::string bag_path = model_path.str() + "grasp.bag";
+      bag.open(bag_path, rosbag::bagmode::Read);
+      for(rosbag::MessageInstance const m: rosbag::View(bag)) {
+        grasp_srv::GlobalGraspPose::ConstPtr global_grasp_ptr 
+          = m.instantiate<grasp_srv::GlobalGraspPose>();
+        if (global_grasp_ptr != nullptr)
+          res.grasps.global_grasp_poses.push_back(*global_grasp_ptr);
+      }
+      bag.close();
+      continue; //   Go to the next object
+    }
+
+    std::string pcd_file_name = model_path.str() + "textured.pcd";
     // load pointcloud
-    CloudCamera cloud_cam(pcd_file_name, view_points);
+    CloudCamera cloud_cam(pcd_file_name, view_points_);
     if (cloud_cam.getCloudOriginal()->size() == 0)
     {
       std::cout << "Input point cloud is empty or does not exist!\n";
@@ -282,7 +296,16 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
       }
       // Add one more global grasp poses
       res.grasps.global_grasp_poses.push_back(global_grasp_msg);
+
+      // Write MSG into corresponding dir
+      if(params_.msg_write_) {
+        rosbag::Bag bag;
+        std::string bag_path = model_path.str() + "grasp.bag";
+        bag.open(bag_path, rosbag::bagmode::Write);
+        bag.write("grasp_per_object", ros::Time::now(), global_grasp_msg);
+        bag.close();
+      }
     } 
   }
-  
+  return true;  // Exit successfully
 }

@@ -10,9 +10,14 @@ include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
+# Boost
+find_package(Boost REQUIRED COMPONENTS system)
+include_directories(${Boost_INCLUDE_DIRS}) 
+
 # ROS include
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  rosbag
   std_msgs
   geometry_msgs
   message_generation
@@ -51,7 +56,12 @@ generate_messages(
 
 catkin_package(
  INCLUDE_DIRS include
- CATKIN_DEPENDS roscpp std_msgs geometry_msgs message_runtime 
+ CATKIN_DEPENDS 
+ roscpp 
+ rosbag
+ std_msgs 
+ geometry_msgs 
+ message_runtime 
 )
 
 set(GRASP "gpg")

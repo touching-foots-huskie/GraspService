@@ -57,9 +57,15 @@
 #include "ros/ros.h"
 #include "grasp_srv/GraspGen.h"
 #include "grasp_srv/Grasp.h"
+#include <rosbag/bag.h>
+#include <rosbag/view.h>
 
 // Eigen
 #include <Eigen/Geometry>
+
+// BOOST
+// #include <boost/foreach.hpp>
+// #define foreach BOOST_FOREACH
 
 
 /** CandidatesGenerator class
@@ -85,6 +91,9 @@ class CandidatesGenerator
       int num_samples_; ///< the number of samples to be used in the search
       int num_threads_; ///< the number of CPU threads to be used in the search
       std::vector<double> workspace_; ///< the robot's workspace
+      // Params on ROS MSG
+      bool msg_read_;
+      bool msg_write_;
     };
 
     /**
@@ -150,7 +159,7 @@ class CandidatesGenerator
 
     // set view point
     void set_view_point(double x, double y, double z) {
-      view_points << x, y, z;
+      view_points_ << x, y, z;
     }
 
   private:
@@ -159,7 +168,7 @@ class CandidatesGenerator
     Plot plotter_; ///< pointer to an object for plotting
 
     Parameters params_; ///< parameters for the grasp candidates generation
-    Eigen::Matrix<double, 3, 1> view_points;
+    Eigen::Matrix<double, 3, 1> view_points_;
 };
 
 #endif /* GRASP_CANDIDATES_GENERATOR_H */

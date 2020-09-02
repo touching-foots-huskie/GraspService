@@ -87,6 +87,10 @@ int main(int argc, char **argv) {
     std::cout << "plot_grasps: " << plot_grasps << "\n";
     std::cout << "plot_normals: " << plot_normals << "\n";
 
+    // MSG Read Or Write
+    bool msg_read = config_file.getValueOfKey<bool>("msg_read", false);
+    bool msg_write = config_file.getValueOfKey<bool>("msg_write", false);
+    
     // Create object to generate grasp candidates. // Params Control
     CandidatesGenerator::Parameters generator_params;
     generator_params.num_samples_ = num_samples;
@@ -96,6 +100,8 @@ int main(int argc, char **argv) {
     generator_params.remove_statistical_outliers_ = remove_outliers;
     generator_params.voxelize_ = voxelize;
     generator_params.workspace_ = workspace;
+    generator_params.msg_read_ = msg_read;
+    generator_params.msg_write_ = msg_write;
     
     HandSearch::Parameters hand_search_params;
     hand_search_params.finger_width_ = finger_width;
