@@ -249,10 +249,10 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
         pre_bottom += (frame * pre_vector);
 
         // Frame need to be change to accomdate the urdf
-        Eigen::Matrix3d gpg2urdf = Eigen::AngleAxisf(-0.5*M_PI, Vector3f::UnitX())
-                                 * Eigen::AngleAxisf(-0.5*M_PI, Vector3f::UnitZ());
+        Eigen::Matrix3d gpg2urdf = Eigen::AngleAxisd(-0.5*M_PI, Vector3d::UnitX())
+                                 * Eigen::AngleAxisd(-0.5*M_PI, Vector3d::UnitZ());
         frame = frame * gpg2urdf;
-        
+
         // Compute global pose
         geometry_msgs::Pose object_pose = req.object_poses.object_poses[obj_i];
         Eigen::Quaternion<double> object_frame_quat(object_pose.orientation.w,
