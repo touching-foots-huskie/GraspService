@@ -1,4 +1,3 @@
-# Test the generation of grasp pose visually
 #!/usr/bin/env python
 from __future__ import print_function
 

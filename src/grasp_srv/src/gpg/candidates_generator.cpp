@@ -188,9 +188,9 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
   for(int obj_i = 0; obj_i < object_num; ++obj_i) {
     std::ostringstream model_path;
     std::string model_name = req.object_poses.object_names[obj_i];
-    model_path << "/root/ocrtoc_materials/models/"
-                 << model_name << "/"
-                 << "meshes/";
+    std::string ws_path = params_.ws_path;
+    model_path << ws_path    << "/data/"
+               << model_name << "/meshes/";
 
     // If read true, then read instead of computing
     if(params_.msg_read_) {

@@ -45,7 +45,14 @@ bool grasp_gen(grasp_srv::GraspGen::Request  &req,
 
 int main(int argc, char **argv) {
     // Get Grasp Generator
-    std::string config_path = "/root/GraspService/src/grasp_srv/cfg/params.cfg";
+    std::string workspace_path;
+    if(argc >= 2) {
+      workspace_path = std::string(argv[1]);
+    } else {
+      workspace_path = "/root/GraspService/src/grasp_srv";
+    }
+    std::string config_path = workspace_path + "/cfg/params.cfg";
+    std::cout << config_path << std::endl;
     ConfigFile config_file(config_path);
     // Config
     double finger_width = config_file.getValueOfKey<double>("finger_width", 0.01);
@@ -102,6 +109,7 @@ int main(int argc, char **argv) {
     generator_params.workspace_ = workspace;
     generator_params.msg_read_ = msg_read;
     generator_params.msg_write_ = msg_write;
+    generator_params.ws_path = workspace_path;
     
     HandSearch::Parameters hand_search_params;
     hand_search_params.finger_width_ = finger_width;

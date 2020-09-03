@@ -1,4 +1,4 @@
-# render the robot kinematics result
+#!/usr/bin/env python
 from __future__ import print_function
 
 import ikpy
@@ -20,10 +20,11 @@ def render_robot_pose(target_pose):
         "robotiq_2f_85_left_pad_joint",
         "robotiq_2f_85_left_spring_link_joint"]
 
-    redundant_times = 20  # 2 seconds
-    
+    redundant_times = 20  # 2 seconds 
     # load urdf robot
-    ur5e = ikpy.chain.Chain.from_urdf_file("../../ur_e_description/urdf/ur5e.urdf")
+    import os
+    file_path = os.path.dirname(os.path.abspath(__file__))
+    ur5e = ikpy.chain.Chain.from_urdf_file(file_path + "/../../ur_e_description/urdf/ur5e.urdf")
     ik_results = ur5e.inverse_kinematics_frame(target_pose, orientation_mode="all")
     reached_pose = ur5e.forward_kinematics(ik_results)
     # create the msg publisher

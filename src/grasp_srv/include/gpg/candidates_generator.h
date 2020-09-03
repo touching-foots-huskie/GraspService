@@ -94,6 +94,8 @@ class CandidatesGenerator
       // Params on ROS MSG
       bool msg_read_;
       bool msg_write_;
+      // Workspace Path
+      std::string ws_path;
     };
 
     /**

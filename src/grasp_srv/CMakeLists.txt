@@ -156,3 +156,7 @@ add_dependencies(grasp_gen_server grasp_srv_gencpp)
 add_executable(grasp_gen_client src/grasp_gen_client.cpp)
 target_link_libraries(grasp_gen_client ${catkin_LIBRARIES})
 add_dependencies(grasp_gen_client grasp_srv_gencpp)
+
+# install
+catkin_install_python(PROGRAMS scripts/grasp_test.py scripts/robot_kinematics_render.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
