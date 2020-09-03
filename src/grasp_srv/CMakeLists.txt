@@ -17,6 +17,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 # ROS include
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  rospy
   rosbag
   std_msgs
   geometry_msgs
@@ -58,6 +59,7 @@ catkin_package(
  INCLUDE_DIRS include
  CATKIN_DEPENDS 
  roscpp 
+ rospy
  rosbag
  std_msgs 
  geometry_msgs 
