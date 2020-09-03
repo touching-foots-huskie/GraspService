@@ -8,6 +8,7 @@ import grasp_srv.srv
 import grasp_srv.msg
 import geometry_msgs.msg
 
+import numpy as np
 import ikpy
 from scipy.spatial.transform import Rotation as R
 
@@ -35,7 +36,7 @@ def test_grasp_gen(model_name_list, object_pose_list):
             object_poses.object_poses.append(object_pose)
 
         resp = grasp_gen(object_poses)
-        if len(ur5e.grasps.global_grasp_poses[0].grasp_poses) > 0:
+        if len(resp.grasps.global_grasp_poses[0].grasp_poses) > 0:
             print("Service Sent")
             # Test on One
             grasp_pose = resp.grasps.global_grasp_poses[0].grasp_poses[0]
@@ -43,9 +44,18 @@ def test_grasp_gen(model_name_list, object_pose_list):
                              grasp_pose.orientation.y,
                              grasp_pose.orientation.z,
                              grasp_pose.orientation.w])
-            
+            # Fixing matrix [Fix for different coordinates]
+            rz = R.from_rotvec(np.pi/2*np.array([0., 0., 1.]))
+            rx = R.from_rotvec(np.pi/2*np.array([1., 0., 0.]))
+            r = r * rz * rx
+            transform_matrix = np.zeros((4, 4)) 
+            transform_matrix[:3, :3] = r.as_dcm()
+            transform_matrix[0, 3] = grasp_pose.position.x
+            transform_matrix[1, 3] = grasp_pose.position.y
+            transform_matrix[2, 3] = grasp_pose.position.z
+            transform_matrix[3, 3] = 1.
             # run the render function
-            render_robot_pose(r.as_matrix())
+            robot_kinematics_render.render_robot_pose(transform_matrix)
             print("Pose Rendered")
             return
         else:
@@ -56,8 +66,8 @@ def test_grasp_gen(model_name_list, object_pose_list):
 
 
 if __name__ == "__main__":
-    model_name_list = ["a_cup"]
-    origin_pos = [0.2, 0.2, 0.2, 0., 0., 0., 1.]
+    model_name_list = ["a_cups"]
+    origin_pos = [0.3, 0.3, 0.0, 0., 0., 0., 1.]
     object_pose_list = [origin_pos]
     test_grasp_gen(model_name_list, object_pose_list)
 

@@ -25,7 +25,7 @@ def render_robot_pose(target_pose):
     # load urdf robot
     ur5e = ikpy.chain.Chain.from_urdf_file("../../ur_e_description/urdf/ur5e.urdf")
     ik_results = ur5e.inverse_kinematics_frame(target_pose, orientation_mode="all")
-    print("Result is {}".format(ik_results))
+    reached_pose = ur5e.forward_kinematics(ik_results)
     # create the msg publisher
     rospy.init_node('joint_state_publisher')
     pub = rospy.Publisher('joint_states', JointState, queue_size=10)
