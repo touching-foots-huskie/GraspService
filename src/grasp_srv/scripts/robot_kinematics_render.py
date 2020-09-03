@@ -5,10 +5,12 @@ import ikpy
 import rospy
 import numpy as np
 from sensor_msgs.msg import JointState
+from std_msgs.msg import String
 from std_msgs.msg import Header
+from geometry_msgs.msg import Pose
 
 
-def render_robot_pose(target_pose):
+def render_robot_pose(target_pose, object_name, object_pose):
     # Params for render
     empty_joints = [
         "robotiq_2f_85_right_driver_joint",
@@ -27,9 +29,14 @@ def render_robot_pose(target_pose):
     ur5e = ikpy.chain.Chain.from_urdf_file(file_path + "/../../ur_e_description/urdf/ur5e.urdf")
     ik_results = ur5e.inverse_kinematics_frame(target_pose, orientation_mode="all")
     reached_pose = ur5e.forward_kinematics(ik_results)
+
     # create the msg publisher
     rospy.init_node('joint_state_publisher')
+    
+    # publisher
     pub = rospy.Publisher('joint_states', JointState, queue_size=10)
+    obj_pub = rospy.Publisher("object_name", String, queue_size=10) 
+    pose_pub = rospy.Publisher("object_pose", Pose, queue_size=10)
     rate = rospy.Rate(10)
 
     joint_msg = JointState()
@@ -48,19 +55,18 @@ def render_robot_pose(target_pose):
     joint_msg.velocity = []
     joint_msg.effort = []
 
-    # Kept sending
+    object_name_msg = String()
+    object_name_msg.data = object_name
+    # Publishing sending
     for _ in range(redundant_times):
         joint_msg.header.stamp = rospy.Time.now()
         pub.publish(joint_msg)
+        obj_pub.publish(object_name_msg)
+        pose_pub.publish(object_pose)
         rate.sleep()
 
 
 if __name__ == '__main__':
-    target_pose = np.array([[1., 0., 0., 0.2],
-                            [0., 1., 0., 0.2],
-                            [0., 0., 1., 0.2],
-                            [0., 0., 0., 1.]])
-    # rospy.init_node('render_robot_pose', anonymous=True)
-    render_robot_pose(target_pose)
+    pass
 
     

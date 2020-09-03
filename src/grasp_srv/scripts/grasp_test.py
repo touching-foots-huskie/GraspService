@@ -39,6 +39,9 @@ def test_grasp_gen(model_name_list, object_pose_list):
             print("Service Sent")
             # Test on One
             grasp_pose = resp.grasps.global_grasp_poses[0].grasp_poses[0]
+            object_name = model_name_list[0]
+            object_pose = object_poses.object_poses[0]
+
             r = R.from_quat([grasp_pose.orientation.x, 
                              grasp_pose.orientation.y,
                              grasp_pose.orientation.z,
@@ -53,8 +56,11 @@ def test_grasp_gen(model_name_list, object_pose_list):
             transform_matrix[1, 3] = grasp_pose.position.y
             transform_matrix[2, 3] = grasp_pose.position.z
             transform_matrix[3, 3] = 1.
-            # run the render function
-            robot_kinematics_render.render_robot_pose(transform_matrix)
+
+            print(transform_matrix)
+            # run 
+            robot_kinematics_render.render_robot_pose(
+                transform_matrix, object_name, object_pose)
             print("Pose Rendered")
             return
         else:
@@ -66,7 +72,7 @@ def test_grasp_gen(model_name_list, object_pose_list):
 
 if __name__ == "__main__":
     model_name_list = ["a_cups"]
-    origin_pos = [0.3, 0.3, 0.0, 0., 0., 0., 1.]
+    origin_pos = [0.2, -0.2, 0.0, 0., 0., 0., 1.]
     object_pose_list = [origin_pos]
     test_grasp_gen(model_name_list, object_pose_list)
 

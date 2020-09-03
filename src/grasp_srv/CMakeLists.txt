@@ -22,6 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   message_generation
+  pcl_ros
 )
 
 include_directories(
@@ -64,6 +65,7 @@ catkin_package(
  std_msgs 
  geometry_msgs 
  message_runtime 
+ pcl_ros
 )
 
 set(GRASP "gpg")
@@ -156,6 +158,10 @@ add_dependencies(grasp_gen_server grasp_srv_gencpp)
 add_executable(grasp_gen_client src/grasp_gen_client.cpp)
 target_link_libraries(grasp_gen_client ${catkin_LIBRARIES})
 add_dependencies(grasp_gen_client grasp_srv_gencpp)
+
+# add Render Object Node
+add_executable(render_object src/render_object.cpp)
+target_link_libraries(render_object ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
 # install
 catkin_install_python(PROGRAMS scripts/grasp_test.py scripts/robot_kinematics_render.py

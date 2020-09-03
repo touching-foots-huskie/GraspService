@@ -1,10 +1,13 @@
 <launch>
     <!-- run service node -->
     <node name="grasp_gen" pkg="grasp_srv" type="grasp_gen_server"
-        args="$(find grasp_srv)"/>   
-    <!-- run visualization  -->
-    <arg name="model" default="$(find ur_e_description)/urdf/ur5e.urdf"/>
+          args="$(find grasp_srv)"/>   
+    <!-- robot visualization  -->
+    <arg  name="model" default="$(find ur_e_description)/urdf/ur5e.urdf"/>
     <param name="robot_description" command="cat $(arg model)"/>
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ur_e_description)/rviz/ur5e.rviz"/> 
+    <!-- point cloud visualization -->
+    <node name="render_object" pkg="grasp_srv" type="render_object"
+          args="$(find grasp_srv)"/> 
 </launch>
