@@ -6,8 +6,9 @@
 <robot name="ur5e">
   <gazebo>
     <plugin filename="libgazebo_ros_control.so" name="ros_control">
+      <robotNamespace>/</robotNamespace>
       <!--robotNamespace>/</robotNamespace-->
-      <!--robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType-->
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     </plugin>
     <!--
     <plugin name="gazebo_ros_power_monitor_controller" filename="libgazebo_ros_power_monitor.so">
