@@ -38,7 +38,7 @@ def test_grasp_gen(model_name_list, object_pose_list):
         if len(resp.grasps.global_grasp_poses[0].grasp_poses) > 0:
             print("Service Sent")
             # Test on One
-            grasp_pose = resp.grasps.global_grasp_poses[0].pre_grasp_poses[0]
+            grasp_pose = resp.grasps.global_grasp_poses[0].grasp_poses[0]
             object_name = model_name_list[0]
             object_pose = object_poses.object_poses[0]
 

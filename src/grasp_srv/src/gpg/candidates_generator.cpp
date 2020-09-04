@@ -243,6 +243,10 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
         Eigen::Vector3d top     = output_grasp.getGraspTop();
         Eigen::Matrix3d frame   = output_grasp.getFrame();
 
+	double compensate_distance = 0.1;
+        Eigen::Vector3d comp_vector(-compensate_distance, 0.0, 0.0);
+        bottom += (frame * comp_vector);
+
         double pre_distance = 0.15;
         Eigen::Vector3d pre_bottom = bottom;
         Eigen::Vector3d pre_vector(-pre_distance, 0.0, 0.0);
