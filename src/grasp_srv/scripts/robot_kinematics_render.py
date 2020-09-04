@@ -9,6 +9,8 @@ from std_msgs.msg import String
 from std_msgs.msg import Header
 from geometry_msgs.msg import Pose
 
+import waypoints_generate
+
 
 def render_robot_pose(target_pose, object_name, object_pose):
     # Params for render
@@ -31,14 +33,19 @@ def render_robot_pose(target_pose, object_name, object_pose):
     ur5e = ikpy.chain.Chain.from_urdf_file(file_path + "/../../ur_e_description/urdf/ur5e.urdf",
                                            active_links_mask=active_links_mask)
 
-    initial_states = np.array([0., 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.])
-    ik_results = ikpy.inverse_kinematics.inverse_kinematic_optimization(
-                    ur5e, target_pose, initial_states, 
-                    max_iter = 100, 
-                    orientation_mode="all", no_position=False)
+    # generadually change into target
+    waypoints_num = 10
+    j_start = np.zeros([8,])
+    m_start = ur5e.forward_kinematics(j_start)
+    waypoints = waypoints_generate.m_waypoints(m_start, target_pose, waypoints_num)
+    j_value = j_start
+    for i, waypoint in enumerate(waypoints):
+        j_value = ikpy.inverse_kinematics.inverse_kinematic_optimization(
+                        ur5e, waypoint, j_value, 
+                        max_iter = 100, 
+                        orientation_mode="all", no_position=False)
 
-    reached_pose = ur5e.forward_kinematics(ik_results)
-    print(ik_results)
+    reached_pose = ur5e.forward_kinematics(j_value)
     print(target_pose)
     print(reached_pose)
     # create the msg publisher
@@ -52,7 +59,7 @@ def render_robot_pose(target_pose, object_name, object_pose):
 
     joint_msg = JointState()
     joint_msg.header = Header()
-    for i, value in enumerate(ik_results):
+    for i, value in enumerate(j_value):
         if i == 0 or i == 7:
             continue
         else:
