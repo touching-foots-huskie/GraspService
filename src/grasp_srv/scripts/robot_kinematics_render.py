@@ -33,21 +33,32 @@ def render_robot_pose(target_pose, object_name, object_pose):
     ur5e = ikpy.chain.Chain.from_urdf_file(file_path + "/../../ur_e_description/urdf/ur5e.urdf",
                                            active_links_mask=active_links_mask)
 
+    print(ur5e.links[-1].name)
     # generadually change into target
-    waypoints_num = 10
-    j_start = np.zeros([8,])
-    m_start = ur5e.forward_kinematics(j_start)
-    waypoints = waypoints_generate.m_waypoints(m_start, target_pose, waypoints_num)
-    j_value = j_start
-    for i, waypoint in enumerate(waypoints):
-        j_value = ikpy.inverse_kinematics.inverse_kinematic_optimization(
+    waypoints_num = 5
+    j_value = np.zeros([8,])
+
+    iter_num = 0
+    diff_pose_sum = 1.
+
+    while iter_num < 10 and diff_pose_sum > 0.1:
+        m_start = ur5e.forward_kinematics(j_value)
+        waypoints = waypoints_generate.m_waypoints(m_start, target_pose, waypoints_num)
+        for i, waypoint in enumerate(waypoints):
+            j_value = ikpy.inverse_kinematics.inverse_kinematic_optimization(
+                        ur5e, waypoint, j_value, 
+                        max_iter = 100, 
+                        orientation_mode=None, no_position=False)
+            j_value = ikpy.inverse_kinematics.inverse_kinematic_optimization(
                         ur5e, waypoint, j_value, 
                         max_iter = 100, 
                         orientation_mode="all", no_position=False)
 
-    reached_pose = ur5e.forward_kinematics(j_value)
-    print(target_pose)
-    print(reached_pose)
+        reached_pose = ur5e.forward_kinematics(j_value)
+        diff_pose = target_pose - reached_pose
+        diff_pose_sum = np.linalg.norm(diff_pose)
+        iter_num += 1
+
     # create the msg publisher
     rospy.init_node('joint_state_publisher')
     

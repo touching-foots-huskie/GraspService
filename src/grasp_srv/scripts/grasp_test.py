@@ -38,7 +38,7 @@ def test_grasp_gen(model_name_list, object_pose_list):
         if len(resp.grasps.global_grasp_poses[0].grasp_poses) > 0:
             print("Service Sent")
             # Test on One
-            grasp_pose = resp.grasps.global_grasp_poses[0].grasp_poses[0]
+            grasp_pose = resp.grasps.global_grasp_poses[0].pre_grasp_poses[0]
             object_name = model_name_list[0]
             object_pose = object_poses.object_poses[0]
 
@@ -46,10 +46,6 @@ def test_grasp_gen(model_name_list, object_pose_list):
                              grasp_pose.orientation.y,
                              grasp_pose.orientation.z,
                              grasp_pose.orientation.w])
-            # Fixing matrix [Fix for different coordinates]
-            rz = R.from_rotvec(np.pi/2*np.array([0., 0., 1.]))
-            rx = R.from_rotvec(np.pi/2*np.array([1., 0., 0.]))
-            r = r * rz * rx
             transform_matrix = np.zeros((4, 4)) 
             transform_matrix[:3, :3] = r.as_dcm()
             transform_matrix[0, 3] = grasp_pose.position.x
@@ -57,8 +53,6 @@ def test_grasp_gen(model_name_list, object_pose_list):
             transform_matrix[2, 3] = grasp_pose.position.z
             transform_matrix[3, 3] = 1.
 
-            print(transform_matrix)
-            print(object_pose)
             # run 
             robot_kinematics_render.render_robot_pose(
                 transform_matrix, object_name, object_pose)
@@ -72,7 +66,7 @@ def test_grasp_gen(model_name_list, object_pose_list):
 
 
 if __name__ == "__main__":
-    model_name_list = ["adjustable_wrench"]
+    model_name_list = ["a_cups"]
     origin_pos = [0.3, 0.3, 0.2, 0., 0., 0., 1.]
     object_pose_list = [origin_pos]
     test_grasp_gen(model_name_list, object_pose_list)
