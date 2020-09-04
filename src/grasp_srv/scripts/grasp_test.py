@@ -58,6 +58,7 @@ def test_grasp_gen(model_name_list, object_pose_list):
             transform_matrix[3, 3] = 1.
 
             print(transform_matrix)
+            print(object_pose)
             # run 
             robot_kinematics_render.render_robot_pose(
                 transform_matrix, object_name, object_pose)
@@ -71,8 +72,8 @@ def test_grasp_gen(model_name_list, object_pose_list):
 
 
 if __name__ == "__main__":
-    model_name_list = ["a_cups"]
-    origin_pos = [0.2, -0.2, 0.0, 0., 0., 0., 1.]
+    model_name_list = ["adjustable_wrench"]
+    origin_pos = [0.3, 0.3, 0.2, 0., 0., 0., 1.]
     object_pose_list = [origin_pos]
     test_grasp_gen(model_name_list, object_pose_list)
 

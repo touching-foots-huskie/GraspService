@@ -21,15 +21,26 @@ def render_robot_pose(target_pose, object_name, object_pose):
         "robotiq_2f_85_left_follower_joint",
         "robotiq_2f_85_left_pad_joint",
         "robotiq_2f_85_left_spring_link_joint"]
+    active_links_mask = [False, True, True, True,
+                        True,  True, True, False]
 
     redundant_times = 20  # 2 seconds 
     # load urdf robot
     import os
     file_path = os.path.dirname(os.path.abspath(__file__))
-    ur5e = ikpy.chain.Chain.from_urdf_file(file_path + "/../../ur_e_description/urdf/ur5e.urdf")
-    ik_results = ur5e.inverse_kinematics_frame(target_pose, orientation_mode="all")
-    reached_pose = ur5e.forward_kinematics(ik_results)
+    ur5e = ikpy.chain.Chain.from_urdf_file(file_path + "/../../ur_e_description/urdf/ur5e.urdf",
+                                           active_links_mask=active_links_mask)
 
+    initial_states = np.array([0., 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.])
+    ik_results = ikpy.inverse_kinematics.inverse_kinematic_optimization(
+                    ur5e, target_pose, initial_states, 
+                    max_iter = 100, 
+                    orientation_mode="all", no_position=False)
+
+    reached_pose = ur5e.forward_kinematics(ik_results)
+    print(ik_results)
+    print(target_pose)
+    print(reached_pose)
     # create the msg publisher
     rospy.init_node('joint_state_publisher')
     
@@ -42,7 +53,7 @@ def render_robot_pose(target_pose, object_name, object_pose):
     joint_msg = JointState()
     joint_msg.header = Header()
     for i, value in enumerate(ik_results):
-        if(i == 0 or i == 7):
+        if i == 0 or i == 7:
             continue
         else:
             joint_msg.name.append(ur5e.links[i].name)
