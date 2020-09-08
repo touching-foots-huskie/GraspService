@@ -56,8 +56,8 @@ def test_grasp_gen(model_name_list, object_pose_list, object_scale_list):
                                         grasp_pose.orientation.y,
                                         grasp_pose.orientation.z,
                                         grasp_pose.orientation.w]))
-                rz = R.from_rotvec(-np.pi/2.0, np.array([0., 0., 1.]))
-                rx = R.from_rotvec(-np.pi, np.array[1., 0., 0.])
+                rz = R.from_rotvec(-np.pi/2.0*np.array([0., 0., 1.]))
+                rx = R.from_rotvec(-np.pi/2.0*np.array([1., 0., 0.]))
                 rf = r * rz * rx
                 r_quat = rf.as_quat()
                 gripper_visualization.publish_object(object_pose, object_name, object_scale)
@@ -83,6 +83,6 @@ if __name__ == "__main__":
     model_name_list = ["master_chef_can"]
     origin_pos = [0.4, 0.4, 0.2, 0., 0., 0., 1.]
     object_pose_list = [origin_pos]
-    object_scale_list = [0.8]
+    object_scale_list = [0.5]
     test_grasp_gen(model_name_list, object_pose_list, object_scale_list)
 
