@@ -463,6 +463,7 @@ void Plot::saveViewer(boost::shared_ptr<pcl::visualization::PCLVisualizer>& view
 {
   viewer->spinOnce(100);
   viewer->saveScreenshot(output_path + "/output.PNG");
+  boost::this_thread::sleep(boost::posix_time::microseconds(100000));
   viewer->close();
 }
 
