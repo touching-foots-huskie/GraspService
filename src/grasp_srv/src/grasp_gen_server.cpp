@@ -127,6 +127,9 @@ int main(int argc, char **argv) {
     CandidatesGenerator candidates_generator(generator_params, hand_search_params);
     candidates_generator.set_view_point(camera_pose[3], camera_pose[6], camera_pose[9]);
     
+    std::string output_path = workspace_path + "/log";
+    candidates_generator.set_plotter_path(output_path);
+    
     ros::init(argc, argv, "grasp_gen_server");
     ros::NodeHandle n;
 

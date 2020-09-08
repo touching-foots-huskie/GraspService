@@ -21,6 +21,7 @@ void Plot::plotFingers3D(const std::vector<GraspSet>& hand_set_list, const Point
 }
 
 
+// The one used in the service
 void Plot::plotFingers3D(const std::vector<Grasp>& hand_list, const PointCloudRGBA::Ptr& cloud,
   std::string str, double outer_diameter, double finger_width, double hand_depth, double hand_height) const
 {
@@ -35,7 +36,8 @@ void Plot::plotFingers3D(const std::vector<Grasp>& hand_list, const PointCloudRG
   viewer->addPointCloud<pcl::PointXYZRGBA>(cloud, rgb, "cloud");
   viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "cloud");
 
-  runViewer(viewer);
+  // runViewer(viewer);
+  saveViewer(viewer);
 }
 
 
@@ -453,6 +455,14 @@ void Plot::runViewer(boost::shared_ptr<pcl::visualization::PCLVisualizer>& viewe
     boost::this_thread::sleep(boost::posix_time::microseconds(100000));
   }
 
+  viewer->close();
+}
+
+
+void Plot::saveViewer(boost::shared_ptr<pcl::visualization::PCLVisualizer>& viewer) const
+{
+  viewer->spinOnce(100);
+  viewer->saveScreenshot(output_path + "/output.PNG");
   viewer->close();
 }
 

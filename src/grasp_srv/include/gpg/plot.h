@@ -162,6 +162,10 @@ class Plot
      */
     void plotCloud(const PointCloudRGBA::Ptr& cloud_rgb, const std::string& title) const;
 
+    // Set output path for viewer
+    void set_output_path(std::string _output_path) {
+      output_path = _output_path;
+    }
 
   private:
 
@@ -232,12 +236,21 @@ class Plot
     void runViewer(boost::shared_ptr<pcl::visualization::PCLVisualizer>& viewer) const;
 
     /**
+     * \brief Save the rendered image of pcl viewer
+     * \param viewer the PCL visualizer to be shown
+     */
+    void saveViewer(boost::shared_ptr<pcl::visualization::PCLVisualizer>& viewer) const;
+
+    /**
      * \brief Create a PCL visualizer.
      * \param title the title of the visualization window
      */
     boost::shared_ptr<pcl::visualization::PCLVisualizer> createViewer(std::string title) const;
 
     double marker_lifetime_; ///< max time that markers are visualized in Rviz
+    
+    // Save Data Path 
+    std::string output_path;
 };
 
 #endif /* PLOT_H */ 

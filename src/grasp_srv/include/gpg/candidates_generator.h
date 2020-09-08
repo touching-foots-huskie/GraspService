@@ -164,6 +164,11 @@ class CandidatesGenerator
       view_points_ << x, y, z;
     }
 
+    // set output path for plotter
+    void set_plotter_path(std::string _output_path) {
+      plotter_.set_output_path(_output_path);
+    }
+
   private:
 
     HandSearch* hand_search_; ///< pointer to an object for the hand search
