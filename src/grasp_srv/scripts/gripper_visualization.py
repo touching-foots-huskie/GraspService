@@ -14,14 +14,14 @@ def publish_gripper(quat, trans, gripper_id):
     t.header.stamp = rospy.Time.now()
     t.header.frame_id = "world"
     t.child_frame_id = "tool0"
-    t.transform.translation.x = trans[0]
-    t.transform.translation.y = trans[1]
-    t.transform.translation.z = trans[2]
+    t.transform.translation.x = trans.x
+    t.transform.translation.y = trans.y
+    t.transform.translation.z = trans.z
 
-    t.transform.rotation.x = quat[0]
-    t.transform.rotation.y = quat[1]
-    t.transform.rotation.z = quat[2]
-    t.transform.rotation.w = quat[3]
+    t.transform.rotation.x = quat.x
+    t.transform.rotation.y = quat.y
+    t.transform.rotation.z = quat.z
+    t.transform.rotation.w = quat.w
 
     for i in range(10):
         br.sendTransform(t)

@@ -20,8 +20,6 @@ Pose is a 1D list of 7 elements (x, y, z, qx, qy, qz, qw),
 '''
 def test_grasp_gen(model_name_list, object_pose_list, object_scale_list):
     rospy.init_node('grasp_state_publisher')
-    pub = rospy.Publisher('joint_states', sensor_msgs.msg.JointState, queue_size=10)
-    
     rospy.wait_for_service('grasp_gen')
     try:
         grasp_gen = rospy.ServiceProxy('grasp_gen', grasp_srv.srv.GraspGen)
