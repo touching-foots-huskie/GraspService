@@ -4,6 +4,7 @@ import tf2_ros
 import geometry_msgs.msg
 from geometry_msgs.msg import Pose
 from std_msgs.msg import String
+from std_msgs.msg import Float64
 
 def publish_gripper(quat, trans, gripper_id):
     # set initialization
@@ -28,18 +29,23 @@ def publish_gripper(quat, trans, gripper_id):
         rate.sleep()
 
 
-def publish_object(object_pose, object_name):
+def publish_object(object_pose, object_name, object_scale):
     # set initialization
     rate = rospy.Rate(10)
     obj_pub = rospy.Publisher("object_name", String, queue_size=10)
     pose_pub = rospy.Publisher("object_pose", Pose, queue_size=10)
+    scale_pub = rospy.Publisher("object_scale", Float64, queue_size=10)
 
     # prepare data
     object_name_msg = String()
     object_name_msg.data = object_name
 
+    object_scale_msg = Float64()
+    object_scale_msg.data = object_scale
+
     for i in range(10):
         obj_pub.publish(object_name_msg)
+        scale_pub.publish(object_scale_msg)
         pose_pub.publish(object_pose)
         rate.sleep()
 

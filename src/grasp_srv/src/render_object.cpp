@@ -3,6 +3,7 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/io/pcd_io.h>
 #include <std_msgs/String.h>
+#include <std_msgs/Float64.h>
 #include <geometry_msgs/Pose.h>
 #include <visualization_msgs/Marker.h>
 #include <pcl_ros/point_cloud.h>
@@ -14,12 +15,20 @@
 //global frame id
 std::string object_name = "a_cups";
 Eigen::Affine3f object_transform = Eigen::Affine3f::Identity(); // float
+float object_scale = 1.0;
 
 
 // Object Name Call Back
 void ObjectNameCallBack(const std_msgs::String::ConstPtr& msg) {
     ROS_INFO("Choose Object: [%s]", msg->data.c_str());
     object_name = msg->data;
+}
+
+
+// Object Scale Call Back
+void ObjectScaleCallBack(const std_msgs::Float64::ConstPtr& msg) {
+    ROS_INFO("Scale: [%f]", msg->data);
+    object_scale = msg->data;
 }
 
 
@@ -31,9 +40,13 @@ void ObjectPoseCallBack(const geometry_msgs::Pose::ConstPtr& msg) {
     Eigen::Vector3f t(float(msg->position.x),
                       float(msg->position.y),
                       float(msg->position.z));
+    
+    Eigen::Affine3f s;
+    s = Eigen::Scaling(object_scale);
     // Update object transform
     object_transform = Eigen::Affine3f::Identity();
     object_transform.rotate(q).pretranslate(t);
+    object_transform = object_transform * s;
 }
 
 
@@ -61,10 +74,10 @@ int main(int argc, char** argv)
 
     ros::init (argc, argv, "pub_pcl");
     ros::NodeHandle nh;
-    // Model Name Subscriber
+    // Model Subscriber
     ros::Subscriber object_sub = nh.subscribe("object_name", 1000, ObjectNameCallBack);
     ros::Subscriber pose_sub   = nh.subscribe("object_pose", 1000, ObjectPoseCallBack);
-
+    ros::Subscriber scale_sub  = nh.subscribe("object_scale", 1000, ObjectScaleCallBack);
     // Point Cloud Publisher
     ros::Publisher object_pointcloud_pub 
         = nh.advertise<pcl::PointCloud<pcl::PointXYZ>> ("object", 1);
