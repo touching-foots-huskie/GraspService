@@ -113,7 +113,7 @@ CloudCamera::CloudCamera(const std::string& filename, const Eigen::Matrix3Xd& vi
   cloud_processed_ = loadPointCloudFromFile(filename);
   // Make Affine transform
   Eigen::Transform<double, 3, Eigen::Affine> t;
-  t = Eigen::Affine3d::Identity();; 
+  t = Eigen::Scaling(pointcloud_scale);
   pcl::transformPointCloud<pcl::PointXYZRGBA, double>(*cloud_processed_, *cloud_original_, t, true);
 
   cloud_processed_ = cloud_original_;
