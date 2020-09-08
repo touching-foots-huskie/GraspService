@@ -6,21 +6,27 @@ import rospy
 import grasp_srv.srv
 import grasp_srv.msg
 import geometry_msgs.msg
+import sensor_msgs.msg
 
 import numpy as np
 import ikpy
 from scipy.spatial.transform import Rotation as R
 
-import robot_kinematics_render
+import gripper_visualization
+
 
 '''
 Pose is a 1D list of 7 elements (x, y, z, qx, qy, qz, qw), 
 '''
 def test_grasp_gen(model_name_list, object_pose_list, object_scale_list):
+    rospy.init_node('grasp_state_publisher')
+    pub = rospy.Publisher('joint_states', sensor_msgs.msg.JointState, queue_size=10)
+    
     rospy.wait_for_service('grasp_gen')
     try:
         grasp_gen = rospy.ServiceProxy('grasp_gen', grasp_srv.srv.GraspGen)
         object_poses = grasp_srv.msg.ObjectPoses()
+        # create msg
         for name, pose, scale in zip(model_name_list, object_pose_list, object_scale_list):
             object_poses.object_names.append(name)
             object_poses.object_scales.append(scale)
@@ -36,6 +42,7 @@ def test_grasp_gen(model_name_list, object_pose_list, object_scale_list):
             object_poses.object_poses.append(object_pose)
 
         resp = grasp_gen(object_poses)
+        # parse msg
         if len(resp.grasps.global_grasp_poses[0].grasp_poses) > 0:
             print("Service Sent")
             # Test on One
@@ -43,20 +50,13 @@ def test_grasp_gen(model_name_list, object_pose_list, object_scale_list):
             object_name = model_name_list[0]
             object_pose = object_poses.object_poses[0]
 
-            r = R.from_quat([grasp_pose.orientation.x, 
-                             grasp_pose.orientation.y,
-                             grasp_pose.orientation.z,
-                             grasp_pose.orientation.w])
-            transform_matrix = np.zeros((4, 4)) 
-            transform_matrix[:3, :3] = r.as_dcm()
-            transform_matrix[0, 3] = grasp_pose.position.x
-            transform_matrix[1, 3] = grasp_pose.position.y
-            transform_matrix[2, 3] = grasp_pose.position.z
-            transform_matrix[3, 3] = 1.
-
-            # run 
-            robot_kinematics_render.render_robot_pose(
-                transform_matrix, object_name, object_pose)
+            # publish object & gripper
+            gripper_visualization.publish_object(object_pose, object_name)
+            gripper_visualization.publish_gripper(
+                object_pose.orientation, 
+                object_pose.position,
+                0)
+        
             print("Pose Rendered")
             return
         else:
