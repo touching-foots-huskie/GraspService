@@ -26,7 +26,7 @@ class Visualizer: public QWidget
 {
 Q_OBJECT
 public:
-    Visualizer(QWidget* parent = 0) {grasp_id_ = 0;};
+    Visualizer(QWidget* parent = 0);
     virtual ~Visualizer();
 
 private Q_SLOTS:

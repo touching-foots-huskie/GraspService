@@ -103,6 +103,25 @@ CloudCamera::CloudCamera(const std::string& filename, const Eigen::Matrix3Xd& vi
 }
 
 
+CloudCamera::CloudCamera(const std::string& filename, const Eigen::Matrix3Xd& view_points,
+  const double pointcloud_scale)
+: cloud_processed_(new PointCloudRGB), cloud_original_(new PointCloudRGB), view_points_(view_points)
+{
+  sample_indices_.resize(0);
+  samples_.resize(3,0);
+  normals_.resize(3,0);
+  cloud_processed_ = loadPointCloudFromFile(filename);
+  // Make Affine transform
+  Eigen::Transform<double, 3, Eigen::Affine> t;
+  t = Eigen::Affine3d::Identity();; 
+  pcl::transformPointCloud<pcl::PointXYZRGBA, double>(*cloud_processed_, *cloud_original_, t, true);
+
+  cloud_processed_ = cloud_original_;
+  camera_source_ = Eigen::MatrixXi::Ones(1, cloud_processed_->size());
+  std::cout << "Loaded point cloud with " << camera_source_.cols() << " points \n";
+}
+
+
 CloudCamera::CloudCamera(const std::string& filename_left, const std::string& filename_right,
   const Eigen::Matrix3Xd& view_points)
 : cloud_processed_(new PointCloudRGB), cloud_original_(new PointCloudRGB), view_points_(view_points)

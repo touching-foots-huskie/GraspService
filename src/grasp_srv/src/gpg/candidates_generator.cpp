@@ -188,6 +188,7 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
   for(int obj_i = 0; obj_i < object_num; ++obj_i) {
     std::ostringstream model_path;
     std::string model_name = req.object_poses.object_names[obj_i];
+    double model_scale = req.object_poses.object_scales[obj_i];
     std::string ws_path = params_.ws_path;
     model_path << ws_path    << "/data/"
                << model_name << "/meshes/";
@@ -209,7 +210,7 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
 
     std::string pcd_file_name = model_path.str() + "textured.pcd";
     // load pointcloud
-    CloudCamera cloud_cam(pcd_file_name, view_points_);
+    CloudCamera cloud_cam(pcd_file_name, view_points_, model_scale);
     if (cloud_cam.getCloudOriginal()->size() == 0)
     {
       std::cout << "Input point cloud is empty or does not exist!\n";
@@ -243,7 +244,7 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
         Eigen::Vector3d top     = output_grasp.getGraspTop();
         Eigen::Matrix3d frame   = output_grasp.getFrame();
 
-	double compensate_distance = 0.1;
+	      double compensate_distance = 0.1;
         Eigen::Vector3d comp_vector(-compensate_distance, 0.0, 0.0);
         bottom += (frame * comp_vector);
 

@@ -40,6 +40,7 @@
 #include <vector>
 
 #include <Eigen/Dense>
+#include <Eigen/Geometry>
 
 #include <pcl/features/integral_image_normal.h>
 #include <pcl/features/normal_3d_omp.h>
@@ -49,6 +50,7 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
+#include <pcl/common/transforms.h>
 
 #include <gpg/eigen_utils.h>
 
@@ -165,6 +167,15 @@ public:
    * \param view_points the origins of the cameras (size: 3 x k)
    */
   CloudCamera(const std::string& filename, const Eigen::Matrix3Xd& view_points);
+
+  /**
+   * \brief Constructor for point cloud files (*.pcd).
+   * \param filename the location of the point cloud file
+   * \param view_points the origins of the cameras (size: 3 x k)
+   * \param the affine scale for the point cloud
+   */
+  CloudCamera(const std::string& filename, const Eigen::Matrix3Xd& view_points,
+    const double pointcloud_scale);
 
   /**
    * \brief Constructor for point cloud files (*.pcd) from a two cameras setup.
