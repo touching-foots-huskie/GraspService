@@ -6,7 +6,6 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /Axes2
       Splitter Ratio: 0.6147058606147766
     Tree Height: 443
   - Class: rviz/Selection
@@ -281,12 +280,12 @@ Visualization Manager:
       Use rainbow: true
       Value: true
     - Class: rviz/Axes
-      Enabled: false
-      Length: 0.10000000149011612
+      Enabled: true
+      Length: 1
       Name: Axes
       Radius: 0.009999999776482582
-      Reference Frame: robotiq_2f_85_base
-      Value: false
+      Reference Frame: base
+      Value: true
     - Class: rviz/Axes
       Enabled: true
       Length: 0.10000000149011612
@@ -322,7 +321,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.0499765872955322
+      Distance: 2.5253710746765137
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -337,10 +336,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4547964036464691
+      Pitch: 0.5297963619232178
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.630378723144531
+      Yaw: 1.777193307876587
     Saved: ~
 Window Geometry:
   Displays:
