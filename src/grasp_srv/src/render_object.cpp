@@ -79,7 +79,7 @@ int main(int argc, char** argv)
                                 + "/meshes/textured.pcd";
         // DepthCloud
         pcl::PointCloud<pcl::PointXYZ>::Ptr transformed_pd_msg = pcd_read_file(object_path, object_msg);
-        transformed_pd_msg->header.frame_id = "base";  // Deal with base frame
+        transformed_pd_msg->header.frame_id = "world";  // Deal with base frame
         pcl_conversions::toPCL(ros::Time::now(), transformed_pd_msg->header.stamp);
         object_pointcloud_pub.publish(transformed_pd_msg);
 
