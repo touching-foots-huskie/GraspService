@@ -16,13 +16,14 @@ import robot_kinematics_render
 '''
 Pose is a 1D list of 7 elements (x, y, z, qx, qy, qz, qw), 
 '''
-def test_grasp_gen(model_name_list, object_pose_list):
+def test_grasp_gen(model_name_list, object_pose_list, object_scale_list):
     rospy.wait_for_service('grasp_gen')
     try:
         grasp_gen = rospy.ServiceProxy('grasp_gen', grasp_srv.srv.GraspGen)
         object_poses = grasp_srv.msg.ObjectPoses()
-        for name, pose in zip(model_name_list, object_pose_list):
+        for name, pose, scale in zip(model_name_list, object_pose_list, object_scale_list):
             object_poses.object_names.append(name)
+            object_poses.object_scales.append(scale)
             object_pose = geometry_msgs.msg.Pose()
             # set position
             object_pose.position.x = pose[0]
@@ -69,5 +70,6 @@ if __name__ == "__main__":
     model_name_list = ["a_cups"]
     origin_pos = [0.3, 0.3, 0.2, 0., 0., 0., 1.]
     object_pose_list = [origin_pos]
-    test_grasp_gen(model_name_list, object_pose_list)
+    object_scale_list = [0.5]
+    test_grasp_gen(model_name_list, object_pose_list, object_scale_list)
 

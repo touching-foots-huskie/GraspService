@@ -16,6 +16,9 @@ int main(int argc, char **argv)
     srv.request.object_poses.object_names.push_back("a_cups");
     srv.request.object_poses.object_names.push_back("a_cups");
 
+    srv.request.object_poses.object_scales.push_back(0.5);
+    srv.request.object_poses.object_scales.push_back(0.5);
+
     geometry_msgs::Pose pose;
     pose.position.x = 0;
     pose.position.y = 0;
