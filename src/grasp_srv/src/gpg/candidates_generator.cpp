@@ -266,6 +266,26 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                         object_pose.position.y,
                                         object_pose.position.z);
 
+        // Get Grasp orientation
+        Eigen::Vector3d ori_vector(1.0, 0.0, 0.0);
+        ori_vector = grasp_frame * ori_vector;  // world orientation
+        bool reachable = false;
+        double grasp_z = ori_vector.z();
+        double grasp_y = ori_vector.y();
+        if(grasp_z <= 0) {
+          if(grasp_y >= 0) {
+            reachable = true;
+          } 
+          else {
+            double grasp_ratio = (-grasp_y);
+            if((grasp_ratio > 0) && (grasp_ratio < 0.5)) {
+              reachable = true;
+            }
+          }
+        }
+
+        if(!reachable) continue;  // Filtered unreachable pose
+
         Eigen::Vector3d grasp_point = object_frame_matrix * bottom + object_position;
         Eigen::Vector3d pre_grasp_point = object_frame_matrix * pre_bottom + object_position;
 
