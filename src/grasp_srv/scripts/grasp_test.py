@@ -49,10 +49,21 @@ def test_grasp_gen(model_name_list, object_pose_list, object_scale_list):
             object_pose = object_poses.object_poses[0]
 
             # publish object & gripper
+            # Rot from ee to tool0
+            r = R.from_quat(np.array([grasp_pose.orientation.x,
+                                      grasp_pose.orientation.y,
+                                      grasp_pose.orientation.z,
+                                      grasp_pose.orientation.w]))
+            rz = R.from_rotvec(-np.pi/2.0, np.array([0., 0., 1.]))
+            rx = R.from_rotvec(-np.pi, np.array[1., 0., 0.])
+            rf = r * rz * rx
+            r_quat = rf.as_quat()
             gripper_visualization.publish_object(object_pose, object_name)
             gripper_visualization.publish_gripper(
-                object_pose.orientation, 
-                object_pose.position,
+                r_quat, 
+                [grasp_pose.position.x,
+                 grasp_pose.position.y,
+                 grasp_pose.position.z],
                 0)
         
             print("Pose Rendered")
