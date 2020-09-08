@@ -67,9 +67,9 @@ def test_grasp_gen(model_name_list, object_pose_list, object_scale_list):
 
 
 if __name__ == "__main__":
-    model_name_list = ["a_cups"]
+    model_name_list = ["master_chef_can"]
     origin_pos = [0.4, 0.4, 0.2, 0., 0., 0., 1.]
     object_pose_list = [origin_pos]
-    object_scale_list = [1.0]
+    object_scale_list = [0.8]
     test_grasp_gen(model_name_list, object_pose_list, object_scale_list)
 
