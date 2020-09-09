@@ -61,17 +61,29 @@ Visualizer::Visualizer(QWidget* parent) : QWidget(parent) {
     // ModelName Text
     modelname_text_ = new QLineEdit("a_cups", this);
     connect(modelname_text_, SIGNAL (editingFinished()), this, SLOT (updateModelName()));
-    visual_layout->addWidget(modelname_text_, 2, 8, 1, 4);
+    visual_layout->addWidget(modelname_text_, 2, 10, 1, 2);
+    QLabel* model_name_label = new QLabel();
+    QString model_name_text = QString::fromStdString("Model Name");
+    model_name_label->setText(model_name_text);
+    visual_layout->addWidget(model_name_label, 2, 8, 1, 2);
 
     // ModelPose Text
     modelpose_text_ = new QLineEdit("0 0 0 0 0 0 1", this);
     connect(modelpose_text_, SIGNAL (editingFinished()), this, SLOT (updateModelPose()));
-    visual_layout->addWidget(modelpose_text_, 1, 8, 1, 4);
+    visual_layout->addWidget(modelpose_text_, 1, 10, 1, 2);
+    QLabel* model_pose_label = new QLabel();
+    QString model_pose_text = QString::fromStdString("Model Pose");
+    model_pose_label->setText(model_pose_text);
+    visual_layout->addWidget(model_pose_label, 1, 8, 1, 2);
 
     // ModelScale Text
     modelscale_text_ = new QLineEdit("1.0", this);
     connect(modelscale_text_, SIGNAL (editingFinished()), this, SLOT (updateModelScale()));
-    visual_layout->addWidget(modelscale_text_, 0, 8, 1, 4);
+    visual_layout->addWidget(modelscale_text_, 0, 10, 1, 2);
+    QLabel* model_scale_label = new QLabel();
+    QString model_scale_text = QString::fromStdString("Model Scale");
+    model_scale_label->setText(model_scale_text);
+    visual_layout->addWidget(model_scale_label, 0, 8, 1, 2);
 
     // Manager initialization 
     manager_ = new rviz::VisualizationManager(render_panel_);
