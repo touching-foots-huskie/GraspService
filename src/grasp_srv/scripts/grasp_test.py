@@ -7,9 +7,9 @@ import grasp_srv.srv
 import grasp_srv.msg
 import geometry_msgs.msg
 import sensor_msgs.msg
+import grasp_srv.msg
 
 import numpy as np
-import ikpy
 from scipy.spatial.transform import Rotation as R
 
 import gripper_visualization
@@ -18,44 +18,28 @@ import gripper_visualization
 '''
 Pose is a 1D list of 7 elements (x, y, z, qx, qy, qz, qw), 
 '''
-def test_grasp_gen(model_name_list, object_pose_list, object_scale_list):
-    rospy.init_node('grasp_state_publisher')
+def grasp_callback(object_poses):
+    print("Service Called")
     rospy.wait_for_service('grasp_gen')
     try:
         grasp_gen = rospy.ServiceProxy('grasp_gen', grasp_srv.srv.GraspGen)
-        object_poses = grasp_srv.msg.ObjectPoses()
-        # create msg
-        for name, pose, scale in zip(model_name_list, object_pose_list, object_scale_list):
-            object_poses.object_names.append(name)
-            object_poses.object_scales.append(scale)
-            object_pose = geometry_msgs.msg.Pose()
-            # set position
-            object_pose.position.x = pose[0]
-            object_pose.position.y = pose[1]
-            object_pose.position.z = pose[2]
-            object_pose.orientation.x = pose[3]
-            object_pose.orientation.y = pose[4]
-            object_pose.orientation.z = pose[5]
-            object_pose.orientation.w = pose[6]
-            object_poses.object_poses.append(object_pose)
-
         resp = grasp_gen(object_poses)
         # parse msg
         if len(resp.grasps.global_grasp_poses) > 0:
             if len(resp.grasps.global_grasp_poses[0].grasp_poses) > 0:
                 print("Service Sent")
                 # Test on One
-                grasp_pose = resp.grasps.global_grasp_poses[0].grasp_poses[0]
-                object_name = model_name_list[0]
-                object_scale = object_scale_list[0]
-                object_pose = object_poses.object_poses[0]
+                grasp_pose   = resp.grasps.global_grasp_poses[0].grasp_poses[0]
+                object_name  = object_poses.object_names[0]
+                object_scale = object_poses.object_scales[0]
+                object_pose  = object_poses.object_poses[0]
 
                 # publish object & gripper
                 # Rot from ee to tool0
                 r = R.from_quat(np.array([grasp_pose.orientation.x,
-                                        grasp_pose.orientation.y,
-                                        grasp_pose.orientation.z,
-                                        grasp_pose.orientation.w]))
+                                          grasp_pose.orientation.y,
+                                          grasp_pose.orientation.z,
+                                          grasp_pose.orientation.w]))
                 rz = R.from_rotvec(-np.pi/2.0*np.array([0., 0., 1.]))
                 rx = R.from_rotvec(-np.pi/2.0*np.array([1., 0., 0.]))
                 rf = r * rz * rx
@@ -80,9 +64,13 @@ def test_grasp_gen(model_name_list, object_pose_list, object_scale_list):
 
 
 if __name__ == "__main__":
-    model_name_list = ["master_chef_can"]
-    origin_pos = [0.4, 0.4, 0.2, 0., 0., 0., 1.]
-    object_pose_list = [origin_pos]
-    object_scale_list = [0.5]
-    test_grasp_gen(model_name_list, object_pose_list, object_scale_list)
+    # model_name_list = ["master_chef_can"]
+    # origin_pos = [0.4, 0.4, 0.2, 0., 0., 0., 1.]
+    # object_pose_list = [origin_pos]
+    # object_scale_list = [0.5]
+    # test_grasp_gen(model_name_list, object_pose_list, object_scale_list)
+    rospy.init_node('grasp_connector')
+    # start grasp subscriber
+    rospy.Subscriber("object_poses", grasp_srv.msg.ObjectPoses, grasp_callback)
+    rospy.spin()
 

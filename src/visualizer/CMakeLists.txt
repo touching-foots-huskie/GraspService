@@ -1,9 +1,16 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(grasp_visualizer)
-find_package(catkin REQUIRED COMPONENTS rviz roscpp)
-catkin_package()
+find_package(catkin REQUIRED COMPONENTS rviz roscpp grasp_srv)
 include_directories(${catkin_INCLUDE_DIRS})
 link_directories(${catkin_LIBRARY_DIRS})
+
+catkin_package(
+ INCLUDE_DIRS include
+ CATKIN_DEPENDS 
+ rviz
+ roscpp 
+ grasp_srv
+)
 
 ## This setting causes Qt's "MOC" generation to happen automatically.
 set(CMAKE_AUTOMOC ON)
