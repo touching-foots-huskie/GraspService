@@ -111,6 +111,12 @@ Visualizer::Visualizer(QWidget* parent) : QWidget(parent) {
         createDisplay("rviz/PointCloud2", "object", true);
     object_->subProp("Topic")->setValue("/object");
 
+    // Axis Dispaly
+    axis_ =  manager_->
+        createDisplay("rviz/Axes", "world_axis", true);
+    axis_->subProp("Reference Frame")->setValue("world");
+    axis_->subProp("Length")->setValue(0.5f);
+    axis_->subProp("Radius")->setValue(0.01f);
     showImage();
 }
 

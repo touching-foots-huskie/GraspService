@@ -57,6 +57,7 @@ private:
     rviz::Display* grid_;
     rviz::Display* robot_;
     rviz::Display* object_;
+    rviz::Display* axis_;
     // Label
     QLabel* color_image_label_;
     QLineEdit* modelname_text_;
