@@ -5,7 +5,6 @@ include_directories(${catkin_INCLUDE_DIRS})
 link_directories(${catkin_LIBRARY_DIRS})
 
 catkin_package(
- INCLUDE_DIRS include
  CATKIN_DEPENDS 
  rviz
  roscpp 

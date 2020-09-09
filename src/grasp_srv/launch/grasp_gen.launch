@@ -7,8 +7,10 @@
     <param name="robot_description" command="cat $(arg model)"/>
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ur_e_description)/rviz/ur5e.rviz"/> 
     <!-- point cloud visualization -->
-    <node name="render_object" pkg="grasp_srv" type="render_object"
-          args="$(find grasp_srv)"/> 
+    <node name="render_object" pkg="grasp_srv" type="render_object" args="$(find grasp_srv)"/> 
+    <node name="grasp_connector" pkg="grasp_srv" type="grasp_test.py" output="screen"/> 
+    <!-- visualization controller -->
+    <node name="visualizer" pkg="grasp_visualizer" type="visualizer" output="screen"/>
+
 </launch>

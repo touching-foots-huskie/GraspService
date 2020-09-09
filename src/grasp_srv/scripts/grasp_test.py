@@ -19,7 +19,6 @@ import gripper_visualization
 Pose is a 1D list of 7 elements (x, y, z, qx, qy, qz, qw), 
 '''
 def grasp_callback(object_poses):
-    print("Service Called")
     rospy.wait_for_service('grasp_gen')
     try:
         grasp_gen = rospy.ServiceProxy('grasp_gen', grasp_srv.srv.GraspGen)
@@ -27,7 +26,6 @@ def grasp_callback(object_poses):
         # parse msg
         if len(resp.grasps.global_grasp_poses) > 0:
             if len(resp.grasps.global_grasp_poses[0].grasp_poses) > 0:
-                print("Service Sent")
                 # Test on One
                 grasp_pose   = resp.grasps.global_grasp_poses[0].grasp_poses[0]
                 object_name  = object_poses.object_names[0]
@@ -52,23 +50,18 @@ def grasp_callback(object_poses):
                     grasp_pose.position.z],
                     0)
             
-                print("Pose Rendered")
+                rospy.loginfo("Pose Rendered")
                 return
             else:
-                print("No Grasp Candidates Found | CODE:2")
+                rospy.loginfo("No Grasp Candidates Found | CODE:2")
         else:
-            print("No Grasp Candidates Found | CODE:1")
+            rospy.loginfo("No Grasp Candidates Found | CODE:1")
                 
     except rospy.ServiceException as e:
-        print("Service call failed: %s"%e)
+        rospy.loginfo("Service call failed: %s"%e)
 
 
 if __name__ == "__main__":
-    # model_name_list = ["master_chef_can"]
-    # origin_pos = [0.4, 0.4, 0.2, 0., 0., 0., 1.]
-    # object_pose_list = [origin_pos]
-    # object_scale_list = [0.5]
-    # test_grasp_gen(model_name_list, object_pose_list, object_scale_list)
     rospy.init_node('grasp_connector')
     # start grasp subscriber
     rospy.Subscriber("object_poses", grasp_srv.msg.ObjectPoses, grasp_callback)

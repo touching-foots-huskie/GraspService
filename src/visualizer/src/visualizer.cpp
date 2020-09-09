@@ -12,6 +12,7 @@ Visualizer::Visualizer(QWidget* parent) : QWidget(parent) {
     object_name_ = "a_cups";
     std::fill(object_pose_, object_pose_ + 7, 0.0f);
     object_pose_[6] = 1.0f;
+    object_scale_ = 1.0f;
     // Object Pub
     objectpose_pub_ = nh_.advertise<grasp_srv::ObjectPoses>("object_poses", 1);
     // Data Path
@@ -63,12 +64,12 @@ Visualizer::Visualizer(QWidget* parent) : QWidget(parent) {
     visual_layout->addWidget(modelname_text_, 2, 8, 1, 4);
 
     // ModelPose Text
-    modelpose_text_ = new QLineEdit("0,0,0,0,0,0,1", this);
+    modelpose_text_ = new QLineEdit("0 0 0 0 0 0 1", this);
     connect(modelpose_text_, SIGNAL (editingFinished()), this, SLOT (updateModelPose()));
     visual_layout->addWidget(modelpose_text_, 1, 8, 1, 4);
 
     // ModelScale Text
-    modelscale_text_ = new QLineEdit("0.8", this);
+    modelscale_text_ = new QLineEdit("1.0", this);
     connect(modelscale_text_, SIGNAL (editingFinished()), this, SLOT (updateModelScale()));
     visual_layout->addWidget(modelscale_text_, 0, 8, 1, 4);
 
@@ -142,10 +143,8 @@ void Visualizer::startGen() {
     msg.object_names.push_back(object_name_);
     msg.object_scales.push_back(object_scale_);
     msg.object_poses.push_back(object_pose);
-    for(int i = 0; i < 10; ++i) {
-        objectpose_pub_.publish(msg);
-        rate.sleep();
-    }
+    objectpose_pub_.publish(msg);
+    rate.sleep();
     
     std::cout << "Object Msg published" << std::endl;
 }
@@ -160,23 +159,31 @@ void Visualizer::updateModelPose() {
     QString model_pose = modelpose_text_->text();
     std::string pose_string = model_pose.toStdString();
     // Parse String
-    double norm_p = 0.0;
+    std::istringstream iss(pose_string);
+    std::vector<std::string> results((std::istream_iterator<std::string>(iss)),
+		                      std::istream_iterator<std::string>());
+
     for(int i = 0; i < 7; ++i) {
-        std::string delimiter = ",";
-        std::string value = pose_string.substr(2*i, pose_string.find(delimiter));
-        double pvalue = std::stod(value);
+        double pvalue = std::stod(results[i]);
         object_pose_[i] = pvalue;
-        norm_p += (pvalue * pvalue);
     }
+    
     // Normalize
+    double norm_p = 0.0;
+    for(int i = 0; i < 4; ++i) {
+        norm_p += pow(object_pose_[i+3], 2); 
+    }
     norm_p = std::sqrt(norm_p);
+
+    for(int i = 0; i < 4; ++i) {
+        object_pose_[i+3] = object_pose_[i+3]/norm_p;
+    }
 
     std::ostringstream ss;
     for(int i = 0; i < 7; ++i) {
-        object_pose_[i] /= norm_p;
         ss << object_pose_[i];
         if(i < 6) {
-            ss << ",";
+            ss << " ";
         }
     }
     // Reset String
