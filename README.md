@@ -27,3 +27,12 @@ source devel/setup.bash
 rosrun grasp_srv grasp_gen_server 
 rosrun grasp_srv_grasp_gen_client #in another terminal
 </code></pre>
+
+## Visualization Test
+
+To run visualization, just run the following code:
+<pre><code>roslaunch grasp_srv grasp_gen.launch
+</code></pre>
+
+Everything is self-explained.
+
