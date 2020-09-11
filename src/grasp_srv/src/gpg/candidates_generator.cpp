@@ -208,9 +208,23 @@ bool CandidatesGenerator::grasp_gen(grasp_srv::GraspGen::Request  &req,
       continue; //   Go to the next object
     }
 
-    std::string pcd_file_name = model_path.str() + "textured.pcd";
-    // load pointcloud
-    CloudCamera cloud_cam(pcd_file_name, view_points_, model_scale);
+    // Read Pontcloud cloud
+    CloudCamera cloud_cam;
+    if(model_name == "raw_pointcloud") {
+      // Load PointCloud from PointCloud2
+      pcl::PointCloud<pcl::PointNormal> input_pointcloud;
+      pcl::fromROSMsg<pcl::PointNormal>(req.object_poses.object_point_clouds[obj_i],
+                                        input_pointcloud);	
+      cloud_cam.setPointCloud(input_pointcloud.makeShared(),
+                              view_points_,
+                              model_scale);
+    }
+    else {
+      // Read pointcloud from file
+      std::string pcd_file_name = model_path.str() + "textured.pcd";
+      cloud_cam.setPointCloud(pcd_file_name, view_points_, model_scale);
+    }
+    
     if (cloud_cam.getCloudOriginal()->size() == 0)
     {
       std::cout << "Input point cloud is empty or does not exist!\n";

@@ -23,6 +23,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   message_generation
   pcl_ros
+  pcl_conversions
 )
 
 include_directories(
@@ -54,6 +55,7 @@ generate_messages(
    DEPENDENCIES
    std_msgs  # Or other packages containing msgs
    geometry_msgs
+   sensor_msgs
 )
 
 catkin_package(
@@ -64,8 +66,10 @@ catkin_package(
  rosbag
  std_msgs 
  geometry_msgs 
+ sensor_msgs
  message_runtime 
  pcl_ros
+ pcl_conversions
 )
 
 set(GRASP "gpg")
@@ -156,7 +160,7 @@ add_dependencies(grasp_gen_server grasp_srv_gencpp)
 
 # add Grasp Gen Client
 add_executable(grasp_gen_client src/grasp_gen_client.cpp)
-target_link_libraries(grasp_gen_client ${catkin_LIBRARIES})
+target_link_libraries(grasp_gen_client ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 add_dependencies(grasp_gen_client grasp_srv_gencpp)
 
 # add Render Object Node

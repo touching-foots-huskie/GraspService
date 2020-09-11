@@ -3,6 +3,14 @@
 #include "grasp_srv/GraspGen.h"
 #include <cstdlib>
 
+// pcl
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl_conversions/pcl_conversions.h>
+
+// msg
+#include <sensor_msgs/PointCloud2.h>
 
 int main(int argc, char **argv) 
 {
@@ -29,6 +37,18 @@ int main(int argc, char **argv)
     pose.orientation.w = 0;
     srv.request.object_poses.object_poses.push_back(pose);
     srv.request.object_poses.object_poses.push_back(pose);
+
+    // object_clouds
+    // Read from File
+    std::string file_name = "/root/GraspService/src/grasp_srv/data/a_cups/mesh/textured.pcd";
+    pcl::PointCloud<pcl::PointNormal>::Ptr cloud(new pcl::PointCloud<pcl::PointNormal>);
+    pcl::io::loadPCDFile<pcl::PointNormal>(file_name, *cloud);
+    // Transform this into a msg
+    sensor_msgs::PointCloud2 test_point_cloud1;
+    sensor_msgs::PointCloud2 test_point_cloud2;
+    pcl::toROSMsg<pcl::PointNormal>(*cloud, test_point_cloud2);	
+    srv.request.object_poses.object_point_clouds.push_back(test_point_cloud1);
+    srv.request.object_poses.object_point_clouds.push_back(test_point_cloud2);
 
     if(client.call(srv)) {
         ROS_INFO("Grasp Pose Generated");

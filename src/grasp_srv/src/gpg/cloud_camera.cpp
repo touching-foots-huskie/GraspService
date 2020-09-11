@@ -542,3 +542,44 @@ void CloudCamera::setSamples(const Eigen::Matrix3Xd& samples)
 {
   samples_ = samples;
 }
+
+
+// New Defined functions for framework
+void CloudCamera::setPointCloud(const std::string& filename, const Eigen::Matrix3Xd& view_points,
+                                const double pointcloud_scale) {
+  view_points_ = view_points;
+  sample_indices_.resize(0);
+  samples_.resize(3,0);
+  normals_.resize(3,0);
+  cloud_processed_ = loadPointCloudFromFile(filename);
+  // Make Affine transform
+  Eigen::Transform<double, 3, Eigen::Affine> t;
+  t = Eigen::Scaling(pointcloud_scale);
+  pcl::transformPointCloud<pcl::PointXYZRGBA, double>(*cloud_processed_, *cloud_original_, t, true);
+
+  cloud_processed_ = cloud_original_;  // TODO: hard copy or soft copy?
+  camera_source_ = Eigen::MatrixXi::Ones(1, cloud_processed_->size());
+  std::cout << "Loaded point cloud with " << camera_source_.cols() << " points \n";
+}
+
+
+void CloudCamera::setPointCloud(const PointCloudPointNormal::Ptr& cloud, 
+                                const Eigen::Matrix3Xd& view_points,
+                                const double pointcloud_scale) {
+  view_points_ = view_points;
+  sample_indices_.resize(0);
+  samples_.resize(3,0);
+  normals_.resize(3,0);
+  // Assign pointcloud
+  pcl::copyPointCloud(*cloud, *cloud_processed_);
+
+  // Make Affine transform
+  Eigen::Transform<double, 3, Eigen::Affine> t;
+  t = Eigen::Scaling(pointcloud_scale);
+  pcl::transformPointCloud<pcl::PointXYZRGBA, double>(*cloud_processed_, *cloud_original_, t, true);
+
+  cloud_processed_ = cloud_original_;
+  // Assign indices
+  camera_source_ = Eigen::MatrixXi::Ones(1, cloud_processed_->size());
+  std::cout << "Loaded point cloud with " << camera_source_.cols() << " points \n";
+}

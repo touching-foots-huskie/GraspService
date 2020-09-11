@@ -48,6 +48,7 @@
 #include <pcl/search/kdtree.h>
 #include <pcl/search/impl/kdtree.hpp>
 #include <pcl/io/pcd_io.h>
+#include <pcl_conversions/pcl_conversions.h>
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 #include <pcl/common/transforms.h>
@@ -340,12 +341,27 @@ public:
 
   /**
    * \brief Set the camera view points.
-   * \return the origins of the cameras (size: 3 x k)
+   * \return 
   */
   void setViewPoints(const Eigen::Matrix3Xd& view_points)
   {
     view_points_ = view_points;
   }
+
+  /**
+   * \brief Set the pointcloud from file name
+   * \return 
+  */
+  void setPointCloud(const std::string& filename, const Eigen::Matrix3Xd& view_points,
+                     const double pointcloud_scale);
+
+  /**
+   * \brief Set the pointcloud from PointCloud Ptr
+   * \return 
+  */
+  void setPointCloud(const PointCloudPointNormal::Ptr& cloud, 
+                     const Eigen::Matrix3Xd& view_points,
+                     const double pointcloud_scale);
 
 
 private:
