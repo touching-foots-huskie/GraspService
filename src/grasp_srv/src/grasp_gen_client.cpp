@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 
     // object_clouds
     // Read from File
-    std::string file_name = "/root/GraspService/src/grasp_srv/data/a_cups/mesh/textured.pcd";
+    std::string file_name = "/root/GraspService/src/grasp_srv/data/a_cups/mesh/cloud.pcd";
     pcl::PointCloud<pcl::PointNormal>::Ptr cloud(new pcl::PointCloud<pcl::PointNormal>);
     pcl::io::loadPCDFile<pcl::PointNormal>(file_name, *cloud);
     // Transform this into a msg

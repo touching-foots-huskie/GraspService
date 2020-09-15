@@ -795,8 +795,8 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
       // Get pointcloud from file
       std::ostringstream model_path;
       model_path << ws_path_   << "/data/"
-                 << model_name << "/meshes/";
-      std::string pcd_file_name = model_path.str() + "textured.pcd";
+                 << model_name << "/visual_meshes/";
+      std::string pcd_file_name = model_path.str() + "cloud.pcd";
       cloud.setPointCloud(pcd_file_name, default_view_point, model_scale);
     }
 
