@@ -12,5 +12,4 @@
     <node name="grasp_connector" pkg="grasp_srv" type="grasp_test.py" output="screen"/> 
     <!-- visualization controller -->
     <node name="visualizer" pkg="grasp_visualizer" type="visualizer" output="screen"/>
-
 </launch>

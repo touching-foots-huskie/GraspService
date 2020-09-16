@@ -386,7 +386,7 @@ class Cloud {
    * \brief Set the pointcloud from PointCloud Ptr
    * \return 
   */
-  void setPointCloud(const PointCloudPointNormal::Ptr& cloud, 
+  void setPointCloud(const PointCloudRGB::Ptr& cloud, 
                      const Eigen::Matrix3Xd& view_points,
                      const double pointcloud_scale);
 

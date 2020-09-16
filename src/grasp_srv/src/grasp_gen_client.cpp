@@ -12,44 +12,79 @@
 // msg
 #include <sensor_msgs/PointCloud2.h>
 
+// json related 
+#include <nlohmann/json.hpp>
+// for convenience
+using json = nlohmann::json;
+
+// stream
+#include <istream>
+#include <fstream>
+
+// Eigen related
+#include <Eigen/Eigen>
+#include <Eigen/Geometry>
+
+void matrix_parse(Eigen::Matrix4d& matrix, const json& json_matrix) {
+    for(int i = 0; i < 4; ++i) {
+        for(int j = 0; j < 4; ++j) {
+            matrix(i, j) = json_matrix[i][j];
+        }
+    }
+} 
+
+
 int main(int argc, char **argv) 
 {
+    // ros init
     ros::init(argc, argv, "grasp_gen_client");
-
     ros::NodeHandle n;
     ros::ServiceClient client 
         = n.serviceClient<grasp_srv::GraspGen>("grasp_gen");
     
+    // json path
+    std::string scene_name = "1-1/";
+    std::string data_path = "/home/harvey/Data/kinect_data/output/";
+    std::string json_path = data_path + scene_name + "object_data.json";
+
+    std::ifstream json_file("file.json");
+    json object_datas;
+    json_file >> object_datas;
+    
     grasp_srv::GraspGen srv;
-    srv.request.object_poses.object_names.push_back("a_cups");
-    srv.request.object_poses.object_names.push_back("a_cups");
 
-    srv.request.object_poses.object_scales.push_back(0.5);
-    srv.request.object_poses.object_scales.push_back(0.5);
+    // Go through all objects in scene
+    for(auto id = 0; id < object_datas.size(); ++id) {
+        // Parse name
+        std::string name = object_datas[id]["name"];
+        srv.request.object_poses.object_names.push_back(name);
+        srv.request.object_poses.object_scales.push_back(1.0);
+        // Parse pose
+        Eigen::Matrix4d object_pose;
+        matrix_parse(object_pose, object_datas[id]["pose_world"]);
+        // Compute quat from matrix
+        Eigen::Matrix3d q_matrix = object_pose.block(0, 0, 3, 3);
+        Eigen::Quaterniond q(q_matrix);
+        geometry_msgs::Pose pose;
+        pose.position.x = object_pose(3, 0);
+        pose.position.y = object_pose(3, 1);
+        pose.position.z = object_pose(3, 2);
+        pose.orientation.x = q.x();
+        pose.orientation.y = q.y();
+        pose.orientation.z = q.z();
+        pose.orientation.w = q.w();
+        srv.request.object_poses.object_poses.push_back(pose);
+        // Load PointCloud
+        std::string pd_filename = data_path + scene_name + std::to_string(id) + ".pcd";
+        pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGBA>);
+        pcl::io::loadPCDFile<pcl::PointXYZRGBA>(pd_filename, *cloud);
+        // Transform this into a msg
+        sensor_msgs::PointCloud2 point_cloud;
+        pcl::toROSMsg<pcl::PointXYZRGBA>(*cloud, point_cloud);	
+        srv.request.object_poses.object_point_clouds.push_back(point_cloud);
+    }
 
-    geometry_msgs::Pose pose;
-    pose.position.x = 0;
-    pose.position.y = 0;
-    pose.position.z = 0;
-    pose.orientation.x = 1;
-    pose.orientation.y = 0;
-    pose.orientation.z = 0;
-    pose.orientation.w = 0;
-    srv.request.object_poses.object_poses.push_back(pose);
-    srv.request.object_poses.object_poses.push_back(pose);
-
-    // object_clouds
-    // Read from File
-    std::string file_name = "/root/GraspService/src/grasp_srv/data/a_cups/mesh/cloud.pcd";
-    pcl::PointCloud<pcl::PointNormal>::Ptr cloud(new pcl::PointCloud<pcl::PointNormal>);
-    pcl::io::loadPCDFile<pcl::PointNormal>(file_name, *cloud);
-    // Transform this into a msg
-    sensor_msgs::PointCloud2 test_point_cloud1;
-    sensor_msgs::PointCloud2 test_point_cloud2;
-    pcl::toROSMsg<pcl::PointNormal>(*cloud, test_point_cloud2);	
-    srv.request.object_poses.object_point_clouds.push_back(test_point_cloud1);
-    srv.request.object_poses.object_point_clouds.push_back(test_point_cloud2);
-
+    // call srv
     if(client.call(srv)) {
         ROS_INFO("Grasp Pose Generated");
     }

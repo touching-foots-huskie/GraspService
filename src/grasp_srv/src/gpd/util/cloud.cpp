@@ -680,7 +680,7 @@ void Cloud::setPointCloud(const std::string& filename,
   std::cout << "Loaded point cloud with " << camera_source_.cols() << " points \n";
 }
 
-void Cloud::setPointCloud(const PointCloudPointNormal::Ptr& cloud, 
+void Cloud::setPointCloud(const PointCloudRGB::Ptr& cloud, 
                           const Eigen::Matrix3Xd& view_points,
                           const double pointcloud_scale) {
   view_points_ = view_points;

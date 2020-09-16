@@ -783,9 +783,9 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
     Eigen::Matrix<double, 3, 1> default_view_point;
     default_view_point << 0., 0., 0.;
     if(model_name == "raw_pointcloud") {
-      pcl::PointCloud<pcl::PointNormal> input_pointcloud;
-      pcl::fromROSMsg<pcl::PointNormal>(req.object_poses.object_point_clouds[obj_i],
-                                        input_pointcloud);	
+      pcl::PointCloud<pcl::PointXYZRGBA> input_pointcloud;
+      pcl::fromROSMsg<pcl::PointXYZRGBA>(req.object_poses.object_point_clouds[obj_i],
+                                         input_pointcloud);	
       // TODO: support dynamic view points
       cloud.setPointCloud(input_pointcloud.makeShared(),
                           default_view_point,

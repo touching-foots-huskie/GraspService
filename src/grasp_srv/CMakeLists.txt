@@ -21,6 +21,9 @@ include_directories(${Boost_INCLUDE_DIRS})
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
+#JSON
+find_package(nlohmann_json 3.2.0 REQUIRED)
+
 # Classifier depends on what libraries are installed.
 option(USE_OPENVINO "use classifier based on OpenVINO toolkit" OFF)
 option(USE_CAFFE "use classifier based on Caffe framework" OFF)
@@ -296,7 +299,10 @@ add_dependencies(grasp_gen_server grasp_srv_gencpp)
 
 # add Grasp Gen Client
 add_executable(grasp_gen_client src/grasp_gen_client.cpp)
-target_link_libraries(grasp_gen_client ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+target_link_libraries(grasp_gen_client 
+                      ${catkin_LIBRARIES} 
+                      ${PCL_LIBRARIES} 
+                      nlohmann_json::nlohmann_json)
 add_dependencies(grasp_gen_client grasp_srv_gencpp)
 
 # add Render Object Node
