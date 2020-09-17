@@ -132,7 +132,8 @@ generate_messages(
 )
 
 catkin_package(
- INCLUDE_DIRS include
+ INCLUDE_DIRS 
+ include
  CATKIN_DEPENDS 
  roscpp 
  rospy
@@ -302,13 +303,23 @@ add_executable(grasp_gen_client src/grasp_gen_client.cpp)
 target_link_libraries(grasp_gen_client 
                       ${catkin_LIBRARIES} 
                       ${PCL_LIBRARIES} 
-                      nlohmann_json::nlohmann_json)
+                      nlohmann_json::nlohmann_json
+                      ${Boost_LIBRARIES})
 add_dependencies(grasp_gen_client grasp_srv_gencpp)
 
 # add Render Object Node
 add_executable(render_object src/render_object.cpp)
 target_link_libraries(render_object ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
+# # add Render Scene Node
+add_executable(render_scene src/render_scene.cpp)
+target_link_libraries(render_scene 
+                      ${catkin_LIBRARIES}
+                      ${PCL_LIBRARIES}
+                      nlohmann_json::nlohmann_json)
+
 # install
-catkin_install_python(PROGRAMS scripts/grasp_test.py scripts/robot_kinematics_render.py
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+catkin_install_python(PROGRAMS scripts/grasp_test.py 
+                               scripts/robot_kinematics_render.py
+                               scripts/gripper_transfer.py
+                      DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
