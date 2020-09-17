@@ -14,7 +14,7 @@ SceneVisualizer::SceneVisualizer(std::string data_path, QWidget* parent) : QWidg
     data_path_ = data_path;
     
     // Initialize publisher
-    grasp_pub_      = nh_.advertise<std_msgs::Int32>("grasp_index", 1);
+    grasp_pub_      = nh_.advertise<std_msgs::Int32>("grasp_id", 1);
     scene_name_pub_ = nh_.advertise<std_msgs::String>("scene_name", 1);
     model_name_pub_ = nh_.advertise<std_msgs::String>("model_name", 1);
     save_signal_pub_ = nh_.advertise<std_msgs::Bool>("save_signal", 1);

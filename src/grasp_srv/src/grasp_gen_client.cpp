@@ -42,7 +42,7 @@ using json = nlohmann::json;
 // global data
 grasp_srv::Grasps grasps;
 std::string model_name;
-int grasp_id;
+int grasp_id = 0;
 
 
 /*
@@ -97,6 +97,10 @@ void SceneNameCallBack(const std_msgs::String::ConstPtr& msg,
         ROS_INFO("Grasp Pose Generated");
         // Publish
         grasps = srv.response.grasps;  // Update Response
+        // Update ModelName & Id
+        model_name = grasps.global_grasp_poses[0].model_names[0];
+        grasp_id = 0;
+        publish_pose(n);  // Publish Pose After Call
     }
     else {
         ROS_ERROR("Failed to call service grasp_gen");
@@ -105,8 +109,11 @@ void SceneNameCallBack(const std_msgs::String::ConstPtr& msg,
 }
 
 
-void ModelNameCallBack(const std_msgs::String::ConstPtr& msg) {
+void ModelNameCallBack(const std_msgs::String::ConstPtr& msg,
+                       ros::NodeHandle n) {
     model_name = msg->data;
+    grasp_id = 0;  // Reset grasp_id after change model
+    publish_pose(n);
     ROS_INFO("Model Name Updated.");
 };
 
@@ -115,8 +122,11 @@ void GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg,
                      ros::NodeHandle n) {
     grasp_id = msg->data;
     ROS_INFO("Grasp ID Updated.");
+    publish_pose(n);   
+};
 
-    // Publish GraspPose
+
+void publish_pose(ros::NodeHandle n) {
     bool flag = false;
     for(auto i = 0; i < grasps.global_grasp_poses.size(); ++i) {
         if(grasps.global_grasp_poses[i].model_names.size() == 0) continue;  // No Grasps Here
@@ -133,8 +143,9 @@ void GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg,
             break;
         }
     }
-    if(!flag) ROS_INFO("No Poses For This Model");
-};
+    if(!flag) ROS_INFO("No Poses For This Model.");
+    else ROS_INFO("Pose Published.");
+}
 
 
 void SaveCallBack(const std_msgs::Bool::ConstPtr& msg, const std::string& data_path) {
@@ -169,6 +180,7 @@ void SaveCallBack(const std_msgs::Bool::ConstPtr& msg, const std::string& data_p
             std::ofstream out_file(pose_file_name);
             out_file << pose_datas;
             out_file.close();
+            ROS_INFO("Grasp Saved.");
             return;
         }
     }
@@ -196,14 +208,16 @@ int main(int argc, char **argv)
     ros::Subscriber grasp_sub  = n.subscribe<std_msgs::Int32>("grasp_id", 1000, f2);
     
     // Model Name
-    ros::Subscriber model_name_sub  = n.subscribe<std_msgs::String>("model_name", 1000, ModelNameCallBack);
+    boost::function<void (const std_msgs::String::ConstPtr&)> f3 =
+        boost::bind(ModelNameCallBack, boost::placeholders::_1, n);
+    ros::Subscriber model_name_sub  = n.subscribe<std_msgs::String>("model_name", 1000, f3);
     
     // Save 
-    boost::function<void (const std_msgs::Bool::ConstPtr&)> f3 =
+    boost::function<void (const std_msgs::Bool::ConstPtr&)> f4 =
         boost::bind(SaveCallBack, boost::placeholders::_1, model_dir);
-    ros::Subscriber save_sub  = n.subscribe<std_msgs::Bool>("save_signal", 1000, f3);
+    ros::Subscriber save_sub  = n.subscribe<std_msgs::Bool>("save_signal", 1000, f4);
 
-    ros::MultiThreadedSpinner spinner(6); 
+    ros::MultiThreadedSpinner spinner(7); 
     spinner.spin();
 
     return 0;

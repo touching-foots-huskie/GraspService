@@ -18,7 +18,7 @@ Visualizer::Visualizer(QWidget* parent) : QWidget(parent) {
     // Data Path
     data_path_ = "/home/harvey/Data/Reconstruction";
     // Initialize publisher
-    grasp_pub_ = nh_.advertise<std_msgs::Int32>("grasp_index", 1);
+    grasp_pub_ = nh_.advertise<std_msgs::Int32>("grasp_id", 1);
     // QT
     this->setWindowTitle("Reconstruction Visualizer");
     // Layout
