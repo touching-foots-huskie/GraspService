@@ -834,21 +834,21 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         Eigen::Matrix<double, 3, 1> default_view_point;
         default_view_point << 0., 0., 0.;
         if(model_name == "raw_pointcloud") {
-        pcl::PointCloud<pcl::PointXYZRGBA> input_pointcloud;
-        pcl::fromROSMsg<pcl::PointXYZRGBA>(req.object_poses.object_point_clouds[obj_i],
-                                            input_pointcloud);	
-        // TODO: support dynamic view points
-        cloud.setPointCloud(input_pointcloud.makeShared(),
-                            default_view_point,
-                            model_scale);
+            pcl::PointCloud<pcl::PointXYZRGBA> input_pointcloud;
+            pcl::fromROSMsg<pcl::PointXYZRGBA>(req.object_poses.object_point_clouds[obj_i],
+                                                input_pointcloud);	
+            // TODO: support dynamic view points
+            cloud.setPointCloud(input_pointcloud.makeShared(),
+                                default_view_point,
+                                model_scale);
         }
         else {
-        // Get pointcloud from file
-        std::ostringstream model_path;
-        model_path << ws_path_   << "/data/"
-                    << model_name << "/visual_meshes/";
-        std::string pcd_file_name = model_path.str() + "cloud.pcd";
-        cloud.setPointCloud(pcd_file_name, default_view_point, model_scale);
+            // Get pointcloud from file
+            std::ostringstream model_path;
+            model_path << ws_path_   << "/data/"
+                       << model_name << "/visual_meshes/";
+            std::string pcd_file_name = model_path.str() + "cloud.pcd";
+            cloud.setPointCloud(pcd_file_name, default_view_point, model_scale);
         }
 
         // Preprocess the point cloud.
@@ -883,8 +883,8 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         // Add grasp_msg into res
         res.grasps.global_grasp_poses.push_back(global_grasp_msg);
         }
-        return true;
     }
+    return true;
 }
 
 void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
