@@ -148,6 +148,7 @@ void SaveCallBack(const std_msgs::Bool::ConstPtr& msg, const std::string& data_p
     // Add new pose
     geometry_msgs::Pose local_pose = 
                 grasps.global_grasp_poses[i].local_poses[grasp_id];
+    double scale = grasps.global_grasp_poses[i].scales[grasp_id];
     std::vector<double> pose_array = {
         local_pose.position.x,
         local_pose.position.y,
@@ -155,7 +156,8 @@ void SaveCallBack(const std_msgs::Bool::ConstPtr& msg, const std::string& data_p
         local_pose.orientation.x,
         local_pose.orientation.y,
         local_pose.orientation.z,
-        local_pose.orientation.w};
+        local_pose.orientation.w,
+        scale};
     pose_datas.push_back(pose_array);
     std::ofstream out_file(pose_file_name);
     out_file << pose_datas;

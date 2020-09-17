@@ -387,6 +387,7 @@ GraspDetector::GraspDetector(const std::string &config_filename, const std::stri
    // OCRTOC Related
     centered_at_origin_ = config_file.getValueOfKey<bool>("centered_at_origin", false);
     ws_path_ = ws_path;
+    pre_defined_enable_ = config_file.getValueOfKey<bool>("pre_defined_enable", false);
 }
 
 std::vector<std::unique_ptr<candidate::Hand>> GraspDetector::detectGrasps(
@@ -773,12 +774,63 @@ void GraspDetector::printStdVector(const std::vector<double> &v,
 bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                               grasp_srv::GraspGen::Response &res) {
     int object_num = req.object_poses.object_names.size();
+    // local parameters
+    double compensate_distance = 0.1;
+    double pre_distance = 0.15;
+
     for(int obj_i = 0; obj_i < object_num; ++obj_i) {
-        // Get PointCloud First
-        util::Cloud cloud;
         std::string model_name = req.object_poses.object_names[obj_i];
         double model_scale = req.object_poses.object_scales[obj_i];
 
+        // Get Object Pose
+        geometry_msgs::Pose object_pose = req.object_poses.object_poses[obj_i];
+        Eigen::Quaternion<double> object_frame_quat(object_pose.orientation.w,
+                                                    object_pose.orientation.x,
+                                                    object_pose.orientation.y,
+                                                    object_pose.orientation.z);
+        Eigen::Matrix3d object_frame_matrix = object_frame_quat.matrix();
+        Eigen::Vector3d object_position(object_pose.position.x,
+                                        object_pose.position.y,
+                                        object_pose.position.z);
+
+        grasp_srv::GlobalGraspPose global_grasp_msg;
+        // Load Predefined Pose
+        if(false) {
+            std::string pose_filename;
+            pose_filename = ws_path_   + "/data/" +
+                            model_name + "/pose.json";
+            try {
+                std::ifstream json_file(pose_filename);
+                json pose_datas;
+                json_file >> pose_datas;
+                // Save pose_datas into msg
+                for(auto id = 0; id < pose_datas.size(); ++id) {
+                    Eigen::Vector3d bottom(pose_datas[id][0],
+                                           pose_datas[id][1],
+                                           pose_datas[id][2]);
+                    Eigen::Quaternion<double> frame_quat(pose_datas[id][6],
+                                                         pose_datas[id][3],
+                                                         pose_datas[id][4],
+                                                         pose_datas[id][5]);
+                    Eigen::Matrix3d frame = frame_quat.matrix();
+                    double pre_scale = pose_datas[id][7];
+                    double relative_scale = model_scale / pre_scale;
+                    // Generate Msg
+                    generate_msg(global_grasp_msg, 
+                                 model_name, model_scale,
+                                 frame, bottom,
+                                 object_frame_matrix,
+                                 object_position,
+                                 relative_scale = relative_scale);
+                }
+                ROS_INFO("Pre-defined Pose Added.");
+            }
+            catch(std::exception& e) {
+            }
+        }
+
+        // Get PointCloud First
+        util::Cloud cloud;
         Eigen::Matrix<double, 3, 1> default_view_point;
         default_view_point << 0., 0., 0.;
         if(model_name == "raw_pointcloud") {
@@ -811,17 +863,6 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         // Generate Candidates
         std::vector<std::unique_ptr<candidate::Hand>> grasps = detectGrasps(cloud);
 
-        // Get Object Pose
-        geometry_msgs::Pose object_pose = req.object_poses.object_poses[obj_i];
-        Eigen::Quaternion<double> object_frame_quat(object_pose.orientation.w,
-                                                    object_pose.orientation.x,
-                                                    object_pose.orientation.y,
-                                                    object_pose.orientation.z);
-        Eigen::Matrix3d object_frame_matrix = object_frame_quat.matrix();
-        Eigen::Vector3d object_position(object_pose.position.x,
-                                        object_pose.position.y,
-                                        object_pose.position.z);
-
         // Save grasps into msg
         if(grasps.size() < 1) {
         ROS_INFO("No Grasp Pose Found.");
@@ -829,7 +870,6 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         else {
         ROS_INFO("Grasp Pose Found");      
         // Save it into the msg
-        grasp_srv::GlobalGraspPose global_grasp_msg;
         for(int grasp_i = 0; grasp_i < grasps.size();++grasp_i) {
             // Set Score
             float score = grasps[grasp_i]->getScore();
@@ -838,90 +878,114 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
             Eigen::Vector3d bottom  = grasps[grasp_i]->getPosition();
             Eigen::Matrix3d frame   = grasps[grasp_i]->getFrame();
 
-            double compensate_distance = 0.1;
-            Eigen::Vector3d comp_vector(-compensate_distance, 0.0, 0.0);
-            bottom += (frame * comp_vector);
-
-            double pre_distance = 0.15;
-            Eigen::Vector3d pre_bottom = bottom;
-            Eigen::Vector3d pre_vector(-pre_distance, 0.0, 0.0);
-            pre_bottom += (frame * pre_vector);
-
-            // Grasp Frame
-            Eigen::Matrix3d grasp_frame = object_frame_matrix * frame;
-            
-            // Grasp Filter
-            // Get Grasp orientation
-            Eigen::Vector3d ori_vector(1.0, 0.0, 0.0);
-            ori_vector = grasp_frame * ori_vector;  // world orientation
-            bool reachable = false;
-            double grasp_z = ori_vector.z();
-            double grasp_y = ori_vector.y();
-            if(grasp_z <= 0) {
-            if(grasp_y >= 0) {
-                reachable = true;
-            } 
-            else {
-                double grasp_ratio = (-grasp_y);
-                if((grasp_ratio > 0) && (grasp_ratio < 0.5)) {
-                reachable = true;
-                }
-            }
-            }
-
-            if(!reachable) continue;  // Filtered unreachable pose
-
-            // Get Global Pose
-            Eigen::Vector3d grasp_point = object_frame_matrix * bottom + object_position;
-            Eigen::Vector3d pre_grasp_point = object_frame_matrix * pre_bottom + object_position;
-
-            Eigen::Quaternion<double> grasp_frame_quat(grasp_frame);
-            Eigen::Quaternion<double> frame_quat(frame);
-            geometry_msgs::Pose grasp_pose;
-            geometry_msgs::Pose pre_grasp_pose;
-            geometry_msgs::Pose local_pose;
-
-            // grasp_pose
-            grasp_pose.position.x = grasp_point.x();
-            grasp_pose.position.y = grasp_point.y();
-            grasp_pose.position.z = grasp_point.z();
-            grasp_pose.orientation.x = grasp_frame_quat.x();
-            grasp_pose.orientation.y = grasp_frame_quat.y();
-            grasp_pose.orientation.z = grasp_frame_quat.z();
-            grasp_pose.orientation.w = grasp_frame_quat.w();
-            
-            // pre_grasp_pose
-            pre_grasp_pose.position.x = pre_grasp_point.x();
-            pre_grasp_pose.position.y = pre_grasp_point.y();
-            pre_grasp_pose.position.z = pre_grasp_point.z();
-            pre_grasp_pose.orientation.x = grasp_frame_quat.x();
-            pre_grasp_pose.orientation.y = grasp_frame_quat.y();
-            pre_grasp_pose.orientation.z = grasp_frame_quat.z();
-            pre_grasp_pose.orientation.w = grasp_frame_quat.w();
-
-            // local_pose
-            local_pose.position.x = bottom.x();
-            local_pose.position.y = bottom.y();
-            local_pose.position.z = bottom.z();
-            local_pose.orientation.x = frame_quat.x();
-            local_pose.orientation.y = frame_quat.y();
-            local_pose.orientation.z = frame_quat.z();
-            local_pose.orientation.w = frame_quat.w();
-
-            global_grasp_msg.grasp_poses.push_back(grasp_pose);
-            global_grasp_msg.pre_grasp_poses.push_back(pre_grasp_pose);
-            global_grasp_msg.local_poses.push_back(local_pose);
-
-            // Set grasp width
-            float grasp_width = grasps[grasp_i]->getGraspWidth();
-            global_grasp_msg.grasp_widths.push_back(grasp_width);
-            global_grasp_msg.model_names.push_back(model_name);
-            global_grasp_msg.scales.push_back(model_scale);
+            generate_msg(global_grasp_msg, 
+                         model_name, model_scale,
+                         frame, bottom,
+                         object_frame_matrix,
+                         object_position);
         }
         // Add grasp_msg into res
         res.grasps.global_grasp_poses.push_back(global_grasp_msg);
         }
         return true;
     }
+}
+
+void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
+                                 const std::string model_name,
+                                 const double model_scale,
+                                 const Eigen::Matrix3d& frame, 
+                                 const Eigen::Vector3d& bottom,
+                                 const Eigen::Matrix3d& object_frame_matrix,
+                                 const Eigen::Vector3d& object_position,
+                                 const double comp_distance,
+                                 const double pre_distance,
+                                 const double angle_ratio,
+                                 const double relative_scale) {
+    // Scale the frame 
+    Eigen::Affine3d T = Eigen::Affine3d::Identity();
+    T.translate(bottom).rotate(frame).scale(relative_scale);
+    Eigen::Matrix4d T_matrix = T;
+    // update frame & bottom
+    frame = T_matrix.block(0, 0, 3, 3);
+    bottom = T_matrix.block(0, 3, 3, 1);
+    Eigen::Vector3d raw_bottom = bottom;
+    Eigen::Vector3d comp_vector(-comp_distance, 0.0, 0.0);
+    bottom += (frame * comp_vector);
+    Eigen::Vector3d pre_bottom = bottom;
+
+    Eigen::Vector3d pre_vector(-pre_distance, 0.0, 0.0);
+    pre_bottom += (frame * pre_vector);
+
+    // Grasp Frame
+    Eigen::Matrix3d grasp_frame = object_frame_matrix * frame;
+    
+    // Grasp Filter
+    // Get Grasp orientation
+    Eigen::Vector3d ori_vector(1.0, 0.0, 0.0);
+    ori_vector = grasp_frame * ori_vector;  // world orientation
+    bool reachable = false;
+    double grasp_z = ori_vector.z();
+    double grasp_y = ori_vector.y();
+    if(grasp_z <= 0) {
+    if(grasp_y >= 0) {
+        reachable = true;
+    } 
+    else {
+        double grasp_ratio = (-grasp_y);
+        if((grasp_ratio > 0) && (grasp_ratio < angle_ratio)) {
+        reachable = true;
+        }
+    }
+    }
+
+    if(!reachable) return;  // Filtered unreachable pose
+
+    // Get Global Pose
+    Eigen::Vector3d grasp_point = object_frame_matrix * bottom + object_position;
+    Eigen::Vector3d pre_grasp_point = object_frame_matrix * pre_bottom + object_position;
+
+    Eigen::Quaternion<double> grasp_frame_quat(grasp_frame);
+    Eigen::Quaternion<double> frame_quat(frame);
+    geometry_msgs::Pose grasp_pose;
+    geometry_msgs::Pose pre_grasp_pose;
+    geometry_msgs::Pose local_pose;
+
+    // grasp_pose
+    grasp_pose.position.x = grasp_point.x();
+    grasp_pose.position.y = grasp_point.y();
+    grasp_pose.position.z = grasp_point.z();
+    grasp_pose.orientation.x = grasp_frame_quat.x();
+    grasp_pose.orientation.y = grasp_frame_quat.y();
+    grasp_pose.orientation.z = grasp_frame_quat.z();
+    grasp_pose.orientation.w = grasp_frame_quat.w();
+    
+    // pre_grasp_pose
+    pre_grasp_pose.position.x = pre_grasp_point.x();
+    pre_grasp_pose.position.y = pre_grasp_point.y();
+    pre_grasp_pose.position.z = pre_grasp_point.z();
+    pre_grasp_pose.orientation.x = grasp_frame_quat.x();
+    pre_grasp_pose.orientation.y = grasp_frame_quat.y();
+    pre_grasp_pose.orientation.z = grasp_frame_quat.z();
+    pre_grasp_pose.orientation.w = grasp_frame_quat.w();
+
+    // local_pose
+    local_pose.position.x = raw_bottom.x();
+    local_pose.position.y = raw_bottom.y();
+    local_pose.position.z = raw_bottom.z();
+    local_pose.orientation.x = frame_quat.x();
+    local_pose.orientation.y = frame_quat.y();
+    local_pose.orientation.z = frame_quat.z();
+    local_pose.orientation.w = frame_quat.w();
+
+    global_grasp_msg.grasp_poses.push_back(grasp_pose);
+    global_grasp_msg.pre_grasp_poses.push_back(pre_grasp_pose);
+    global_grasp_msg.local_poses.push_back(local_pose);
+
+    // Set grasp width
+    float grasp_width = grasps[grasp_i]->getGraspWidth();
+    global_grasp_msg.grasp_widths.push_back(grasp_width);
+    global_grasp_msg.model_names.push_back(model_name);
+    global_grasp_msg.scales.push_back(model_scale);
 }
 }  // namespace gpd
