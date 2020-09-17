@@ -45,7 +45,7 @@ std::string model_name;
 int grasp_id = 0;
 
 
-void publish_pose(ros::NodeHandle n) {
+void publish_pose(ros::NodeHandle& n) {
     bool flag = false;
     for(auto i = 0; i < grasps.global_grasp_poses.size(); ++i) {
         if(grasps.global_grasp_poses[i].model_names.size() == 0) continue;  // No Grasps Here
@@ -71,7 +71,7 @@ void publish_pose(ros::NodeHandle n) {
 When Receive a scene name, ask for grasp pose in the scene
 */
 void SceneNameCallBack(const std_msgs::String::ConstPtr& msg, 
-                       ros::NodeHandle n, const std::string& data_path) {
+                       ros::NodeHandle& n, const std::string& data_path) {
     ROS_INFO("Choose Scene: [%s]", msg->data.c_str());
     std::string scene_name = msg->data;
     std::string json_path = data_path + scene_name + "/object_data.json";
@@ -132,7 +132,7 @@ void SceneNameCallBack(const std_msgs::String::ConstPtr& msg,
 
 
 void ModelNameCallBack(const std_msgs::String::ConstPtr& msg,
-                       ros::NodeHandle n) {
+                       ros::NodeHandle& n) {
     model_name = msg->data;
     grasp_id = 0;  // Reset grasp_id after change model
     publish_pose(n);
@@ -141,7 +141,7 @@ void ModelNameCallBack(const std_msgs::String::ConstPtr& msg,
 
 
 void GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg, 
-                     ros::NodeHandle n) {
+                     ros::NodeHandle& n) {
     grasp_id = msg->data;
     ROS_INFO("Grasp ID Updated.");
     publish_pose(n);   

@@ -781,6 +781,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
     for(int obj_i = 0; obj_i < object_num; ++obj_i) {
         std::string model_name = req.object_poses.object_names[obj_i];
         double model_scale = req.object_poses.object_scales[obj_i];
+        ROS_INFO("Grasp Gen for %s", model_name);
         // Get Object Pose  
         geometry_msgs::Pose object_pose = req.object_poses.object_poses[obj_i];
         Eigen::Quaternion<double> object_frame_quat(object_pose.orientation.w,
