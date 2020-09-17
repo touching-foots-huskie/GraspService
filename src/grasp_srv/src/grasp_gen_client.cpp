@@ -45,6 +45,28 @@ std::string model_name;
 int grasp_id = 0;
 
 
+void publish_pose(ros::NodeHandle n) {
+    bool flag = false;
+    for(auto i = 0; i < grasps.global_grasp_poses.size(); ++i) {
+        if(grasps.global_grasp_poses[i].model_names.size() == 0) continue;  // No Grasps Here
+        std::string name = grasps.global_grasp_poses[i].model_names[0];
+        if(name == model_name) {
+            if(grasp_id >= grasps.global_grasp_poses[i].model_names.size()) 
+                grasp_id = grasp_id % grasps.global_grasp_poses[i].model_names.size();
+            geometry_msgs::Pose grasp_pose = 
+                grasps.global_grasp_poses[i].grasp_poses[grasp_id];
+            flag = true;
+            // Publish Pose
+            ros::Publisher pose_pub = n.advertise<geometry_msgs::Pose>("grasp_pose", 1);
+            pose_pub.publish(grasp_pose);
+            break;
+        }
+    }
+    if(!flag) ROS_INFO("No Poses For This Model.");
+    else ROS_INFO("Pose Published.");
+}
+
+
 /*
 When Receive a scene name, ask for grasp pose in the scene
 */
@@ -124,28 +146,6 @@ void GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg,
     ROS_INFO("Grasp ID Updated.");
     publish_pose(n);   
 };
-
-
-void publish_pose(ros::NodeHandle n) {
-    bool flag = false;
-    for(auto i = 0; i < grasps.global_grasp_poses.size(); ++i) {
-        if(grasps.global_grasp_poses[i].model_names.size() == 0) continue;  // No Grasps Here
-        std::string name = grasps.global_grasp_poses[i].model_names[0];
-        if(name == model_name) {
-            if(grasp_id >= grasps.global_grasp_poses[i].model_names.size()) 
-                grasp_id = grasp_id % grasps.global_grasp_poses[i].model_names.size();
-            geometry_msgs::Pose grasp_pose = 
-                grasps.global_grasp_poses[i].grasp_poses[grasp_id];
-            flag = true;
-            // Publish Pose
-            ros::Publisher pose_pub = n.advertise<geometry_msgs::Pose>("grasp_pose", 1);
-            pose_pub.publish(grasp_pose);
-            break;
-        }
-    }
-    if(!flag) ROS_INFO("No Poses For This Model.");
-    else ROS_INFO("Pose Published.");
-}
 
 
 void SaveCallBack(const std_msgs::Bool::ConstPtr& msg, const std::string& data_path) {
