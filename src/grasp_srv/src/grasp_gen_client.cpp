@@ -144,13 +144,15 @@ void SaveCallBack(const std_msgs::Bool::ConstPtr& msg, const std::string& data_p
 int main(int argc, char **argv) 
 {
     // Find Data path
-    std::string data_path(argv[1]);
+    std::string scene_dir(argv[1]);  // Parse for Scene
+    std::string model_dir(argv[2]);
+
     // ros init
     ros::init(argc, argv, "grasp_gen_client");
     ros::NodeHandle n;
     // Create Boost Function
     boost::function<void (const std_msgs::String::ConstPtr&)> f1 =
-        boost::bind(SceneNameCallBack, boost::placeholders::_1, n, data_path);
+        boost::bind(SceneNameCallBack, boost::placeholders::_1, n, scene_dir);
     // Create Subscriber
     ros::Subscriber scene_sub  = n.subscribe<std_msgs::String>("scene_name", 1000, f1);
     
@@ -163,9 +165,11 @@ int main(int argc, char **argv)
     ros::Subscriber model_name_sub  = n.subscribe<std_msgs::String>("model_name", 1000, ModelNameCallBack);
     
     // Save 
-    ros::Subscriber save_sub  = n.subscribe<std_msgs::Bool>("save", 1000, SaveCallBack);
+    boost::function<void (const std_msgs::Bool::ConstPtr&)> f3 =
+        boost::bind(SaveCallBack, boost::placeholders::_1, model_dir);
+    ros::Subscriber save_sub  = n.subscribe<std_msgs::Bool>("save", 1000, f3);
 
-    ros::MultiThreadedSpinner spinner(5); 
+    ros::MultiThreadedSpinner spinner(6); 
     spinner.spin();
 
     return 0;
