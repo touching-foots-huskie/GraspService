@@ -13,6 +13,7 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Int32.h>
+#include <std_msgs/Bool.h>
 #include <geometry_msgs/Pose.h>
 #include "grasp_srv/Grasps.h"
 
@@ -135,6 +136,11 @@ void GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg,
 };
 
 
+void SaveCallBack(const std_msgs::Bool::ConstPtr& msg, const std::string& data_path) {
+    // Save Local LocalPose and Scale
+    std::string model_path = data_path + model_name;
+};
+
 int main(int argc, char **argv) 
 {
     // Find Data path
@@ -155,6 +161,10 @@ int main(int argc, char **argv)
     
     // Model Name
     ros::Subscriber model_name_sub  = n.subscribe<std_msgs::String>("model_name", 1000, ModelNameCallBack);
+    
+    // Save 
+    ros::Subscriber save_sub  = n.subscribe<std_msgs::Bool>("save", 1000, SaveCallBack);
+
     ros::MultiThreadedSpinner spinner(5); 
     spinner.spin();
 
