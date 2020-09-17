@@ -24,6 +24,7 @@ using json = nlohmann::json;
 
 // stream
 #include <istream>
+#include <ostream>
 #include <fstream>
 
 // Eigen related
@@ -139,7 +140,28 @@ void GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg,
 void SaveCallBack(const std_msgs::Bool::ConstPtr& msg, const std::string& data_path) {
     // Save Local LocalPose and Scale
     std::string model_path = data_path + model_name;
+    std::string pose_file_name = model_path + "/pose.json";
+    std::ifstream json_file(pose_file_name);
+    json pose_datas;
+    json_file >> pose_datas;
+    json_file.close();
+    // Add new pose
+    geometry_msgs::Pose local_pose = 
+                grasps.global_grasp_poses[i].local_poses[grasp_id];
+    std::vector<double> pose_array = {
+        local_pose.position.x,
+        local_pose.position.y,
+        local_pose.position.z,
+        local_pose.orientation.x,
+        local_pose.orientation.y,
+        local_pose.orientation.z,
+        local_pose.orientation.w};
+    pose_datas.push_back(pose_array);
+    std::ofstream out_file(pose_file_name);
+    out_file << pose_datas;
+    out_file.close();
 };
+
 
 int main(int argc, char **argv) 
 {
@@ -167,7 +189,7 @@ int main(int argc, char **argv)
     // Save 
     boost::function<void (const std_msgs::Bool::ConstPtr&)> f3 =
         boost::bind(SaveCallBack, boost::placeholders::_1, model_dir);
-    ros::Subscriber save_sub  = n.subscribe<std_msgs::Bool>("save", 1000, f3);
+    ros::Subscriber save_sub  = n.subscribe<std_msgs::Bool>("save_signal", 1000, f3);
 
     ros::MultiThreadedSpinner spinner(6); 
     spinner.spin();

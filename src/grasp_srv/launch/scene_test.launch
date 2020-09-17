@@ -1,9 +1,11 @@
 <launch>
     <!-- define data path -->
-    <arg name="DATA_PATH" value="/home/harvey/Data/kinect_data/output/" />
+    <arg name="DATA_PATH" value="$(find grasp_srv)/kinect_data/output/" />
+    <arg name="MODEL_PATH" value="$(find grasp_srv)/data/" />
+    
     <!-- run service node -->
     <node name="grasp_gen_client" pkg="grasp_srv" type="grasp_gen_client"
-        args="$(arg DATA_PATH)" output="screen"/>
+        args="$(arg DATA_PATH) $(arg MODEL_PATH)" output="screen"/>
     
     <node name="grasp_gen" pkg="grasp_srv" type="grasp_gen_server"
         args="$(find grasp_srv)" output="screen"/>   
@@ -22,7 +24,4 @@
     <param name="robot_description" command="cat $(arg model)"/>
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
-    
-     
-    
 </launch>
