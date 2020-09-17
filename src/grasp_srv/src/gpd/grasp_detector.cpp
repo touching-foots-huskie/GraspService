@@ -781,7 +781,6 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
     for(int obj_i = 0; obj_i < object_num; ++obj_i) {
         std::string model_name = req.object_poses.object_names[obj_i];
         double model_scale = req.object_poses.object_scales[obj_i];
-        float grasp_width = grasps[grasp_i]->getGraspWidth();
         // Get Object Pose  
         geometry_msgs::Pose object_pose = req.object_poses.object_poses[obj_i];
         Eigen::Quaternion<double> object_frame_quat(object_pose.orientation.w,
@@ -816,6 +815,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                     double pre_scale = pose_datas[id][7];
                     double relative_scale = model_scale / pre_scale;
                     // Generate Msg
+                    float grasp_width = pose_datas[id][8];
                     generate_msg(global_grasp_msg, 
                                  model_name, model_scale, grasp_width,
                                  frame, bottom,
@@ -862,7 +862,6 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
 
         // Generate Candidates
         std::vector<std::unique_ptr<candidate::Hand>> grasps = detectGrasps(cloud);
-
         // Save grasps into msg
         if(grasps.size() < 1) {
         ROS_INFO("No Grasp Pose Found.");
@@ -871,13 +870,10 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         ROS_INFO("Grasp Pose Found");      
         // Save it into the msg
         for(int grasp_i = 0; grasp_i < grasps.size();++grasp_i) {
-            // Set Score
-            float score = grasps[grasp_i]->getScore();
-            global_grasp_msg.scores.push_back(score);
             // Set Grasp Pose
             Eigen::Vector3d bottom  = grasps[grasp_i]->getPosition();
             Eigen::Matrix3d frame   = grasps[grasp_i]->getFrame();
-
+            float grasp_width = grasps[grasp_i]->getGraspWidth();
             generate_msg(global_grasp_msg, 
                          model_name, model_scale, grasp_width,
                          frame, bottom,
@@ -986,7 +982,7 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     global_grasp_msg.local_poses.push_back(local_pose);
 
     // Set grasp width
-    global_grasp_msg.grasp_widths.push_back(grasp_width);
+    global_grasp_msg.grasp_widths.push_back(grasp_width * relative_scale);
     global_grasp_msg.model_names.push_back(model_name);
     global_grasp_msg.scales.push_back(model_scale);
 }

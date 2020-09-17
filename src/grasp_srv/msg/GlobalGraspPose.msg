@@ -8,5 +8,4 @@ float64[] scales
 
 # grasp related
 float64[] grasp_widths
-float64[] scores
 string[]  model_names
