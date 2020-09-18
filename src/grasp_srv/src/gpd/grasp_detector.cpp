@@ -819,7 +819,6 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                     Eigen::Matrix3d frame = frame_quat.matrix();
                     double pre_scale = pose_datas[id][7];
                     double relative_scale = model_scale / pre_scale;
-                    std::cout << relative_scale << std::endl;
                     // Generate Msg
                     float grasp_width = pose_datas[id][8];
                     generate_msg(global_grasp_msg, 
@@ -910,11 +909,6 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     Eigen::Matrix3d frame = frame_matrix;
     Eigen::Vector3d bottom = bottom_vector;
 
-    std::cout << "Frame " << std::endl;
-    std::cout << frame << std::endl;
-    std::cout << "Bottom" << std::endl;
-    std::cout << bottom << std::endl;
-    
     Eigen::Affine3d T = Eigen::Affine3d::Identity();
     T.translate(bottom).rotate(frame).scale(relative_scale);
     Eigen::Matrix4d T_matrix = T.matrix();
@@ -922,11 +916,6 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     frame = T_matrix.block(0, 0, 3, 3);
     bottom = T_matrix.block(0, 3, 3, 1);
     
-    std::cout << "Frame " << std::endl;
-    std::cout << frame << std::endl;
-    std::cout << "Bottom" << std::endl;
-    std::cout << bottom << std::endl;
-
     Eigen::Vector3d raw_bottom = bottom;
     Eigen::Vector3d comp_vector(-comp_distance, 0.0, 0.0);
     bottom += (frame * comp_vector);
@@ -963,6 +952,9 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     Eigen::Vector3d grasp_point = object_frame_matrix * bottom + object_position;
     Eigen::Vector3d pre_grasp_point = object_frame_matrix * pre_bottom + object_position;
 
+    std::cout << "World Point" << std::endl;
+    std::cout << grasp_point << std::endl;
+    
     Eigen::Quaternion<double> grasp_frame_quat(grasp_frame);
     Eigen::Quaternion<double> frame_quat(frame);
     geometry_msgs::Pose grasp_pose;
