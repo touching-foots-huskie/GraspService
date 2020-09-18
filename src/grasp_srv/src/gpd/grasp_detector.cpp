@@ -958,21 +958,9 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     geometry_msgs::Pose pre_grasp_pose;
     geometry_msgs::Pose local_pose;
 
-    std::cout << "Object Point" << std::endl;
-    std::cout << object_position << std::endl;
-    std::cout << "World Point" << std::endl;
-    std::cout << grasp_point << std::endl;
-    std::cout << "Pend" << std::endl;
-    std::cout << object_frame_matrix * bottom << std::endl;
-    std::cout << "Bottom" << std::endl;
-    std::cout << bottom << std::endl;
-    std::cout << "Bottom Vector" << std::endl;
-    std::cout << bottom_vector << std::endl;
-    std::cout << "Frame" << std::endl;
-    std::cout << frame << std::endl;
-    std::cout << "Frame Quat" << std::endl;
-    std::cout << frame_quat.x() << ","  << frame_quat.y() << ","  << frame_quat.z() << ","  << frame_quat.w() << std::endl;
-
+    std::cout << comp_distance << std::endl;
+    std::cout << pre_distance << std::endl;   
+     
     // grasp_pose
     grasp_pose.position.x = grasp_point.x();
     grasp_pose.position.y = grasp_point.y();
