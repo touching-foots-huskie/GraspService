@@ -4,7 +4,23 @@
 SceneManagement::SceneManagement(std::string scene_dir, std::string model_dir) :
     scene_dir_(scene_dir), model_dir_(model_dir), grasp_id_(0) {
     // Publish initialization
-    pose_pub_ = n.advertise<geometry_msgs::Pose>("grasp_pose", 1)
+    pose_pub_ = nh_.advertise<geometry_msgs::Pose>("grasp_pose", 1)
+    // Subscriber
+    // Scene
+    scene_sub_  = nh_.subscribe<std_msgs::String>("scene_name", 1000,
+        &SceneManagement::SceneNameCallBack, &scene_management); 
+    // Grasp ID
+    grasp_sub_  = nh_.subscribe<std_msgs::Int32>("grasp_id", 1000,
+        &SceneManagement::GraspIdCallBack, &scene_management);
+    // Model Name
+    model_name_sub_  = nh_.subscribe<std_msgs::String>("model_name", 1000,
+        &SceneManagement::ModelNameCallBack, &scene_management);
+    // Save 
+    save_sub_  = nh_.subscribe<std_msgs::Bool>("save_signal", 1000, 
+        &SceneManagement::SaveCallBack, &scene_management);
+    
+    // Start Service
+    client_ = nh_.serviceClient<grasp_srv::GraspGen>("grasp_gen");
 }
 
 void SceneManagement::publish_pose() {
@@ -69,11 +85,8 @@ void SceneManagement::SceneNameCallBack(const std_msgs::String::ConstPtr& msg) {
         pcl::toROSMsg<pcl::PointXYZRGBA>(*cloud, point_cloud);	
         srv.request.object_poses.object_point_clouds.push_back(point_cloud);
     }
-    // Start Service
-    ros::ServiceClient client 
-        = n.serviceClient<grasp_srv::GraspGen>("grasp_gen");
     // Call Srv
-    if(client.call(srv)) {
+    if(client_.call(srv)) {
         ROS_INFO("Grasp Pose Generated");
         // Publish
         grasps_ = srv.response.grasps;  // Update Response
@@ -142,34 +155,14 @@ void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {
 // Use Class to Manager it
 int main(int argc, char **argv) 
 {
+    // ros init
+    ros::init(argc, argv, "grasp_gen_client");
     // Find Data path
     std::string scene_dir(argv[1]);  // Parse for Scene
     std::string model_dir(argv[2]);
-
     SceneManagement scene_management(scene_dir, model_dir);
-
-    // ros init
-    ros::init(argc, argv, "grasp_gen_client");
-    ros::NodeHandle n;
-
-    // Scene
-    ros::Subscriber scene_sub  = n.subscribe<std_msgs::String>("scene_name", 1000,
-        &SceneManagement::SceneNameCallBack, &scene_management); 
-    
-    // Grasp ID
-    ros::Subscriber grasp_sub  = n.subscribe<std_msgs::Int32>("grasp_id", 1000,
-        &SceneManagement::GraspIdCallBack, &scene_management);
-    
-    // Model Name
-    ros::Subscriber model_name_sub  = n.subscribe<std_msgs::String>("model_name", 1000,
-        &SceneManagement::ModelNameCallBack, &scene_management);
-    
-    // Save 
-    ros::Subscriber save_sub  = n.subscribe<std_msgs::Bool>("save_signal", 1000, 
-        &SceneManagement::SaveCallBack, &scene_management);
 
     ros::MultiThreadedSpinner spinner(4); 
     spinner.spin();
-
     return 0;
 }

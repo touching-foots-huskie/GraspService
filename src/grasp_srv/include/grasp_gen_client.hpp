@@ -52,8 +52,14 @@ public:
 
 private:
     void publish_pose();
-    ros::Publisher pose_pub_;
     ros::NodeHandle nh_;
+    ros::Publisher pose_pub_;
+    ros::ServiceClient client_;
+    ros::Subscriber scene_sub_;
+    ros::Subscriber grasp_sub_;
+    ros::Subscriber model_name_sub_;
+    ros::Subscriber save_sub_;
+
     grasp_srv::Grasps grasps_;
     std::string model_name_;
     std::string scene_name_;
