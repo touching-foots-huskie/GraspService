@@ -826,7 +826,6 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                  frame, bottom,
                                  object_frame_matrix,
                                  object_position,
-                                 ,,,
                                  relative_scale);
                 }
                 ROS_INFO("Add Pre-defined Pose.");
@@ -902,10 +901,10 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
                                  const Eigen::Vector3d& bottom_vector,
                                  const Eigen::Matrix3d& object_frame_matrix,
                                  const Eigen::Vector3d& object_position,
+                                 const double relative_scale,
                                  const double comp_distance,
                                  const double pre_distance,
-                                 const double angle_ratio,
-                                 const double relative_scale) {
+                                 const double angle_ratio) {
     // Scale the frame  
     Eigen::Matrix3d frame = frame_matrix;
     Eigen::Vector3d bottom = bottom_vector;
