@@ -956,7 +956,11 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     std::cout << object_position << std::endl;
     std::cout << "World Point" << std::endl;
     std::cout << grasp_point << std::endl;
-    
+    std::cout << "Pend" << std::endl;
+    std::cout << object_frame_matrix * bottom << std::endl;
+    std::cout << "Bottom" << std::endl;
+    std::cout << bottom << std::endl;
+
     Eigen::Quaternion<double> grasp_frame_quat(grasp_frame);
     Eigen::Quaternion<double> frame_quat(frame);
     geometry_msgs::Pose grasp_pose;
