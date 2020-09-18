@@ -141,7 +141,8 @@ void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {
                 local_pose.orientation.w,
                 scale,
                 grasp_width};
-            pose_datas.push_back(pose_array);
+            json pose_array_json(pose_array);
+            pose_datas.push_back(pose_array_json);
             std::ofstream out_file(pose_file_name);
             out_file << pose_datas;
             out_file.close();
