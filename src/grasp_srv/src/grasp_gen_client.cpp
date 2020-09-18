@@ -1,64 +1,24 @@
-#include "ros/ros.h"
-#include <geometry_msgs/Pose.h>
-#include "grasp_srv/GraspGen.h"
-#include <cstdlib>
-
-// pcl
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl_conversions/pcl_conversions.h>
-
-// msg
-#include <sensor_msgs/PointCloud2.h>
-#include <std_msgs/String.h>
-#include <std_msgs/Int32.h>
-#include <std_msgs/Bool.h>
-#include <geometry_msgs/Pose.h>
-#include "grasp_srv/Grasps.h"
-
-// json related 
-#include <nlohmann/json.hpp>
-// for convenience
-using json = nlohmann::json;
-
-// stream
-#include <istream>
-#include <ostream>
-#include <fstream>
-
-// Eigen related
-#include <Eigen/Eigen>
-#include <Eigen/Geometry>
-
-// Boost
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
-
-// JSON
-#include "json_tools.h"
+#include "grasp_gen_client.hpp"
 
 
-// global data
-grasp_srv::Grasps grasps;
-std::string model_name;
-int grasp_id = 0;
+SceneManagement::SceneManagement(std::string scene_dir, std::string model_dir) :
+    scene_dir_(scene_dir), model_dir_(model_dir), grasp_id_(0) {
+    // Publish initialization
+    pose_pub_ = n.advertise<geometry_msgs::Pose>("grasp_pose", 1)
+}
 
-
-void publish_pose(ros::NodeHandle& n) {
+void SceneManagement::publish_pose() {
     bool flag = false;
-    for(auto i = 0; i < grasps.global_grasp_poses.size(); ++i) {
-        if(grasps.global_grasp_poses[i].model_names.size() == 0) continue;  // No Grasps Here
-        std::string name = grasps.global_grasp_poses[i].model_names[0];
-        if(name == model_name) {
-            if(grasp_id >= grasps.global_grasp_poses[i].model_names.size()) 
-                grasp_id = grasp_id % grasps.global_grasp_poses[i].model_names.size();
+    for(auto i = 0; i < grasps_.global_grasp_poses.size(); ++i) {
+        if(grasps_.global_grasp_poses[i].model_names.size() == 0) continue;
+        std::string name = grasps_.global_grasp_poses[i].model_names[0];
+        if(name == model_name_) {
+            if(grasp_id_ >= grasps_.global_grasp_poses[i].model_names.size()) 
+                grasp_id_ = grasp_id_ % grasps_.global_grasp_poses[i].model_names.size();
             geometry_msgs::Pose grasp_pose = 
-                grasps.global_grasp_poses[i].grasp_poses[grasp_id];
+                grasps_.global_grasp_poses[i].grasp_poses[grasp_id_];
             flag = true;
-            // Publish Pose
-            ros::Publisher pose_pub = n.advertise<geometry_msgs::Pose>("grasp_pose", 1);
-            pose_pub.publish(grasp_pose);
+            pose_pub_.publish(grasp_pose);
             break;
         }
     }
@@ -66,15 +26,13 @@ void publish_pose(ros::NodeHandle& n) {
     else ROS_INFO("Pose Published.");
 }
 
-
 /*
 When Receive a scene name, ask for grasp pose in the scene
 */
-void SceneNameCallBack(const std_msgs::String::ConstPtr& msg, 
-                       ros::NodeHandle& n, const std::string& data_path) {
+void SceneManagement::SceneNameCallBack(const std_msgs::String::ConstPtr& msg) {
     ROS_INFO("Choose Scene: [%s]", msg->data.c_str());
-    std::string scene_name = msg->data;
-    std::string json_path = data_path + scene_name + "/object_data.json";
+    std::string scene_name_ = msg->data;
+    std::string json_path = scene_dir_ + scene_name_ + "/object_data.json";
     std::cout << json_path << std::endl;
     std::ifstream json_file(json_path);
     json object_datas;
@@ -103,7 +61,7 @@ void SceneNameCallBack(const std_msgs::String::ConstPtr& msg,
         pose.orientation.w = q.w();
         srv.request.object_poses.object_poses.push_back(pose);
         // Load PointCloud
-        std::string pd_filename = data_path + scene_name + "/" + std::to_string(id) + ".pcd";
+        std::string pd_filename = scene_dir_ + scene_name_ + "/" + std::to_string(id) + ".pcd";
         pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGBA>);
         pcl::io::loadPCDFile<pcl::PointXYZRGBA>(pd_filename, *cloud);
         // Transform this into a msg
@@ -118,11 +76,11 @@ void SceneNameCallBack(const std_msgs::String::ConstPtr& msg,
     if(client.call(srv)) {
         ROS_INFO("Grasp Pose Generated");
         // Publish
-        grasps = srv.response.grasps;  // Update Response
+        grasps_ = srv.response.grasps;  // Update Response
         // Update ModelName & Id
-        model_name = grasps.global_grasp_poses[0].model_names[0];
-        grasp_id = 0;
-        publish_pose(n);  // Publish Pose After Call
+        model_name_ = grasps_.global_grasp_poses[0].model_names[0];
+        grasp_id_ = 0;
+        publish_pose();  // Publish Pose After Call
     }
     else {
         ROS_ERROR("Failed to call service grasp_gen");
@@ -130,42 +88,37 @@ void SceneNameCallBack(const std_msgs::String::ConstPtr& msg,
     return;
 }
 
-
-void ModelNameCallBack(const std_msgs::String::ConstPtr& msg,
-                       ros::NodeHandle& n) {
-    model_name = msg->data;
-    grasp_id = 0;  // Reset grasp_id after change model
-    publish_pose(n);
+void SceneManagement::ModelNameCallBack(const std_msgs::String::ConstPtr& msg) {
+    model_name_ = msg->data;
+    grasp_id_ = 0;  // Reset grasp_id_ after change model
+    publish_pose();
     ROS_INFO("Model Name Updated.");
 };
 
-
-void GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg, 
-                     ros::NodeHandle& n) {
-    grasp_id = msg->data;
+void SceneManagement::GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg) {
+    grasp_id_ = msg->data;
+    publish_pose();   
     ROS_INFO("Grasp ID Updated.");
-    publish_pose(n);   
 };
 
-
-void SaveCallBack(const std_msgs::Bool::ConstPtr& msg, const std::string& data_path) {
+void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {
     // Save Local LocalPose and Scale
-    std::string model_path = data_path + model_name;
+    std::string model_path = model_dir_ + model_name_;
     std::string pose_file_name = model_path + "/pose.json";
     std::ifstream json_file(pose_file_name);
     json pose_datas;
     json_file >> pose_datas;
     json_file.close();
     // Add new pose
-    for(auto i = 0; i < grasps.global_grasp_poses.size(); ++i) {
-        if(grasps.global_grasp_poses[i].model_names.size() == 0) continue;  // No Grasps Here
-        std::string name = grasps.global_grasp_poses[i].model_names[0];
-        if(name == model_name) {
-            assert(grasp_id < grasps.global_grasp_poses[i].model_names.size()); 
+    for(auto i = 0; i < grasps_.global_grasp_poses.size(); ++i) {
+        if(grasps_.global_grasp_poses[i].model_names.size() == 0) continue;  // No grasps_ Here
+        std::string name = grasps_.global_grasp_poses[i].model_names[0];
+        if(name == model_name_) {
+            assert(grasp_id_ < grasps_.global_grasp_poses[i].model_names.size()); 
             geometry_msgs::Pose local_pose = 
-                grasps.global_grasp_poses[i].local_poses[grasp_id];
-            double scale = grasps.global_grasp_poses[i].scales[grasp_id];
-            double grasp_width = grasps.global_grasp_poses[i].grasp_widths[grasp_id];
+                grasps_.global_grasp_poses[i].local_poses[grasp_id_];
+            double scale = grasps_.global_grasp_poses[i].scales[grasp_id_];
+            double grasp_width = grasps_.global_grasp_poses[i].grasp_widths[grasp_id_];
             std::vector<double> pose_array = {
                 local_pose.position.x,
                 local_pose.position.y,
@@ -186,38 +139,44 @@ void SaveCallBack(const std_msgs::Bool::ConstPtr& msg, const std::string& data_p
     }
 };
 
-
+// Use Class to Manager it
 int main(int argc, char **argv) 
 {
     // Find Data path
     std::string scene_dir(argv[1]);  // Parse for Scene
     std::string model_dir(argv[2]);
 
+    SceneManagement scene_management(scene_dir, model_dir);
+
     // ros init
     ros::init(argc, argv, "grasp_gen_client");
     ros::NodeHandle n;
-    // Create Boost Function
-    boost::function<void (const std_msgs::String::ConstPtr&)> f1 =
-        boost::bind(SceneNameCallBack, boost::placeholders::_1, n, scene_dir);
-    // Create Subscriber
-    ros::Subscriber scene_sub  = n.subscribe<std_msgs::String>("scene_name", 1000, f1);
+
+    // Scene
+    ros::Subscriber scene_sub  = n.subscribe<std_msgs::String>("scene_name", 1000, 
+            boost::bind(&SceneManagement::SceneNameCallBack,
+                        scene_management,
+                        boost::placeholders::_1));
     
     // Grasp ID
-    boost::function<void (const std_msgs::Int32::ConstPtr&)> f2 =
-        boost::bind(GraspIdCallBack, boost::placeholders::_1, n);
-    ros::Subscriber grasp_sub  = n.subscribe<std_msgs::Int32>("grasp_id", 1000, f2);
+    ros::Subscriber grasp_sub  = n.subscribe<std_msgs::Int32>("grasp_id", 1000,
+            boost::bind(&SceneManagement::GraspIdCallBack,
+                        scene_management,
+                        boost::placeholders::_1));
     
     // Model Name
-    boost::function<void (const std_msgs::String::ConstPtr&)> f3 =
-        boost::bind(ModelNameCallBack, boost::placeholders::_1, n);
-    ros::Subscriber model_name_sub  = n.subscribe<std_msgs::String>("model_name", 1000, f3);
+    ros::Subscriber model_name_sub  = n.subscribe<std_msgs::String>("model_name", 1000,
+            boost::bind(&SceneManagement::ModelNameCallBack,
+                        scene_management,
+                        boost::placeholders::_1));
     
     // Save 
-    boost::function<void (const std_msgs::Bool::ConstPtr&)> f4 =
-        boost::bind(SaveCallBack, boost::placeholders::_1, model_dir);
-    ros::Subscriber save_sub  = n.subscribe<std_msgs::Bool>("save_signal", 1000, f4);
+    ros::Subscriber save_sub  = n.subscribe<std_msgs::Bool>("save_signal", 1000,
+            boost::bind(&SceneManagement::SaveCallBack,
+                        scene_management,
+                        boost::placeholders::_1));
 
-    ros::MultiThreadedSpinner spinner(7); 
+    ros::MultiThreadedSpinner spinner(4); 
     spinner.spin();
 
     return 0;
