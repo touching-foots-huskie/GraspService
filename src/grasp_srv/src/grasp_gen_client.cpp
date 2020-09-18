@@ -116,8 +116,16 @@ void SceneManagement::GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg) {
 void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {
     // Save Local LocalPose and Scale
     std::string model_path = model_dir_ + model_name_;
-    std::string pose_file_name = model_path + "/pose.json";
-    std::ifstream json_file(pose_file_name);
+    std::string pose_filename = model_path + "/pose.json";
+
+    if(!exists_file(pose_filename)) {
+        ofstream ofs;
+        ofs.open(pose_filename, std::ofstream::out);
+        ofs << "[]";
+        ofs.close(); 
+    }
+
+    std::ifstream json_file(pose_filename);
     json pose_datas_json;
     json_file >> pose_datas_json;
     json_file.close();
@@ -146,7 +154,7 @@ void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {
                 grasp_width};
             pose_datas.push_back(pose_array);
             pose_datas_json = pose_datas;
-            std::ofstream out_file(pose_file_name);
+            std::ofstream out_file(pose_filename);
             out_file << pose_datas_json;
             out_file.close();
             return;
