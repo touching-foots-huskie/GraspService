@@ -1,0 +1,14 @@
+<launch>
+    <!-- path information -->
+    <arg name="DATA_PATH"  value="" />
+    <arg name="MODEL_PATH" value="/root/ocrtoc_materials/models/" />
+    <arg name="GRASP_PATH" value="/root/ocrtoc_ws/src/ocrtoc_grasping/grasp_srv/grasp_data/" />
+    <arg name="WORK_PATH"  value="/root/ocrtoc_ws/src/ocrtoc_grasping/grasp_srv" />
+    
+    <!-- run service node -->
+    <node name="grasp_gen_client" pkg="grasp_srv" type="grasp_gen_client"
+        args="$(arg DATA_PATH) $(arg GRASP_PATH)" output="screen"/>
+    
+    <node name="grasp_gen" pkg="grasp_srv" type="grasp_gen_server"
+        args="$(arg WORK_PATH) $(arg MODEL_PATH) $(arg GRASP_PATH)" output="screen"/>   
+</launch>
