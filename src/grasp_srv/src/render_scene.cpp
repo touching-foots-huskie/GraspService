@@ -68,9 +68,16 @@ int main(int argc, char** argv)
         json object_datas;
         json_file >> object_datas;
 
+        // Scale File
+        std::string scale_path = model_path + scene_name + "/scale.json";
+        std::ifstream scale_file(scale_path);
+        json scale_datas;
+        scale_file >> scale_datas;
+
         pcl::PointCloud<pcl::PointXYZRGBA>::Ptr merge(new pcl::PointCloud<pcl::PointXYZRGBA>);
         for(auto i = 0; i < object_datas.size(); ++i) {
             std::string pcd_path;
+            double object_scale = 1.0;
             if(pd_enable) {
                 pcd_path = workspace_path + 
                            scene_name +
@@ -81,6 +88,7 @@ int main(int argc, char** argv)
                 std::string model_name = object_datas[i]["name"];
                 pcd_path = model_path + model_name + 
                            "/visual_meshes/cloud.pcd";
+                object_scale = scale_datas[model_name];
             }
             
             // Load pointcloud
@@ -102,7 +110,7 @@ int main(int argc, char** argv)
             }
             
             Eigen::Affine3d T;
-            T = transform;
+            T = transform.scale(object_scale);
             pcl::transformPointCloud<pcl::PointXYZRGBA>(
                 *cloud_in,
                 *cloud_out,
