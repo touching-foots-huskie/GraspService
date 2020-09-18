@@ -971,7 +971,7 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     std::cout << "Frame" << std::endl;
     std::cout << frame << std::endl;
     std::cout << "Frame Quat" << std::endl;
-    std::cout << frame_quat << std::endl;
+    std::cout << frame_quat.x << ","  << frame_quat.y << ","  << frame_quat.z << ","  << frame_quat.w << std::endl;
 
     // grasp_pose
     grasp_pose.position.x = grasp_point.x();
