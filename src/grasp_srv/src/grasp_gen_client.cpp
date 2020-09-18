@@ -19,6 +19,10 @@ SceneManagement::SceneManagement(std::string scene_dir, std::string model_dir) :
     save_sub_  = nh_.subscribe<std_msgs::Bool>("save_signal", 1000, 
         &SceneManagement::SaveCallBack, this);
     
+    // Save Grasp
+    grasp_save_sub_ = nh_.subscribe<grasp_srv::SaveGrasp>("save_grasp", 1000,
+        &SceneManagement::GraspSaveCallBack, this);
+
     // Start Service
     client_ = nh_.serviceClient<grasp_srv::GraspGen>("grasp_gen");
 }
@@ -161,6 +165,54 @@ void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {
         }
     }
 };
+
+void SceneManagement::GraspSaveCallBack(const grasp_srv::SaveGrasp::ConstPtr& msg) {
+    std::string model_name_ = msg->global_grasp_pose->model_names[0];
+    // Open Json file
+    std::string model_path = model_dir_ + model_name_;
+    std::string pose_filename = model_path + "/pose.json";
+
+    if(!exists_file(pose_filename)) {
+        std::ofstream ofs;
+        ofs.open(pose_filename, std::ofstream::out);
+        ofs << "[]";
+        ofs.close(); 
+    }
+
+    std::ifstream json_file(pose_filename);
+    json pose_datas_json;
+    json_file >> pose_datas_json;
+    json_file.close();
+
+    std::vector<std::vector<double> > pose_datas;
+    pose_datas = pose_datas_json.get<std::vector<std::vector<double> > >();
+
+    for(auto i = 0; i < msg->grasp_ids.size(); ++id) {
+        grasp_id_ = msg->grasp_ids[i];
+        assert(grasp_id_ < msg->global_grasp_pose.model_names.size()); 
+            geometry_msgs::Pose local_pose = 
+                msg->global_grasp_pose.local_poses[grasp_id_];
+            double scale = msg->global_grasp_pose.scales[grasp_id_];
+            double grasp_width = msg->global_grasp_pose.grasp_widths[grasp_id_];
+            std::vector<double> pose_array = {
+                local_pose.position.x,
+                local_pose.position.y,
+                local_pose.position.z,
+                local_pose.orientation.x,
+                local_pose.orientation.y,
+                local_pose.orientation.z,
+                local_pose.orientation.w,
+                scale,
+                grasp_width};
+            pose_datas.push_back(pose_array);  
+    }
+    // Save into files
+    pose_datas_json = pose_datas;
+    std::ofstream out_file(pose_filename);
+    out_file << pose_datas_json;
+    out_file.close();
+    return;
+}
 
 // Use Class to Manager it
 int main(int argc, char **argv) 

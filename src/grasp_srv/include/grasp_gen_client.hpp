@@ -19,6 +19,7 @@
 #include <std_msgs/Bool.h>
 #include <geometry_msgs/Pose.h>
 #include "grasp_srv/Grasps.h"
+#include "grasp_srv/SaveGrasp.h"
 
 // json related 
 #include <nlohmann/json.hpp>
@@ -49,6 +50,7 @@ public:
     void ModelNameCallBack(const std_msgs::String::ConstPtr& msg);
     void GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg);
     void SaveCallBack(const std_msgs::Bool::ConstPtr& msg);
+    void GraspSaveCallBack(const grasp_srv::SaveGrasp::ConstPtr& msg);
 
 private:
     void publish_pose();
@@ -59,6 +61,7 @@ private:
     ros::Subscriber grasp_sub_;
     ros::Subscriber model_name_sub_;
     ros::Subscriber save_sub_;
+    ros::Subscriber grasp_save_sub_;
 
     grasp_srv::Grasps grasps_;
     std::string model_name_;
