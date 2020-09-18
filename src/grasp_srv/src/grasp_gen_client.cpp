@@ -153,28 +153,20 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
 
     // Scene
-    ros::Subscriber scene_sub  = n.subscribe<std_msgs::String>("scene_name", 1000, 
-            boost::bind(&SceneManagement::SceneNameCallBack,
-                        scene_management,
-                        boost::placeholders::_1));
+    ros::Subscriber scene_sub  = n.subscribe<std_msgs::String>("scene_name", 1000,
+        &SceneManagement::SceneNameCallBack, &scene_management); 
     
     // Grasp ID
     ros::Subscriber grasp_sub  = n.subscribe<std_msgs::Int32>("grasp_id", 1000,
-            boost::bind(&SceneManagement::GraspIdCallBack,
-                        scene_management,
-                        boost::placeholders::_1));
+        &SceneManagement::GraspIdCallBack, &scene_management);
     
     // Model Name
     ros::Subscriber model_name_sub  = n.subscribe<std_msgs::String>("model_name", 1000,
-            boost::bind(&SceneManagement::ModelNameCallBack,
-                        scene_management,
-                        boost::placeholders::_1));
+        &SceneManagement::ModelNameCallBack, &scene_management);
     
     // Save 
-    ros::Subscriber save_sub  = n.subscribe<std_msgs::Bool>("save_signal", 1000,
-            boost::bind(&SceneManagement::SaveCallBack,
-                        scene_management,
-                        boost::placeholders::_1));
+    ros::Subscriber save_sub  = n.subscribe<std_msgs::Bool>("save_signal", 1000, 
+        &SceneManagement::SaveCallBack, &scene_management);
 
     ros::MultiThreadedSpinner spinner(4); 
     spinner.spin();
