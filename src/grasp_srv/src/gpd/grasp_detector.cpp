@@ -781,8 +781,8 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
     for(int obj_i = 0; obj_i < object_num; ++obj_i) {
         std::string model_name = req.object_poses.object_names[obj_i];
         double model_scale = req.object_poses.object_scales[obj_i];
-
-        // Get Object Pose
+        float grasp_width = grasps[grasp_i]->getGraspWidth();
+        // Get Object Pose  
         geometry_msgs::Pose object_pose = req.object_poses.object_poses[obj_i];
         Eigen::Quaternion<double> object_frame_quat(object_pose.orientation.w,
                                                     object_pose.orientation.x,
@@ -817,7 +817,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                     double relative_scale = model_scale / pre_scale;
                     // Generate Msg
                     generate_msg(global_grasp_msg, 
-                                 model_name, model_scale,
+                                 model_name, model_scale, grasp_width,
                                  frame, bottom,
                                  object_frame_matrix,
                                  object_position,
@@ -879,7 +879,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
             Eigen::Matrix3d frame   = grasps[grasp_i]->getFrame();
 
             generate_msg(global_grasp_msg, 
-                         model_name, model_scale,
+                         model_name, model_scale, grasp_width,
                          frame, bottom,
                          object_frame_matrix,
                          object_position);
@@ -894,8 +894,9 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
 void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
                                  const std::string model_name,
                                  const double model_scale,
-                                 const Eigen::Matrix3d& frame, 
-                                 const Eigen::Vector3d& bottom,
+                                 const double grasp_width,
+                                 const Eigen::Matrix3d& frame_matrix, 
+                                 const Eigen::Vector3d& bottom_vector,
                                  const Eigen::Matrix3d& object_frame_matrix,
                                  const Eigen::Vector3d& object_position,
                                  const double comp_distance,
@@ -903,9 +904,11 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
                                  const double angle_ratio,
                                  const double relative_scale) {
     // Scale the frame 
+    Eigen::Matrix3d frame = frame_matrix;
+    Eigen::Vector3d bottom = bottom_vector;
     Eigen::Affine3d T = Eigen::Affine3d::Identity();
     T.translate(bottom).rotate(frame).scale(relative_scale);
-    Eigen::Matrix4d T_matrix = T;
+    Eigen::Matrix4d T_matrix = T.matrix();
     // update frame & bottom
     frame = T_matrix.block(0, 0, 3, 3);
     bottom = T_matrix.block(0, 3, 3, 1);
@@ -983,7 +986,6 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     global_grasp_msg.local_poses.push_back(local_pose);
 
     // Set grasp width
-    float grasp_width = grasps[grasp_i]->getGraspWidth();
     global_grasp_msg.grasp_widths.push_back(grasp_width);
     global_grasp_msg.model_names.push_back(model_name);
     global_grasp_msg.scales.push_back(model_scale);

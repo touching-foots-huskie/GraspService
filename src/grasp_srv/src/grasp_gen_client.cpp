@@ -146,22 +146,30 @@ void SaveCallBack(const std_msgs::Bool::ConstPtr& msg, const std::string& data_p
     json_file >> pose_datas;
     json_file.close();
     // Add new pose
-    geometry_msgs::Pose local_pose = 
+    for(auto i = 0; i < grasps.global_grasp_poses.size(); ++i) {
+        if(grasps.global_grasp_poses[i].model_names.size() == 0) continue;  // No Grasps Here
+        std::string name = grasps.global_grasp_poses[i].model_names[0];
+        if(name == model_name) {
+            assert(grasp_id < grasps.global_grasp_poses[i].model_names.size()); 
+            geometry_msgs::Pose local_pose = 
                 grasps.global_grasp_poses[i].local_poses[grasp_id];
-    double scale = grasps.global_grasp_poses[i].scales[grasp_id];
-    std::vector<double> pose_array = {
-        local_pose.position.x,
-        local_pose.position.y,
-        local_pose.position.z,
-        local_pose.orientation.x,
-        local_pose.orientation.y,
-        local_pose.orientation.z,
-        local_pose.orientation.w,
-        scale};
-    pose_datas.push_back(pose_array);
-    std::ofstream out_file(pose_file_name);
-    out_file << pose_datas;
-    out_file.close();
+            double scale = grasps.global_grasp_poses[i].scales[grasp_id];
+            std::vector<double> pose_array = {
+                local_pose.position.x,
+                local_pose.position.y,
+                local_pose.position.z,
+                local_pose.orientation.x,
+                local_pose.orientation.y,
+                local_pose.orientation.z,
+                local_pose.orientation.w,
+                scale};
+            pose_datas.push_back(pose_array);
+            std::ofstream out_file(pose_file_name);
+            out_file << pose_datas;
+            out_file.close();
+            return;
+        }
+    }
 };
 
 

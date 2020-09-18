@@ -220,6 +220,7 @@ class GraspDetector {
     void generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
                       const std::string model_name,
                       const double model_scale,
+                      const double grasp_width,
                       const Eigen::Matrix3d& frame, 
                       const Eigen::Vector3d& bottom,
                       const Eigen::Matrix3d& object_frame_matrix = Eigen::Matrix3d::Identity(),
