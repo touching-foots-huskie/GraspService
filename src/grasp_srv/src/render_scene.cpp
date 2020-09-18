@@ -69,7 +69,7 @@ int main(int argc, char** argv)
         json_file >> object_datas;
 
         // Scale File
-        std::string scale_path = model_path + scene_name + "/scale.json";
+        std::string scale_path = workspace_path + scene_name + "/scale.json";
         std::ifstream scale_file(scale_path);
         json scale_datas;
         scale_file >> scale_datas;
