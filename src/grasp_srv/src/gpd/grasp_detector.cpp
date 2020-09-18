@@ -826,7 +826,8 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                  frame, bottom,
                                  object_frame_matrix,
                                  object_position,
-                                 relative_scale = relative_scale);
+                                 ,,,
+                                 relative_scale);
                 }
                 ROS_INFO("Add Pre-defined Pose.");
             }
@@ -957,10 +958,7 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     geometry_msgs::Pose grasp_pose;
     geometry_msgs::Pose pre_grasp_pose;
     geometry_msgs::Pose local_pose;
-
-    std::cout << comp_distance << std::endl;
-    std::cout << pre_distance << std::endl;   
-     
+   
     // grasp_pose
     grasp_pose.position.x = grasp_point.x();
     grasp_pose.position.y = grasp_point.y();
