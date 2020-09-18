@@ -45,11 +45,11 @@ using json = nlohmann::json;
 class SceneManagement {
 public:
     SceneManagement(std::string scene_dir, std::string model_dir);
-    SceneNameCallBack(const std_msgs::String::ConstPtr& msg);
-    ModelNameCallBack(const std_msgs::String::ConstPtr& msg);
-    GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg);
-    SaveCallBack(const std_msgs::Bool::ConstPtr& msg);
-    
+    void SceneNameCallBack(const std_msgs::String::ConstPtr& msg);
+    void ModelNameCallBack(const std_msgs::String::ConstPtr& msg);
+    void GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg);
+    void SaveCallBack(const std_msgs::Bool::ConstPtr& msg);
+
 private:
     void publish_pose();
     ros::Publisher pose_pub_;
