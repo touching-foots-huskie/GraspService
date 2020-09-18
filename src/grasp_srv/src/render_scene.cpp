@@ -110,7 +110,7 @@ int main(int argc, char** argv)
             }
             
             Eigen::Affine3d T;
-            T = transform.scale(object_scale);
+            T = transform * Eigen::scale(object_scale);
             pcl::transformPointCloud<pcl::PointXYZRGBA>(
                 *cloud_in,
                 *cloud_out,
