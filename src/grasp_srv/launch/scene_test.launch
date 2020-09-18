@@ -14,7 +14,7 @@
         args="$(arg DATA_PATH)" output="screen"/>
 
     <node name="render_scene" pkg="grasp_srv" type="render_scene" 
-        args="$(arg DATA_PATH)" output="screen"/> 
+        args="$(arg DATA_PATH) $(arg MODEL_PATH) 0" output="screen"/> 
 
     <node name="grasp_connector" pkg="grasp_srv" type="gripper_transfer.py" 
         output="screen"/>

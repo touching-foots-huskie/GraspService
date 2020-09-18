@@ -20,6 +20,7 @@
 
 // Std
 #include <iostream>
+#include <sstream>
 
 // JSON
 #include "json_tools.h"
@@ -39,6 +40,13 @@ int main(int argc, char** argv)
 {
     std::string workspace_path;
     workspace_path = std::string(argv[1]);
+
+    std::string model_path;
+    model_path = std::string(argv[2]);
+
+    std::stringstream ss(argv[3]);
+    bool pd_enable;
+    ss >> std::boolalpha >> pd_enable
 
     ros::init (argc, argv, "pub_scene");
     ros::NodeHandle nh;
@@ -62,24 +70,39 @@ int main(int argc, char** argv)
 
         pcl::PointCloud<pcl::PointXYZRGBA>::Ptr merge(new pcl::PointCloud<pcl::PointXYZRGBA>);
         for(auto i = 0; i < object_datas.size(); ++i) {
-            std::string pcd_path =  workspace_path + 
-                                    scene_name +
-                                    "/" + std::to_string(i) + 
-                                    ".pcd";
+            std::string pcd_path;
+            if(pd_enable) {
+                pcd_path = workspace_path + 
+                           scene_name +
+                           "/" + std::to_string(i) + 
+                           ".pcd";
+            }
+            else {
+                std::string model_name = object_datas[i]["name"];
+                pcd_path = model_path + model_name + 
+                           "/visual_meshes/cloud.pcd";
+            }
+            
             // Load pointcloud
             pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud_in (new pcl::PointCloud<pcl::PointXYZRGBA>);
             pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud_out(new pcl::PointCloud<pcl::PointXYZRGBA>);
             pcl::io::loadPCDFile<pcl::PointXYZRGBA>(pcd_path, *cloud_in);
             // Transform data
-            Eigen::Matrix4d camera_pose;
+            Eigen::Matrix4d transform;
             // Set Camera Pose
-            camera_pose << -1.271828999999999876e-01, 7.748804000000000247e-01, -6.191807999999999756e-01, 5.570000000000000506e-01,
+            if(pd_enable) {
+                // Camera Pose Here
+                transform << -1.271828999999999876e-01, 7.748804000000000247e-01, -6.191807999999999756e-01, 5.570000000000000506e-01,
                            9.885949000000000542e-01, 4.827069999999999972e-02, -1.426535999999999915e-01, 1.280000000000000027e-01,
                            -8.065110000000000334e-02, -6.302621000000000473e-01, -7.721820000000000350e-01, 5.879999999999999671e-01,
                            0.000000000000000000e+00, 0.000000000000000000e+00, 0.000000000000000000e+00, 1.000000000000000000e+00;
-
+            }
+            else {
+                matrix_parse(transform, object_datas[i]["pose_world"]);
+            }
+            
             Eigen::Affine3d T;
-            T = camera_pose;
+            T = transform;
             pcl::transformPointCloud<pcl::PointXYZRGBA>(
                 *cloud_in,
                 *cloud_out,
