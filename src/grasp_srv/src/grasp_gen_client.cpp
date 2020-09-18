@@ -4,20 +4,20 @@
 SceneManagement::SceneManagement(std::string scene_dir, std::string model_dir) :
     scene_dir_(scene_dir), model_dir_(model_dir), grasp_id_(0) {
     // Publish initialization
-    pose_pub_ = nh_.advertise<geometry_msgs::Pose>("grasp_pose", 1)
+    pose_pub_ = nh_.advertise<geometry_msgs::Pose>("grasp_pose", 1);
     // Subscriber
     // Scene
     scene_sub_  = nh_.subscribe<std_msgs::String>("scene_name", 1000,
-        &SceneManagement::SceneNameCallBack, &scene_management); 
+        &SceneNameCallBack, this); 
     // Grasp ID
     grasp_sub_  = nh_.subscribe<std_msgs::Int32>("grasp_id", 1000,
-        &SceneManagement::GraspIdCallBack, &scene_management);
+        &GraspIdCallBack, this);
     // Model Name
     model_name_sub_  = nh_.subscribe<std_msgs::String>("model_name", 1000,
-        &SceneManagement::ModelNameCallBack, &scene_management);
+        &ModelNameCallBack, this);
     // Save 
     save_sub_  = nh_.subscribe<std_msgs::Bool>("save_signal", 1000, 
-        &SceneManagement::SaveCallBack, &scene_management);
+        &SaveCallBack, this);
     
     // Start Service
     client_ = nh_.serviceClient<grasp_srv::GraspGen>("grasp_gen");
