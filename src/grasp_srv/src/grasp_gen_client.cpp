@@ -24,6 +24,7 @@ SceneManagement::SceneManagement(std::string scene_dir, std::string model_dir) :
 }
 
 void SceneManagement::publish_pose() {
+    ROS_INFO("Start Publishing");
     bool flag = false;
     for(auto i = 0; i < grasps_.global_grasp_poses.size(); ++i) {
         if(grasps_.global_grasp_poses[i].model_names.size() == 0) continue;
@@ -105,7 +106,7 @@ void SceneManagement::ModelNameCallBack(const std_msgs::String::ConstPtr& msg) {
     model_name_ = msg->data;
     grasp_id_ = 0;  // Reset grasp_id_ after change model
     publish_pose();
-    ROS_INFO("Model Name Updated.");
+    ROS_INFO("Model Name: %s.", model_name_);
 };
 
 void SceneManagement::GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg) {
