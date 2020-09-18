@@ -4,3 +4,4 @@ devel/*
 *.swp
 src/grasp_srv/kinect_data/*
 .vscode/
+.catkin_workspace
