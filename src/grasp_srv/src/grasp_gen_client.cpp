@@ -60,7 +60,7 @@ void SceneManagement::SceneNameCallBack(const std_msgs::String::ConstPtr& msg) {
         // Parse name
         std::string name = object_datas[id]["name"];
         srv.request.object_poses.object_names.push_back(name);
-        srv.request.object_poses.object_scales.push_back(1.0);
+        srv.request.object_poses.object_scales.push_back(1.0); // TODO: scale
         // Parse pose
         Eigen::Matrix4d object_pose;
         matrix_parse(object_pose, object_datas[id]["pose_world"]);
@@ -68,9 +68,9 @@ void SceneManagement::SceneNameCallBack(const std_msgs::String::ConstPtr& msg) {
         Eigen::Matrix3d q_matrix = object_pose.block(0, 0, 3, 3);
         Eigen::Quaterniond q(q_matrix);
         geometry_msgs::Pose pose;
-        pose.position.x = object_pose(3, 0);
-        pose.position.y = object_pose(3, 1);
-        pose.position.z = object_pose(3, 2);
+        pose.position.x = object_pose(0, 3);
+        pose.position.y = object_pose(1, 3);
+        pose.position.z = object_pose(2, 3);
         pose.orientation.x = q.x();
         pose.orientation.y = q.y();
         pose.orientation.z = q.z();
@@ -80,7 +80,7 @@ void SceneManagement::SceneNameCallBack(const std_msgs::String::ConstPtr& msg) {
         std::string pd_filename = scene_dir_ + scene_name_ + "/" + std::to_string(id) + ".pcd";
         pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGBA>);
         pcl::io::loadPCDFile<pcl::PointXYZRGBA>(pd_filename, *cloud);
-        // Transform this into a msg
+        // Transform this into a msg || If we directly insert it, the mass is offset
         sensor_msgs::PointCloud2 point_cloud;
         pcl::toROSMsg<pcl::PointXYZRGBA>(*cloud, point_cloud);	
         srv.request.object_poses.object_point_clouds.push_back(point_cloud);
