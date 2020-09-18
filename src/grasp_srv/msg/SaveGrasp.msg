@@ -1,2 +1,2 @@
 GlobalGraspPose global_grasp_pose
-Int32[] grasp_ids
+int32[] grasp_ids
