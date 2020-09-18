@@ -119,7 +119,7 @@ void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {
     std::string pose_filename = model_path + "/pose.json";
 
     if(!exists_file(pose_filename)) {
-        ofstream ofs;
+        std::ofstream ofs;
         ofs.open(pose_filename, std::ofstream::out);
         ofs << "[]";
         ofs.close(); 

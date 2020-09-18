@@ -801,7 +801,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
             try {
                 // File Check
                 if(!exists_file(pose_filename)) {
-                    ofstream ofs;
+                    std::ofstream ofs;
                     ofs.open(pose_filename, std::ofstream::out);
                     ofs << "[]";
                     ofs.close(); 
