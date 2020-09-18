@@ -960,6 +960,8 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     std::cout << object_frame_matrix * bottom << std::endl;
     std::cout << "Bottom" << std::endl;
     std::cout << bottom << std::endl;
+    std::cout << "Bottom Vector" << std::endl;
+    std::cout << bottom_vector << std::endl;
 
     Eigen::Quaternion<double> grasp_frame_quat(grasp_frame);
     Eigen::Quaternion<double> frame_quat(frame);
