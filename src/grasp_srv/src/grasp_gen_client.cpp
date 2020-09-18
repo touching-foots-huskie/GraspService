@@ -8,16 +8,16 @@ SceneManagement::SceneManagement(std::string scene_dir, std::string model_dir) :
     // Subscriber
     // Scene
     scene_sub_  = nh_.subscribe<std_msgs::String>("scene_name", 1000,
-        &SceneNameCallBack, this); 
+        &SceneManagement::SceneNameCallBack, this); 
     // Grasp ID
     grasp_sub_  = nh_.subscribe<std_msgs::Int32>("grasp_id", 1000,
-        &GraspIdCallBack, this);
+        &SceneManagement::GraspIdCallBack, this);
     // Model Name
     model_name_sub_  = nh_.subscribe<std_msgs::String>("model_name", 1000,
-        &ModelNameCallBack, this);
+        &SceneManagement::ModelNameCallBack, this);
     // Save 
     save_sub_  = nh_.subscribe<std_msgs::Bool>("save_signal", 1000, 
-        &SaveCallBack, this);
+        &SceneManagement::SaveCallBack, this);
     
     // Start Service
     client_ = nh_.serviceClient<grasp_srv::GraspGen>("grasp_gen");
