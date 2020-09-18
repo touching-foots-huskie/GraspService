@@ -93,6 +93,7 @@ int main(int argc, char** argv)
             
             // Load pointcloud
             pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud_in (new pcl::PointCloud<pcl::PointXYZRGBA>);
+            pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud_mid(new pcl::PointCloud<pcl::PointXYZRGBA>);
             pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud_out(new pcl::PointCloud<pcl::PointXYZRGBA>);
             pcl::io::loadPCDFile<pcl::PointXYZRGBA>(pcd_path, *cloud_in);
             // Transform data
@@ -110,9 +111,15 @@ int main(int argc, char** argv)
             }
             
             Eigen::Affine3d T;
-            T = transform * Eigen::Scaling(object_scale);
+            T = Eigen::Scaling(object_scale);
             pcl::transformPointCloud<pcl::PointXYZRGBA>(
                 *cloud_in,
+                *cloud_mid,
+                T);
+            T = transform;
+            // scale first
+            pcl::transformPointCloud<pcl::PointXYZRGBA>(
+                *cloud_mid,
                 *cloud_out,
                 T);
             // Assign a Random Color
