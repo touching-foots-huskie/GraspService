@@ -1,15 +1,12 @@
 <launch>
+    <!-- define data path -->
+    <arg name="DATA_PATH" value="$(find grasp_srv)/kinect_data/output/" />
+    <arg name="MODEL_PATH" value="$(find grasp_srv)/data/" />
+    
     <!-- run service node -->
+    <node name="grasp_gen_client" pkg="grasp_srv" type="grasp_gen_client"
+        args="$(arg DATA_PATH) $(arg MODEL_PATH)" output="screen"/>
+    
     <node name="grasp_gen" pkg="grasp_srv" type="grasp_gen_server"
-          args="$(find grasp_srv)" output="screen"/>   
-    <!-- robot visualization  -->
-    <arg  name="model" default="$(find ur_e_description)/urdf/gripper_only.urdf"/>
-    <param name="robot_description" command="cat $(arg model)"/>
-    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
-    <!-- point cloud visualization -->
-    <node name="render_object" pkg="grasp_srv" type="render_object" args="$(find grasp_srv)"/> 
-    <node name="grasp_connector" pkg="grasp_srv" type="grasp_test.py" output="screen"/> 
-    <!-- visualization controller -->
-    <node name="visualizer" pkg="grasp_visualizer" type="visualizer" output="screen"/>
+        args="$(find grasp_srv)" output="screen"/>   
 </launch>
