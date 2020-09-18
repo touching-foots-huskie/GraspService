@@ -192,8 +192,9 @@ GraspDetector::GraspDetector(const std::string &config_filename) {
 // Used in OCRTOC
 GraspDetector::GraspDetector(const std::string& config_filename, 
                              const std::string& ws_path, 
-                             const std::string& model_dir) : 
-                             ws_path_(ws_path), model_dir_(model_dir)
+                             const std::string& model_dir,
+                             const std::string& grasp_dir) : 
+                             ws_path_(ws_path), model_dir_(model_dir), grasp_dir_(grasp_dir) 
                              {
 
     Eigen::initParallel();
@@ -801,7 +802,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         if(pre_defined_enable_) {
             std::string pose_dir;
             std::string pose_filename;
-            pose_dir = ws_path_   + "/data/" + model_name;
+            pose_dir = grasp_dir_ + model_name;
             // where the grasp file saved
             pose_filename = pose_dir + "/pose.json";
             try {

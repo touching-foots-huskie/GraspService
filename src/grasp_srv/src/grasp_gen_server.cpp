@@ -15,9 +15,10 @@ int main(int argc, char **argv) {
     // Get Grasp Generator
     std::string workspace_path(argv[1]);
     std::string model_dir(argv[2]);
+    std::string grasp_dir(argv[3]);
 
     std::string config_filename = workspace_path + "/cfg/eigen_params.cfg";
-    gpd::GraspDetector detector(config_filename, workspace_path, model_dir);
+    gpd::GraspDetector detector(config_filename, workspace_path, model_dir, grasp_dir);
     
     ros::init(argc, argv, "grasp_gen_server");
     ros::NodeHandle n;
