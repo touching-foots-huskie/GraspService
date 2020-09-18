@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 
     std::stringstream ss(argv[3]);
     bool pd_enable;
-    ss >> std::boolalpha >> pd_enable
+    ss >> std::boolalpha >> pd_enable;
 
     ros::init (argc, argv, "pub_scene");
     ros::NodeHandle nh;
