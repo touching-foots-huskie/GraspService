@@ -1,6 +1,6 @@
 build/*
 devel/*
-*.json
 *.pyc
 *.swp
 src/grasp_srv/kinect_data/*
+.vscode/
