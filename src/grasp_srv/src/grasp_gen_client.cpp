@@ -167,7 +167,7 @@ void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {
 };
 
 void SceneManagement::GraspSaveCallBack(const grasp_srv::SaveGrasp::ConstPtr& msg) {
-    std::string model_name_ = msg->global_grasp_pose->model_names[0];
+    std::string model_name_ = msg->global_grasp_pose.model_names[0];
     // Open Json file
     std::string model_path = model_dir_ + model_name_;
     std::string pose_filename = model_path + "/pose.json";
@@ -224,7 +224,7 @@ int main(int argc, char **argv)
     std::string model_dir(argv[2]);
     SceneManagement scene_management(scene_dir, model_dir);
 
-    ros::MultiThreadedSpinner spinner(4); 
+    ros::MultiThreadedSpinner spinner(5); 
     spinner.spin();
     return 0;
 }
