@@ -189,7 +189,12 @@ GraspDetector::GraspDetector(const std::string &config_filename) {
                                             hand_search_params.num_orientations_);
 }
 
-GraspDetector::GraspDetector(const std::string &config_filename, const std::string& ws_path) {
+// Used in OCRTOC
+GraspDetector::GraspDetector(const std::string& config_filename, 
+                             const std::string& ws_path, 
+                             const std::string& model_dir) : 
+                             ws_path_(ws_path), model_dir_(model_dir)
+                             {
 
     Eigen::initParallel();
     // Read parameters from configuration file.
@@ -386,7 +391,6 @@ GraspDetector::GraspDetector(const std::string &config_filename, const std::stri
                                             hand_search_params.num_orientations_);
    // OCRTOC Related
     centered_at_origin_ = config_file.getValueOfKey<bool>("centered_at_origin", false);
-    ws_path_ = ws_path;
     pre_defined_enable_ = config_file.getValueOfKey<bool>("pre_defined_enable", false);
 }
 
@@ -796,6 +800,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         // Load Predefined Pose
         if(pre_defined_enable_) {
             std::string pose_filename;
+            // where the grasp file saved
             pose_filename = ws_path_   + "/data/" +
                             model_name + "/pose.json";
             try {
@@ -857,7 +862,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         else {
             // Get pointcloud from file
             std::ostringstream model_path;
-            model_path << ws_path_   << "/data/"
+            model_path << model_dir_ 
                        << model_name << "/visual_meshes/";
             std::string pcd_file_name = model_path.str() + "cloud.pcd";
             cloud.setPointCloud(pcd_file_name, default_view_point, model_scale);

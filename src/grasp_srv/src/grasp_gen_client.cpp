@@ -1,8 +1,8 @@
 #include "grasp_gen_client.hpp"
 
 
-SceneManagement::SceneManagement(std::string scene_dir, std::string model_dir) :
-    scene_dir_(scene_dir), model_dir_(model_dir), grasp_id_(0) {
+SceneManagement::SceneManagement(std::string scene_dir, std::string grasp_dir) :
+    scene_dir_(scene_dir), grasp_dir_(grasp_dir), grasp_id_(0) {
     // Publish initialization
     pose_pub_ = nh_.advertise<geometry_msgs::Pose>("grasp_pose", 1);
     // Subscriber
@@ -125,8 +125,8 @@ void SceneManagement::GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg) {
 
 void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {
     // Save Local LocalPose and Scale
-    std::string model_path = model_dir_ + model_name_;
-    std::string pose_filename = model_path + "/pose.json";
+    std::string grasp_path = grasp_dir_ + model_name_;
+    std::string pose_filename = grasp_path + "/pose.json";
 
     if(!exists_file(pose_filename)) {
         std::ofstream ofs;
@@ -175,8 +175,8 @@ void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {
 void SceneManagement::GraspSaveCallBack(const grasp_srv::SaveGrasp::ConstPtr& msg) {
     std::string model_name_ = msg->global_grasp_pose.model_names[0];
     // Open Json file
-    std::string model_path = model_dir_ + model_name_;
-    std::string pose_filename = model_path + "/pose.json";
+    std::string grasp_path = grasp_dir_ + model_name_;
+    std::string pose_filename = grasp_path + "/pose.json";
 
     if(!exists_file(pose_filename)) {
         std::ofstream ofs;
@@ -227,8 +227,8 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "grasp_gen_client");
     // Find Data path
     std::string scene_dir(argv[1]);  // Parse for Scene
-    std::string model_dir(argv[2]);
-    SceneManagement scene_management(scene_dir, model_dir);
+    std::string grasp_dir(argv[2]);
+    SceneManagement scene_management(scene_dir, grasp_dir);
 
     ros::MultiThreadedSpinner spinner(5); 
     spinner.spin();

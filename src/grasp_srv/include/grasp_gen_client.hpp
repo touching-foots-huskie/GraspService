@@ -45,7 +45,7 @@ using json = nlohmann::json;
 
 class SceneManagement {
 public:
-    SceneManagement(std::string scene_dir, std::string model_dir);
+    SceneManagement(std::string scene_dir, std::string grasp_dir);
     void SceneNameCallBack(const std_msgs::String::ConstPtr& msg);
     void ModelNameCallBack(const std_msgs::String::ConstPtr& msg);
     void GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg);
@@ -68,7 +68,7 @@ private:
     std::string scene_name_;
     int grasp_id_;
     std::string scene_dir_;
-    std::string model_dir_;
+    std::string grasp_dir_;
 };
 
 #endif

@@ -92,7 +92,9 @@ class GraspDetector {
      * \brief Constructor.
      * \param node ROS node handle
      */
-    GraspDetector(const std::string &config_filename, const std::string& ws_path);
+    GraspDetector(const std::string &config_filename, 
+                  const std::string& ws_path,
+                  const std::string& model_dir);
 
     /**
      * \brief Detect grasps in a point cloud.
@@ -268,6 +270,7 @@ class GraspDetector {
 
     // OCRTOC related 
     std::string ws_path_;
+    std::string model_dir_;
     bool centered_at_origin_;
     bool pre_defined_enable_;
 };
