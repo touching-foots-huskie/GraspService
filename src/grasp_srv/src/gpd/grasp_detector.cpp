@@ -799,11 +799,17 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         grasp_srv::GlobalGraspPose global_grasp_msg;
         // Load Predefined Pose
         if(pre_defined_enable_) {
+            std::string pose_dir;
             std::string pose_filename;
+            pose_dir = ws_path_   + "/data/" + model_name;
             // where the grasp file saved
-            pose_filename = ws_path_   + "/data/" +
-                            model_name + "/pose.json";
+            pose_filename = pose_dir + "/pose.json";
             try {
+                // Check Directory Existense 
+                if(!exists_file(pose_dir)) {
+                    boost::filesystem::create_directories(pose_dir); 
+                }
+
                 // File Check
                 if(!exists_file(pose_filename)) {
                     std::ofstream ofs;
@@ -811,6 +817,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                     ofs << "[]";
                     ofs.close(); 
                 }
+
                 std::ifstream json_file(pose_filename);
                 json pose_datas_json;
                 json_file >> pose_datas_json;

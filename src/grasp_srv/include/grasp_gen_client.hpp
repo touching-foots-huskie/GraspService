@@ -38,6 +38,7 @@ using json = nlohmann::json;
 // Boost
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
+#include <boost/filesystem.hpp>
 
 // JSON
 #include "json_tools.h"

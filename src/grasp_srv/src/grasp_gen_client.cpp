@@ -128,6 +128,12 @@ void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {
     std::string grasp_path = grasp_dir_ + model_name_;
     std::string pose_filename = grasp_path + "/pose.json";
 
+    // Check Directory Existense 
+    if(!exists_file(grasp_path)) {
+        boost::filesystem::create_directories(grasp_path); 
+    }
+
+    // Check File Existense
     if(!exists_file(pose_filename)) {
         std::ofstream ofs;
         ofs.open(pose_filename, std::ofstream::out);
@@ -178,6 +184,11 @@ void SceneManagement::GraspSaveCallBack(const grasp_srv::SaveGrasp::ConstPtr& ms
     std::string grasp_path = grasp_dir_ + model_name_;
     std::string pose_filename = grasp_path + "/pose.json";
 
+    // Check Directory Existense 
+    if(!exists_file(grasp_path)) {
+        boost::filesystem::create_directories(grasp_path); 
+    }
+    
     if(!exists_file(pose_filename)) {
         std::ofstream ofs;
         ofs.open(pose_filename, std::ofstream::out);

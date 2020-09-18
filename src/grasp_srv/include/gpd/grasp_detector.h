@@ -67,6 +67,9 @@
 #include <gpd/util/config_file.h>
 #include <gpd/util/plot.h>
 
+// Boost
+#include <boost/filesystem.hpp>
+
 // json related 
 #include <json_tools.h>
 
