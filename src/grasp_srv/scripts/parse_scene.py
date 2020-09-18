@@ -12,7 +12,7 @@ import json
 
 if __name__=='__main__':
     scene_name = "1-4"
-    data_path = "/home/harvey/Data/kinect_data/output/"
+    data_path = "../kinect_data/output/"
     image_path = data_path + scene_name
     depth_img_path = image_path + "/depth.png"
     color_img_path = image_path + "/rgb.png"

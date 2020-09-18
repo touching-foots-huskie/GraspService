@@ -794,14 +794,19 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
 
         grasp_srv::GlobalGraspPose global_grasp_msg;
         // Load Predefined Pose
-        if(false) {
+        if(pre_defined_enable_) {
             std::string pose_filename;
             pose_filename = ws_path_   + "/data/" +
                             model_name + "/pose.json";
             try {
+                std::cout << pose_filename << std::endl;
                 std::ifstream json_file(pose_filename);
-                json pose_datas;
-                json_file >> pose_datas;
+                json pose_datas_json;
+                json_file >> pose_datas_json;
+                json_file.close();
+
+                std::vector<std::vector<double> > pose_datas;
+                pose_datas = pose_datas_json.get<std::vector<std::vector<double> > >();
                 // Save pose_datas into msg
                 for(auto id = 0; id < pose_datas.size(); ++id) {
                     Eigen::Vector3d bottom(pose_datas[id][0],
@@ -823,9 +828,10 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                  object_position,
                                  relative_scale = relative_scale);
                 }
-                ROS_INFO("Pre-defined Pose Added.");
+                ROS_INFO("Add Pre-defined Pose.");
             }
             catch(std::exception& e) {
+                ROS_INFO("Fail Pre-defined Pose.");
             }
         }
 

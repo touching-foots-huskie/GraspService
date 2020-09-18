@@ -118,9 +118,12 @@ void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {
     std::string model_path = model_dir_ + model_name_;
     std::string pose_file_name = model_path + "/pose.json";
     std::ifstream json_file(pose_file_name);
-    json pose_datas;
-    json_file >> pose_datas;
+    json pose_datas_json;
+    json_file >> pose_datas_json;
     json_file.close();
+
+    std::vector<std::vector<double> > pose_datas;
+    pose_datas = pose_datas_json.get<std::vector<std::vector<double> > >();
     // Add new pose
     for(auto i = 0; i < grasps_.global_grasp_poses.size(); ++i) {
         if(grasps_.global_grasp_poses[i].model_names.size() == 0) continue;  // No grasps_ Here
@@ -141,12 +144,11 @@ void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {
                 local_pose.orientation.w,
                 scale,
                 grasp_width};
-            json pose_array_json(pose_array);
-            pose_datas.push_back(pose_array_json);
+            pose_datas.push_back(pose_array);
+            pose_datas_json = pose_datas;
             std::ofstream out_file(pose_file_name);
-            out_file << pose_datas;
+            out_file << pose_datas_json;
             out_file.close();
-            ROS_INFO("Grasp Saved.");
             return;
         }
     }
