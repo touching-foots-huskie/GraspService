@@ -8,11 +8,13 @@ import cv2
 import numpy as np
 import open3d as o3d
 import json
+import os
 
 
 if __name__=='__main__':
     scene_dir = "/root/GraspService/src/grasp_srv/kinect_data/output/"
     for scene_name in os.listdir(scene_dir):
+        print(scene_name)
         image_path = scene_dir + scene_name
         depth_img_path = image_path + "/depth.png"
         color_img_path = image_path + "/rgb.png"
