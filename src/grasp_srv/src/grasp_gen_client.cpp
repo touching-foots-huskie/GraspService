@@ -106,13 +106,11 @@ void SceneManagement::ModelNameCallBack(const std_msgs::String::ConstPtr& msg) {
     model_name_ = msg->data;
     grasp_id_ = 0;  // Reset grasp_id_ after change model
     publish_pose();
-    ROS_INFO("Model Name: %s.", model_name_);
 };
 
 void SceneManagement::GraspIdCallBack(const std_msgs::Int32::ConstPtr& msg) {
     grasp_id_ = msg->data;
     publish_pose();   
-    ROS_INFO("Grasp ID Updated.");
 };
 
 void SceneManagement::SaveCallBack(const std_msgs::Bool::ConstPtr& msg) {

@@ -158,13 +158,21 @@ void SceneVisualizer::save() {
 void SceneVisualizer::updateModelName() {
     QString model_name = model_name_list_->currentText();
     model_name_ = model_name.toStdString();
-    std::cout << "Model Name Updated" << std::endl;
+
+    std_msgs::String model_msg;
+    model_msg.data = model_name_;
+    model_name_pub_.publish(model_msg);
+
+    // Reset graspid
+    grasp_id_ = 0;
+    std_msgs::Int32 grasp_msg;
+    grasp_msg.data = grasp_id_;
+    grasp_pub_.publish(grasp_msg);
 }
 
 void SceneVisualizer::updateSceneName() {
     QString scene_name = scene_name_text_->text();
     scene_name_ = scene_name.toStdString();
-    std::cout << "SceneName Updated" << std::endl;
     // Parse Json File to update Model Name
     std::string jsonfile_path = data_path_ + scene_name_ + "/object_data.json";
     std::ifstream json_file(jsonfile_path);
@@ -195,7 +203,5 @@ void SceneVisualizer::startGen() {
     std_msgs::Int32 grasp_msg;
     grasp_msg.data = grasp_id_;
     grasp_pub_.publish(grasp_msg);
-
-    ROS_INFO("New Scene Start!");
 }
 
