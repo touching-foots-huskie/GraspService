@@ -952,6 +952,12 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     Eigen::Vector3d grasp_point = object_frame_matrix * bottom + object_position;
     Eigen::Vector3d pre_grasp_point = object_frame_matrix * pre_bottom + object_position;
 
+    Eigen::Quaternion<double> grasp_frame_quat(grasp_frame);
+    Eigen::Quaternion<double> frame_quat(frame);
+    geometry_msgs::Pose grasp_pose;
+    geometry_msgs::Pose pre_grasp_pose;
+    geometry_msgs::Pose local_pose;
+
     std::cout << "Object Point" << std::endl;
     std::cout << object_position << std::endl;
     std::cout << "World Point" << std::endl;
@@ -962,12 +968,10 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     std::cout << bottom << std::endl;
     std::cout << "Bottom Vector" << std::endl;
     std::cout << bottom_vector << std::endl;
-
-    Eigen::Quaternion<double> grasp_frame_quat(grasp_frame);
-    Eigen::Quaternion<double> frame_quat(frame);
-    geometry_msgs::Pose grasp_pose;
-    geometry_msgs::Pose pre_grasp_pose;
-    geometry_msgs::Pose local_pose;
+    std::cout << "Frame" << std::endl;
+    std::cout << frame << std::endl;
+    std::cout << "Frame Quat" << std::endl;
+    std::cout << frame_quat << std::endl;
 
     // grasp_pose
     grasp_pose.position.x = grasp_point.x();
