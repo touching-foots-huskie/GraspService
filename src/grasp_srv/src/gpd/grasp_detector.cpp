@@ -799,7 +799,13 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
             pose_filename = ws_path_   + "/data/" +
                             model_name + "/pose.json";
             try {
-                std::cout << pose_filename << std::endl;
+                // File Check
+                if(!exists_file(pose_filename)) {
+                    ofstream ofs;
+                    ofs.open(pose_filename, std::ofstream::out);
+                    ofs << "[]";
+                    ofs.close(); 
+                }
                 std::ifstream json_file(pose_filename);
                 json pose_datas_json;
                 json_file >> pose_datas_json;

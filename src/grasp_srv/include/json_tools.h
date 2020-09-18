@@ -2,6 +2,10 @@
 #ifndef JSON_TOOLS
 #define JSON_TOOLS
 #include <nlohmann/json.hpp>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <string>
+#include <fstream>
 // for convenience
 using json = nlohmann::json;
 
@@ -12,5 +16,10 @@ void matrix_parse(Eigen::Matrix4d& matrix, const json& json_matrix) {
             matrix(i, j) = json_matrix[i][j];
         }
     }
+}
+
+inline bool exists_file (const std::string& name) {
+  struct stat buffer;   
+  return (stat (name.c_str(), &buffer) == 0); 
 }
 #endif
