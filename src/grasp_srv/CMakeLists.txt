@@ -198,7 +198,8 @@ target_link_libraries(${GRASP}_grasp_detector
   ${GRASP}_hand_set
   ${GRASP}_config_file
   ${GRASP}_plot
-  ${catkin_LIBRARIES})
+  ${catkin_LIBRARIES}
+  nlohmann_json::nlohmann_json)
 
 # Linking for libraries
 target_link_libraries(${GRASP}_antipodal
