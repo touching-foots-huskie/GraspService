@@ -18,8 +18,9 @@ void matrix_parse(Eigen::Matrix4d& matrix, const json& json_matrix) {
     }
 }
 
-inline bool exists_file (const std::string& name) {
+inline bool exists_file(const std::string& name) {
   struct stat buffer;   
   return (stat (name.c_str(), &buffer) == 0); 
 }
+
 #endif

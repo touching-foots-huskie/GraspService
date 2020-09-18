@@ -68,10 +68,7 @@
 #include <gpd/util/plot.h>
 
 // json related 
-#include <nlohmann/json.hpp>
-// for convenience
-using json = nlohmann::json;
-
+#include <json_tools.h>
 
 namespace gpd {
 
