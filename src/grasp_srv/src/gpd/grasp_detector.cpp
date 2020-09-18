@@ -952,6 +952,8 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     Eigen::Vector3d grasp_point = object_frame_matrix * bottom + object_position;
     Eigen::Vector3d pre_grasp_point = object_frame_matrix * pre_bottom + object_position;
 
+    std::cout << "Object Point" << std::endl;
+    std::cout << object_position << std::endl;
     std::cout << "World Point" << std::endl;
     std::cout << grasp_point << std::endl;
     
