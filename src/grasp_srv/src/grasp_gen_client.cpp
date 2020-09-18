@@ -187,7 +187,7 @@ void SceneManagement::GraspSaveCallBack(const grasp_srv::SaveGrasp::ConstPtr& ms
     std::vector<std::vector<double> > pose_datas;
     pose_datas = pose_datas_json.get<std::vector<std::vector<double> > >();
 
-    for(auto i = 0; i < msg->grasp_ids.size(); ++id) {
+    for(auto i = 0; i < msg->grasp_ids.size(); ++i) {
         grasp_id_ = msg->grasp_ids[i];
         assert(grasp_id_ < msg->global_grasp_pose.model_names.size()); 
             geometry_msgs::Pose local_pose = 
