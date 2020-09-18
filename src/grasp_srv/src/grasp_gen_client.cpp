@@ -54,18 +54,24 @@ void SceneManagement::SceneNameCallBack(const std_msgs::String::ConstPtr& msg) {
     ROS_INFO("Choose Scene: [%s]", msg->data.c_str());
     std::string scene_name_ = msg->data;
     std::string json_path = scene_dir_ + scene_name_ + "/object_data.json";
-    std::cout << json_path << std::endl;
     std::ifstream json_file(json_path);
     json object_datas;
     json_file >> object_datas;
-    
+
+    // Scale File
+    std::string scale_path = scene_dir_ + scene_name_ + "/scale.json";
+    std::ifstream scale_file(scale_path);
+    json scale_datas;
+    scale_file >> scale_datas;
+
     grasp_srv::GraspGen srv;
     // Go through all objects in scene
     for(auto id = 0; id < object_datas.size(); ++id) {
         // Parse name
         std::string name = object_datas[id]["name"];
         srv.request.object_poses.object_names.push_back(name);
-        srv.request.object_poses.object_scales.push_back(1.0); // TODO: scale
+        double scale = scale_datas[name];
+        srv.request.object_poses.object_scales.push_back(scale); // TODO: scale
         // Parse pose
         Eigen::Matrix4d object_pose;
         matrix_parse(object_pose, object_datas[id]["pose_world"]);
