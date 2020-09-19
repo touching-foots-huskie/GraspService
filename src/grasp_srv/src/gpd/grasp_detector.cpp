@@ -847,7 +847,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                  object_position,
                                  relative_scale);
                     // generate another with symmetric over x-axis
-                    Eigen::AngleAxis<float> flip(M_PI, Eigen::Vector3d(1.,0.,0.));
+                    Eigen::AngleAxis<double> flip(1.0*M_PI, Eigen::Vector3d(1.,0.,0.));
                     frame = frame * flip.toRotationMatrix();
                     generate_msg(global_grasp_msg, 
                                 model_name, model_scale, grasp_width,
@@ -913,13 +913,13 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                          object_frame_matrix,
                          object_position);
             // generate another with symmetric over x-axis
-                    Eigen::AngleAxis<float> flip(M_PI, Eigen::Vector3d(1.,0.,0.));
-                    frame = frame * flip.toRotationMatrix();
-                    generate_msg(global_grasp_msg, 
-                                model_name, model_scale, grasp_width,
-                                frame, bottom,
-                                object_frame_matrix,
-                                object_position);
+            Eigen::AngleAxis<double> flip(1.0*M_PI, Eigen::Vector3d(1.,0.,0.));
+            frame = frame * flip.toRotationMatrix();
+            generate_msg(global_grasp_msg, 
+                        model_name, model_scale, grasp_width,
+                        frame, bottom,
+                        object_frame_matrix,
+                        object_position);
         }
         // Add grasp_msg into res
         res.grasps.global_grasp_poses.push_back(global_grasp_msg);
