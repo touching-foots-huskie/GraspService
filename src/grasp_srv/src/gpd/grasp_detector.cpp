@@ -952,17 +952,8 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     ori_vector = grasp_frame * ori_vector;  // world orientation
     bool reachable = false;
     double grasp_z = ori_vector.z();
-    double grasp_y = ori_vector.y();
-    if(grasp_z <= 0) {
-    if(grasp_y >= 0) {
+    if(grasp_z < 0) {
         reachable = true;
-    } 
-    else {
-        double grasp_ratio = (-grasp_y);
-        if((grasp_ratio > 0) && (grasp_ratio < angle_ratio)) {
-        reachable = true;
-        }
-    }
     }
 
     if(!reachable) return;  // Filtered unreachable pose

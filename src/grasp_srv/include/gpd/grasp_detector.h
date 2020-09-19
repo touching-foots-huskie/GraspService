@@ -229,7 +229,7 @@ class GraspDetector {
                       const Eigen::Matrix3d& object_frame_matrix = Eigen::Matrix3d::Identity(),
                       const Eigen::Vector3d& object_position = Eigen::Vector3d::Zero(),
                       const double relative_scale = 1.0,
-                      const double comp_distance = 0.1,
+                      const double comp_distance = 0.13,
                       const double pre_distance = 0.15,
                       const double angle_ratio = 0.5);
     
