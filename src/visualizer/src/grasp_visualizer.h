@@ -25,7 +25,9 @@
 #include <std_msgs/String.h>
 #include <std_msgs/Bool.h>
 #include <geometry_msgs/Pose.h>
+// msg & srv
 #include "grasp_srv/ObjectPoses.h"
+#include "grasp_srv/GraspGen.h"
 
 // Math
 #include <cmath>
@@ -59,6 +61,7 @@ private Q_SLOTS:
     void save();
     void start();
     void update_modelname();
+    void update_graspmode();
 private:
     
 
@@ -73,7 +76,9 @@ private:
     ros::Publisher model_id_pub_;      // publish model name
     ros::Publisher grasp_mode_pub_;   // publish grasp model
     ros::Publisher save_signal_pub_;   // save signal
-    ros::Publisher start_signal_pub_;  // start signal
+    
+    // client
+    ros::ServiceClient client_;
 
     // bt
     QPushButton* bt1_;  // save
