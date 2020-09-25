@@ -54,6 +54,19 @@ target_link_libraries(scene_visualizer
                       ${QT_LIBRARIES} 
                       ${catkin_LIBRARIES} 
                       nlohmann_json::nlohmann_json)
+
+set(GRASP_SRC_FILES
+  src/grasp_visualizer.cpp
+  src/grasp_main.cpp
+)
+
+add_executable(grasp_visualizer ${GRASP_SRC_FILES})
+target_link_libraries(grasp_visualizer 
+                      ${QT_LIBRARIES} 
+                      ${catkin_LIBRARIES} 
+                      nlohmann_json::nlohmann_json)
+
 ## Install
 install(TARGETS visualizer DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 install(TARGETS scene_visualizer DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+install(TARGETS grasp_visualizer DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
