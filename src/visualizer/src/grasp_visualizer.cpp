@@ -56,6 +56,6 @@ GraspVisualizer::~GraspVisualizer() {
 }
 
 // SLOT
-GraspVisualizer::save() {}
+void GraspVisualizer::save() {}
 
-GraspVisualizer::start() {}
+void GraspVisualizer::start() {}
