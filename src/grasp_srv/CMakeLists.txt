@@ -201,7 +201,8 @@ target_link_libraries(${GRASP}_grasp_detector
   ${GRASP}_config_file
   ${GRASP}_plot
   ${catkin_LIBRARIES}
-  nlohmann_json::nlohmann_json)
+  nlohmann_json::nlohmann_json
+  geometry_grasp)
 
 # Linking for libraries
 target_link_libraries(${GRASP}_antipodal
