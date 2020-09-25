@@ -1,0 +1,21 @@
+<launch>
+    <!-- where the scene information are saved -->
+    <arg name="DATA_PATH" value="$(find grasp_srv)/kinect_data/output/" />
+    <!-- where the pcd model are saved -->
+    <arg name="MODEL_PATH" value="$(find grasp_srv)/data/" />
+    <!-- where the grasp pose should be saved -->
+    <arg name="GRASP_PATH" value="$(find grasp_srv)/grasp_data/" />
+    
+    <!-- run service node -->
+    <node name="grasp_gen" pkg="grasp_srv" type="grasp_gen_server"
+        args="$(find grasp_srv) $(arg MODEL_PATH) $(arg GRASP_PATH)" output="screen"/>   
+    
+    <node name="grasp_visualizer" pkg="grasp_visualizer" type="grasp_visualizer"
+        output="screen"/>
+
+    <!-- robot visualization  -->
+    <arg  name="model" default="$(find ur_e_description)/urdf/gripper_only.urdf"/>
+    <param name="robot_description" command="cat $(arg model)"/>
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+</launch>
