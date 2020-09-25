@@ -6,6 +6,7 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     // data initialization
     model_id_ = "0";
     model_name_ = "";
+    model_scale_ = 1.0;
     grasp_mode_ = "box";
     data_path_ = "/root/ocrtoc_materials";
     
@@ -80,8 +81,14 @@ void GraspVisualizer::render_grasp(int grasp_id) {
     grasp_pose_pub_.publish(grasp_pose);
 
     // publish model name | to render object
-    object_name_pub_.publish(object_poses_.object_names[0]);
-    object_scale_pub_.publish(object_poses_.object_scales[0]);
+    std_msgs::String object_name_msg;
+    object_name_msg.data = model_name_;
+    object_name_pub_.publish(object_name_msg);
+
+    std_msgs::Float64 object_scale_msg;
+    object_scale_msg.data = model_scale_;
+    object_scale_pub_.publish(object_scale_msg);
+    
     object_pose_pub_.publish(object_poses_.object_poses[0]);
 }
 

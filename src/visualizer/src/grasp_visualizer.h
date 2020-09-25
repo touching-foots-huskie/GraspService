@@ -72,6 +72,7 @@ private:
     std::string grasp_mode_;  // box, can, gpd, flat
     std::string data_path_;   // josn file for object id
     std::string model_name_; 
+    double model_scale_;
 
     // grasps data
     grasp_srv::Grasps grasps_;
