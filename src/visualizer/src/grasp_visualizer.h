@@ -34,6 +34,10 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
+// stream
+#include <istream>
+#include <fstream>
+
 
 namespace rviz
 {
