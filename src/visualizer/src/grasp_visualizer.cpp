@@ -9,9 +9,8 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     data_path_ = "/root/ocrtoc_materials";
     
     // initialize publisher
-    model_id_pub_ = nh_.advertise<std_msgs::Int32>("model_id", 1);
-    grasp_mode_pub_ = nh_.advertise<std_msgs::String>("grasp_mode", 1);
-    save_signal_pub_ = nh_.advertise<std_msgs::Bool>("save_signal", 1);
+    grasp_pose_pub_ = nh_.advertise<geometry_msgs::Pose>("grasp_pose", 1);
+    object_pub_ = nh_.advertise<grasp_srv::ObjectPoses>("object_pose", 1);
     
     // initialize client
     client_ = nh_.serviceClient<grasp_srv::GraspGen>("grasp_gen");
@@ -67,20 +66,34 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
 GraspVisualizer::~GraspVisualizer() {   
 }
 
+// render and save image
+void GraspVisualizer::render_grasp(int grasp_id) {
+    // publish pose | to render pose
+    if(grasps_.global_grasp_poses[0].model_names.size() == 0) continue;
+    geometry_msgs::Pose grasp_pose = 
+        grasps_.global_grasp_poses[0].grasp_poses[grasp_id];
+
+    grasp_pose_pub_.publish(grasp_pose);
+
+    // publish model name | to render object
+    object_pub_.publish(object_poses_);
+}
+
 // SLOT
 void GraspVisualizer::save() {}
 
 void GraspVisualizer::start() {
     grasp_srv::GraspGen srv;
+    grasp_srv::ObjectPoses object_poses_msg;
     // set name
-    srv.request.object_poses.object_names.push_back(model_name_);
+    object_poses_msg.object_names.push_back(model_name_);
     // set scale
-    srv.request.object_poses.object_scales.push_back(1.0);
+    object_poses_msg.object_scales.push_back(1.0);
     // set grasp mode
-    srv.request.object_poses.grasp_modes.push_back(grasp_mode_);
+    object_poses_msg.grasp_modes.push_back(grasp_mode_);
     // empty pointcloud
     sensor_msgs::PointCloud2 pointcloud;
-    srv.request.object_poses.object_point_clouds.push_back(pointcloud);
+    object_poses_msg.object_point_clouds.push_back(pointcloud);
     // upper pose
     geometry_msgs::Pose pose;
     pose.orientation.w = 1.0;
@@ -90,11 +103,15 @@ void GraspVisualizer::start() {
     pose.position.x = 0.0;
     pose.position.y = 0.0;
     pose.position.z = 0.2;
-    srv.request.object_poses.object_poses.push_back(pose);
+    object_poses_msg.object_poses.push_back(pose);
     
+    srv.request.object_poses = object_poses_msg;
+    object_poses_ = object_poses_msg;  // reassign msg
+
     // call service
     if(client_.call(srv)) {
         ROS_INFO("Grasp Pose Generated");
+        grasps_ = srv.response.grasps;  // update grasps
     }
     else {
         ROS_ERROR("Failed to call service grasp_gen");

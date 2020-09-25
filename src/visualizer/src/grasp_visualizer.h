@@ -28,6 +28,7 @@
 // msg & srv
 #include "grasp_srv/ObjectPoses.h"
 #include "grasp_srv/GraspGen.h"
+#include "grasp_srv/Grasps.h"
 
 // Math
 #include <cmath>
@@ -56,26 +57,30 @@ Q_OBJECT
 public:
     GraspVisualizer(QWidget* parent = 0);
     virtual ~GraspVisualizer();
+    // render and save image
+    void render_grasp(int grasp_id);
 
 private Q_SLOTS:
     void save();
     void start();
     void update_modelname();
     void update_graspmode();
-private:
-    
 
+private:
     // publishing data
     std::string model_id_;
     std::string grasp_mode_;  // box, can, gpd, flat
     std::string data_path_;   // josn file for object id
     std::string model_name_; 
 
+    // grasps data
+    grasp_srv::Grasps grasps_;
+    grasp_srv::ObjectPoses object_poses_;
+
     // Ros Publisher
     ros::NodeHandle nh_;
-    ros::Publisher model_id_pub_;      // publish model name
-    ros::Publisher grasp_mode_pub_;   // publish grasp model
-    ros::Publisher save_signal_pub_;   // save signal
+    ros::Publisher grasp_pose_pub_;   // grasp pose
+    ros::Publisher object_pub_; // object publisher
     
     // client
     ros::ServiceClient client_;
@@ -90,6 +95,5 @@ private:
 
     // showing label
     QLabel* model_name_label;
-
 };
 #endif // GRASP_VISUALIZER_H
