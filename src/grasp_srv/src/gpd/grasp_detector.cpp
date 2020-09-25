@@ -838,16 +838,11 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 // generate grasp pose
                 VectorArray position_array;
                 MatrixArray frame_array;
-                switch (type_name)
-                {
-                case "box":
+                if(type_name == "box") {
                     box_grasp(frame_array, position_array, pcd_file_name, model_scale);
-                    break;
-                case "can":
+                }
+                else if(type_name == "can") {
                     can_grasp(frame_array, position_array, pcd_file_name, model_scale);
-                    break;
-                default:
-                    break;
                 }
 
                 // generate msg

@@ -8,7 +8,7 @@ void box_parse(std::string filename, double& size_x, double& size_y, double& siz
     if (pcl::io::loadPCDFile<pcl::PointXYZ>(filename, *cloud) == -1) //* load the file
     {
         PCL_ERROR ("Couldn't find model data \n");
-        return (-1);
+        return;
     }
 
     // check lowest and highest in z-axis
@@ -39,7 +39,7 @@ void can_parse(std::string filename, double& size_r, double& size_h, AXIS& axis)
     if (pcl::io::loadPCDFile<pcl::PointXYZ>(filename, *cloud) == -1) //* load the file
     {
         PCL_ERROR ("Couldn't find model data \n");
-        return (-1);
+        return;
     }
 
     // check lowest and highest in z-axis
@@ -208,7 +208,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
         Eigen::Matrix3d frame = Eigen::Matrix3d::Identity();
         Eigen::Vector3d position = Eigen::Vector3d::Zero();
         
-        position(0) =  -size_x / 2.0;
+        position(0) =  -size_r / 2.0;
         frame = w_rot * rot_z * frame;
         position = w_rot * rot_z * position;
         frame_array.push_back(frame);
@@ -217,7 +217,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
         // vertical 1
         Eigen::Matrix3d frame_v1 = Eigen::Matrix3d::Identity();
         Eigen::Vector3d position_v1 = Eigen::Vector3d::Zero();
-        position_v1(1) =  size_y / 2.0;
+        position_v1(2) =  size_h / 2.0;
         rot_y = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitY());
         frame_v1 = w_rot * frame_v1 * rot_y;
         frame_v1 = rot_z * frame_v1;
@@ -228,7 +228,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
         // vertical 2
         Eigen::Matrix3d frame_v2 = Eigen::Matrix3d::Identity();
         Eigen::Vector3d position_v2 = Eigen::Vector3d::Zero();
-        position_v2(1) =  -size_y / 2.0;
+        position_v2(2) =  -size_h / 2.0;
         rot_y = Eigen::AngleAxisd(-M_PI/2.0, Eigen::Vector3d::UnitY());
         frame_v2 = w_rot * frame_v2 * rot_y;
         frame_v2 = rot_z * frame_v2;
