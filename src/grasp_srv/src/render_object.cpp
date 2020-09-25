@@ -66,12 +66,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr
 int main(int argc, char** argv)
 {
     std::string workspace_path;
-    if(argc >= 2) {
-      workspace_path = std::string(argv[1]);
-    } else {
-      workspace_path = "/root/GraspService/src/grasp_srv";
-    }
-
+    workspace_path = std::string(argv[1]);
     ros::init (argc, argv, "pub_pcl");
     ros::NodeHandle nh;
     // Model Subscriber
@@ -86,8 +81,7 @@ int main(int argc, char** argv)
     ros::Rate loop_rate(4);
     while (nh.ok())
     {
-        std::string object_path = workspace_path 
-                                + "/data/" 
+        std::string object_path = workspace_path  
                                 + object_name
                                 + "/visual_meshes/cloud.pcd";
         // DepthCloud

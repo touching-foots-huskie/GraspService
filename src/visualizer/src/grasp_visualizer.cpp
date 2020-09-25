@@ -5,13 +5,17 @@
 GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     // data initialization
     model_id_ = "0";
+    model_name_ = "";
     grasp_mode_ = "box";
     data_path_ = "/root/ocrtoc_materials";
     
     // initialize publisher
     grasp_pose_pub_ = nh_.advertise<geometry_msgs::Pose>("grasp_pose", 1);
-    object_pub_ = nh_.advertise<grasp_srv::ObjectPoses>("object_pose", 1);
-    
+    // object publisher
+    object_name_pub_ = nh_.advertise<std_msg::String>("object_name", 1);
+    object_scale_pub_ = nh_.advertise<std_msg::Float64>("object_scale", 1);
+    object_pose_pub_ = nh_.advertise<geometry_msgs::Pose>("object_pose", 1);
+
     // initialize client
     client_ = nh_.serviceClient<grasp_srv::GraspGen>("grasp_gen");
     
@@ -69,14 +73,16 @@ GraspVisualizer::~GraspVisualizer() {
 // render and save image
 void GraspVisualizer::render_grasp(int grasp_id) {
     // publish pose | to render pose
-    if(grasps_.global_grasp_poses[0].model_names.size() == 0) continue;
+    if(grasps_.global_grasp_poses[0].model_names.size() == 0) return;
     geometry_msgs::Pose grasp_pose = 
         grasps_.global_grasp_poses[0].grasp_poses[grasp_id];
 
     grasp_pose_pub_.publish(grasp_pose);
 
     // publish model name | to render object
-    object_pub_.publish(object_poses_);
+    object_name_pub_.publish(object_poses_.object_names[0]);
+    object_scale_pub_.publish(object_poses_.object_scales[0]);
+    object_pose_pub_.publish(object_poses_.object_poses[0]);
 }
 
 // SLOT

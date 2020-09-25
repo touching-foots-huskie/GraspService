@@ -80,8 +80,9 @@ private:
     // Ros Publisher
     ros::NodeHandle nh_;
     ros::Publisher grasp_pose_pub_;   // grasp pose
-    ros::Publisher object_pub_; // object publisher
-    
+    ros::Publisher object_name_pub_; // object publisher
+    ros::Publisher object_scale_pub_;
+    ros::Publisher object_pose_pub_;
     // client
     ros::ServiceClient client_;
 

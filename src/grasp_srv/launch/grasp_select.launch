@@ -13,6 +13,12 @@
     <node name="grasp_visualizer" pkg="grasp_visualizer" type="grasp_visualizer"
         output="screen"/>
 
+    <node name="render_object" pkg="grasp_srv" type="render_object" 
+        args="$(arg MODEL_PATH)" output="screen"/> 
+    
+    <node name="grasp_connector" pkg="grasp_srv" type="gripper_transfer.py" 
+        output="screen"/>
+
     <!-- robot visualization  -->
     <arg  name="model" default="$(find ur_e_description)/urdf/gripper_only.urdf"/>
     <param name="robot_description" command="cat $(arg model)"/>
