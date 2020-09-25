@@ -102,11 +102,20 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
     size_y *= scale;
     size_z *= scale;
 
+    // rot_x
+    Eigen::Matrix3d rot_x;
+    rot_x = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitX());
+
     // grasp along +x-axis 
     {
         Eigen::Matrix3d frame = Eigen::Matrix3d::Identity();
         Eigen::Vector3d position = Eigen::Vector3d::Zero();
         position(0) =  -size_x / 2.0;
+        frame_array.push_back(frame);
+        position_array.push_back(position);
+
+        // vertical grasp pose
+        frame = frame * rot_x;
         frame_array.push_back(frame);
         position_array.push_back(position);
     }
@@ -118,6 +127,11 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         rot_z = Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitZ());
         frame = frame * rot_z;
         position(0) =  size_x / 2.0;
+        frame_array.push_back(frame);
+        position_array.push_back(position);
+
+        // vertical grasp pose
+        frame = frame * rot_x;
         frame_array.push_back(frame);
         position_array.push_back(position);
     }
@@ -132,6 +146,11 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         position(1) =  -size_y / 2.0;
         frame_array.push_back(frame);
         position_array.push_back(position);
+
+        // vertical grasp pose
+        frame = frame * rot_x;
+        frame_array.push_back(frame);
+        position_array.push_back(position);
     }
     // grasp along -y-axis 
     {
@@ -141,6 +160,11 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         rot_z = Eigen::AngleAxisd(-M_PI/2.0, Eigen::Vector3d::UnitZ());
         frame = frame * rot_z;
         position(1) =  size_y / 2.0;
+        frame_array.push_back(frame);
+        position_array.push_back(position);
+
+        // vertical grasp pose
+        frame = frame * rot_x;
         frame_array.push_back(frame);
         position_array.push_back(position);
     }
@@ -155,6 +179,11 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         position(2) =  -size_z / 2.0;
         frame_array.push_back(frame);
         position_array.push_back(position);
+
+        // vertical grasp pose
+        frame = frame * rot_x;
+        frame_array.push_back(frame);
+        position_array.push_back(position);
     }
     // grasp along -z-axis 
     {
@@ -164,6 +193,11 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         rot_y = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitY());
         frame = frame * rot_y;
         position(2) =  size_z / 2.0;
+        frame_array.push_back(frame);
+        position_array.push_back(position);
+
+        // vertical grasp pose
+        frame = frame * rot_x;
         frame_array.push_back(frame);
         position_array.push_back(position);
     }
