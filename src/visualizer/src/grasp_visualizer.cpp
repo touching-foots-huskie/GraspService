@@ -12,8 +12,8 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     // initialize publisher
     grasp_pose_pub_ = nh_.advertise<geometry_msgs::Pose>("grasp_pose", 1);
     // object publisher
-    object_name_pub_ = nh_.advertise<std_msg::String>("object_name", 1);
-    object_scale_pub_ = nh_.advertise<std_msg::Float64>("object_scale", 1);
+    object_name_pub_ = nh_.advertise<std_msgs::String>("object_name", 1);
+    object_scale_pub_ = nh_.advertise<std_msgs::Float64>("object_scale", 1);
     object_pose_pub_ = nh_.advertise<geometry_msgs::Pose>("object_pose", 1);
 
     // initialize client
