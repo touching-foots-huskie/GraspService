@@ -81,5 +81,6 @@ void GraspVisualizer::update_modelname() {
     json object_datas;
     json_file >> object_datas;
     std::string model_name = object_datas[model_id_];
+    QString qname = QString::fromStdString(object_name);
     model_name_label->setText(model_name);
 }
