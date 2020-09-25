@@ -88,7 +88,7 @@ void GraspVisualizer::render_grasp(int grasp_id) {
     std_msgs::Float64 object_scale_msg;
     object_scale_msg.data = model_scale_;
     object_scale_pub_.publish(object_scale_msg);
-    
+
     object_pose_pub_.publish(object_poses_.object_poses[0]);
 }
 
@@ -129,6 +129,9 @@ void GraspVisualizer::start() {
     else {
         ROS_ERROR("Failed to call service grasp_gen");
     }
+
+    // test publish
+    render_grasp(0);
 }
 
 void GraspVisualizer::update_modelname() {
