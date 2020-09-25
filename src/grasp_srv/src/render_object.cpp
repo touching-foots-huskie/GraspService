@@ -83,6 +83,7 @@ int main(int argc, char** argv)
         std::string object_path = workspace_path  
                                 + object_name
                                 + "/visual_meshes/cloud.pcd";
+        std::cout << object_path << std::endl;
         // DepthCloud
         pcl::PointCloud<pcl::PointXYZ>::Ptr transformed_pd_msg = pcd_read_file(object_path, object_msg);
         transformed_pd_msg->header.frame_id = "world";  // Deal with base frame
