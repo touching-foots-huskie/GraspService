@@ -73,6 +73,10 @@
 // json related 
 #include <json_tools.h>
 
+// Geometry related
+#include "geometry_grasp.hpp"
+
+
 namespace gpd {
 
 /**
@@ -278,6 +282,7 @@ class GraspDetector {
     std::string grasp_dir_;
     bool centered_at_origin_;
     bool pre_defined_enable_;
+    bool geometry_enable_;
 };
 
 }  // namespace gpd

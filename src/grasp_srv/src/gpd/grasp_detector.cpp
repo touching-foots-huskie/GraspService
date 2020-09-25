@@ -393,6 +393,7 @@ GraspDetector::GraspDetector(const std::string& config_filename,
    // OCRTOC Related
     centered_at_origin_ = config_file.getValueOfKey<bool>("centered_at_origin", false);
     pre_defined_enable_ = config_file.getValueOfKey<bool>("pre_defined_enable", false);
+    geometry_enable_ = config_file.getValueOfKey<bool>("geometry_enable", false);
 }
 
 std::vector<std::unique_ptr<candidate::Hand>> GraspDetector::detectGrasps(
@@ -798,6 +799,83 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                         object_pose.position.z);
 
         grasp_srv::GlobalGraspPose global_grasp_msg;
+        
+        // Enable geometry pre-defined pose
+        if(geometry_enable_) {
+            // type filename
+            std::string pose_dir;
+            std::string type_filename;
+            pose_dir = grasp_dir_ + model_name;
+            // where the grasp file saved
+            type_filename = pose_dir + "/type.json";
+
+            // model filename
+            std::ostringstream model_path;
+            model_path << model_dir_ 
+                       << model_name << "/visual_meshes/";
+            std::string pcd_file_name = model_path.str() + "cloud.pcd";
+
+            try {
+                // Check Directory Existense 
+                if(!exists_file(pose_dir)) {
+                    boost::filesystem::create_directories(pose_dir); 
+                }
+
+                // File Check
+                if(!exists_file(type_filename)) {
+                    std::ofstream ofs;
+                    ofs.open(type_filename, std::ofstream::out);
+                    ofs << "{\"type\": \"unknown\"}";
+                    ofs.close(); 
+                }
+
+                std::ifstream json_file(type_filename);
+                json type_data_json;
+                json_file >> type_data_json;
+                json_file.close();
+                std::string type_name = type_data_json["type"];
+
+                // generate grasp pose
+                VectorArray position_array;
+                MatrixArray frame_array;
+                switch (type_name)
+                {
+                case "box":
+                    box_grasp(frame_array, position_array, pcd_file_name, model_scale);
+                    break;
+                case "can":
+                    can_grasp(frame_array, position_array, pcd_file_name, model_scale);
+                    break;
+                default:
+                    break;
+                }
+
+                // generate msg
+                for(int gi = 0; gi < frame_array.size(); ++gi) {
+                    Eigen::Matrix3d frame = frame_array[gi];
+                    Eigen::Vector3d bottom = position_array[gi];
+                    // Generate Msg
+                    float grasp_width = 0.12;  // default width
+                    generate_msg(global_grasp_msg,  
+                                 model_name, model_scale, grasp_width,
+                                 frame, bottom,
+                                 object_frame_matrix,
+                                 object_position);
+                    // generate another with symmetric over x-axis
+                    Eigen::AngleAxis<double> flip(1.0*M_PI, Eigen::Vector3d(1.,0.,0.));
+                    frame = frame * flip.toRotationMatrix();
+                    generate_msg(global_grasp_msg, 
+                                model_name, model_scale, grasp_width,
+                                frame, bottom,
+                                object_frame_matrix,
+                                object_position);
+                }
+            }
+            catch(std::exception& e) {
+                ROS_INFO("Fail Pre-defined Pose.");
+            }
+        }
+
         // Load Predefined Pose
         if(pre_defined_enable_) {
             std::string pose_dir;

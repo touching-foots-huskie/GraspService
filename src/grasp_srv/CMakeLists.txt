@@ -185,6 +185,7 @@ add_library(${GRASP}_image_geometry src/${GRASP}/descriptor/image_geometry.cpp)
 
 add_library(${GRASP}_image_generator src/${GRASP}/descriptor/image_generator.cpp)
 
+add_library(geometry_grasp src/geometry_grasp.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${GRASP}_clustering
@@ -292,6 +293,8 @@ target_link_libraries(${GRASP}_image_generator
   ${GRASP}_hand_set
   ${GRASP}_image_strategy)
 
+target_link_libraries(geometry_grasp
+                      ${PCL_LIBRARIES})
 
 # add Grasp Gen Server
 add_executable(grasp_gen_server src/grasp_gen_server.cpp)
