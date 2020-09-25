@@ -30,6 +30,10 @@
 // Math
 #include <cmath>
 
+// Json
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+
 
 namespace rviz
 {
@@ -50,15 +54,15 @@ public:
 private Q_SLOTS:
     void save();
     void start();
-
+    void update_modelname();
 private:
-    void readColorImage(std::string img_path);
-    void showImage();
+    
 
     // publishing data
-    int model_id_;
+    std::string model_id_;
     std::string grasp_mode_;  // box, can, gpd, flat
-    std::string data_path_;
+    std::string data_path_;   // josn file for object id
+    std::string model_name_; 
 
     // Ros Publisher
     ros::NodeHandle nh_;
@@ -75,6 +79,8 @@ private:
     QLineEdit* model_id_text;
     QLineEdit* grasp_mode_text;
 
+    // showing label
+    QLabel* model_name_label;
 
 };
 #endif // GRASP_VISUALIZER_H
