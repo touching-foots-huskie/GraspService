@@ -6,7 +6,7 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     // data initialization
     model_id_ = "0";
     model_name_ = "";
-    model_scale_ = 1.0;
+    model_scale_ = 0.5;
     grasp_mode_ = "box";
     data_path_ = "/root/ocrtoc_materials";
     
