@@ -56,7 +56,7 @@ private:
     void showImage();
 
     // publishing data
-    std::string model_id_;
+    int model_id_;
     std::string grasp_mode_;  // box, can, gpd, flat
     std::string data_path_;
 
