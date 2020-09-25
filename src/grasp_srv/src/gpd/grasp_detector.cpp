@@ -855,7 +855,8 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                  model_name, model_scale, grasp_width,
                                  frame, bottom,
                                  object_frame_matrix,
-                                 object_position);
+                                 object_position,
+                                 false);
                     // generate another with symmetric over x-axis
                     Eigen::AngleAxis<double> flip(1.0*M_PI, Eigen::Vector3d(1.,0.,0.));
                     frame = frame * flip.toRotationMatrix();
@@ -863,7 +864,8 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                 model_name, model_scale, grasp_width,
                                 frame, bottom,
                                 object_frame_matrix,
-                                object_position);
+                                object_position,
+                                false);
                 }
             }
             catch(std::exception& e) {
@@ -918,6 +920,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                  frame, bottom,
                                  object_frame_matrix,
                                  object_position,
+                                 true,
                                  relative_scale);
                     // generate another with symmetric over x-axis
                     Eigen::AngleAxis<double> flip(1.0*M_PI, Eigen::Vector3d(1.,0.,0.));
@@ -926,7 +929,9 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                 model_name, model_scale, grasp_width,
                                 frame, bottom,
                                 object_frame_matrix,
-                                object_position);
+                                object_position,
+                                true,
+                                relative_scale);
                 }
                 ROS_INFO("Add Pre-defined Pose.");
             }
@@ -1009,6 +1014,7 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
                                  const Eigen::Vector3d& bottom_vector,
                                  const Eigen::Matrix3d& object_frame_matrix,
                                  const Eigen::Vector3d& object_position,
+                                 const bool enable_filter,
                                  const double relative_scale,
                                  const double comp_distance,
                                  const double pre_distance,
@@ -1039,13 +1045,16 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     // Get Grasp orientation
     Eigen::Vector3d ori_vector(1.0, 0.0, 0.0);
     ori_vector = grasp_frame * ori_vector;  // world orientation
-    bool reachable = false;
-    double grasp_z = ori_vector.z();
-    if(grasp_z < 0) {
-        reachable = true;
-    }
 
-    if(!reachable) return;  // Filtered unreachable pose
+    if(enable_filter) {
+        bool reachable = false;
+        double grasp_z = ori_vector.z();
+        if(grasp_z < 0) {
+            reachable = true;
+        }
+
+        if(!reachable) return;  // Filtered unreachable pose
+    }
 
     // Get Global Pose
     Eigen::Vector3d grasp_point = object_frame_matrix * bottom + object_position;
