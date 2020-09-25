@@ -53,7 +53,6 @@ void ObjectPoseCallBack(const geometry_msgs::Pose::ConstPtr& msg) {
 pcl::PointCloud<pcl::PointXYZ>::Ptr 
     pcd_read_file(std::string data_path,
                   pcl::PointCloud<pcl::PointXYZ>::Ptr& point_cloud) {
-    std::cout << "Data Path : " << data_path << std::endl;
     pcl::io::loadPCDFile<pcl::PointXYZ>(data_path, *point_cloud);
     // Pointcloud transformation
     pcl::PointCloud<pcl::PointXYZ>::Ptr transformed_cloud (new pcl::PointCloud<pcl::PointXYZ> ());
