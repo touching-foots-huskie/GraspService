@@ -19,9 +19,26 @@
     <node name="grasp_connector" pkg="grasp_srv" type="gripper_transfer.py" 
         output="screen"/>
 
-    <!-- robot visualization  -->
+    <!-- robot visualization -->
     <arg  name="model" default="$(find ur_e_description)/urdf/gripper_only.urdf"/>
     <param name="robot_description" command="cat $(arg model)"/>
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+    <!-- camera -->
+    <group ns="camera1">
+    <node pkg="tf" type="static_transform_publisher" name="camera_broadcaster"
+        args="-15 0 15 1.57 3.14 1.1 map camera1 10" />
+    <node name="camera_info" pkg="rostopic" type="rostopic"
+        args="pub camera_info sensor_msgs/CameraInfo
+        '{header: {seq: 0, stamp: {secs: 0, nsecs: 0}, frame_id: 'camera1'},
+        height: 480, width: 640, distortion_model: 'plumb_bob',
+        D: [0],
+        K: [500.0, 0.0, 320, 0.0, 500.0, 240.0, 0.0, 0.0, 1.0],
+        R: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0],
+        P: [500.0, 0.0, 320, 0.0, 0.0, 500, 240, 0.0, 0.0, 0.0, 1.0, 0.0],
+        binning_x: 0, binning_y: 0,
+        roi: {x_offset: 0, y_offset: 0, height: 480, width: 640, do_rectify: false}}' -r 2"
+        output="screen"/>
+    </group>
 </launch>
