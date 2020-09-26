@@ -55,25 +55,27 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     choice_layout->addWidget(grasp_mode_text);
 
     // Visual Layout
-    flowLayout = new QVBoxLayout;
-    // QWidget* scrollAreaContent = new QWidget;
-    // scrollAreaContent->setLayout(flowLayout);
-    // QScrollArea* scrollArea = new QScrollArea;
-    // scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    // scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    // scrollArea->setWidgetResizable(true);
-    // scrollArea->setWidget(scrollAreaContent);
-    // visual_layout->addWidget(scrollArea);
     visual_layout->addLayout(flowLayout);
+    QHBoxLayout* renderLayout = new QHBoxLayout;
+    upper_view = QLabel("Upper View", this);
+    front_view = QLabel("Front View", this);
+    right_view = QLabel("Right View", this);
+    renderLayout.addWidget(upper_view);
+    renderLayout.addWidget(front_view);
+    renderLayout.addWidget(right_view);
 
     // Control Layout
     bt1_ = new QPushButton("Start", this);
     bt2_ = new QPushButton("Save", this);
+    bt3_ = new QPushButton("Show", this);
     connect(bt1_, SIGNAL(released()), this, SLOT(start()));
     connect(bt2_, SIGNAL(released()), this, SLOT(save()));
+    connect(bt3_, SIGNAL(released()), this, SLOT(show()));
 
     control_layout->addWidget(bt1_);
     control_layout->addWidget(bt2_);
+    control_layout->addWidget(bt3_);
+
 
     // initialize function
     update_modelname();
@@ -116,14 +118,11 @@ void GraspVisualizer::read_image(int grasp_id) {
                                 + model_name_ 
                                 + "/" + std::to_string(grasp_id)
                                 + "_front.jpg";
-    std::cout << image1_filename << std::endl;
-    // QString qfilename1(image1_filename.c_str());  
-    // QImage qimage1 = QImage(qfilename1);   
-    // QPixmap pmap = QPixmap::fromImage(qimage1); // load pixmap
-    QLabel* qlabel1 = new QLabel("Test");
-    // qlabel1->setPixmap(pmap);
-    // grasp_render->addWidget(qlabel1);
-    flowLayout->addWidget(qlabel1);
+    // Set upper view
+    QString qfilename1(image1_filename.c_str());  
+    QImage qimage1 = QImage(qfilename1);   
+    QPixmap pmap = QPixmap::fromImage(qimage1); // load pixmap
+    upper_view->setPixmap(pmap);
 }
 
 // SLOT
@@ -165,11 +164,7 @@ void GraspVisualizer::start() {
     }
 
     // go over all grasps
-    for(int i = 0; i < grasps_.global_grasp_poses[0].model_names.size(); ++i) {
-        render_grasp(i);
-        ros::Duration(3.0).sleep();
-        read_image(i);
-    }
+    read_image(0);
 }
 
 void GraspVisualizer::update_modelname() {

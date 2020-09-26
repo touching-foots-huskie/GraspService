@@ -13,7 +13,7 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QScrollArea>
+#include <QListWidgetItem>
 // Button
 #include <QPushButton>
 
@@ -65,6 +65,7 @@ public:
 private Q_SLOTS:
     void save();
     void start();
+    void show();
     void update_modelname();
     void update_graspmode();
 
@@ -80,6 +81,7 @@ private:
     // grasps data
     grasp_srv::Grasps grasps_;
     grasp_srv::ObjectPoses object_poses_;
+    std::map<int, geometry_msgs::Pose> poses_map_;
 
     // Ros Publisher
     ros::NodeHandle nh_;
@@ -94,6 +96,7 @@ private:
     // bt
     QPushButton* bt1_;  // save
     QPushButton* bt2_;  // start
+    QPushButton* bt3_;  // show
 
     // edit
     QLineEdit* model_id_text;
@@ -101,8 +104,9 @@ private:
 
     // showing label
     QLabel* model_name_label;
+    QLabel* upper_view;
+    QLabel* front_view;
+    QLabel* right_view;
 
-    // layout
-    QVBoxLayout* flowLayout;
 };
 #endif // GRASP_VISUALIZER_H
