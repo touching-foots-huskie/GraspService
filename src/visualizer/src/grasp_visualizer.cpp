@@ -121,8 +121,8 @@ void GraspVisualizer::read_image(int grasp_id) {
     QPixmap pmap = QPixmap::fromImage(qimage1); // load pixmap
     QLabel* qlabel1 = new QLabel();
     qlabel1->setPixmap(pmap);
-    grasp_render->addWidget(qlabel1);
-    flowLayout->addLayout(grasp_render);
+    // grasp_render->addWidget(qlabel1);
+    // flowLayout->addLayout(grasp_render);
 }
 
 // SLOT
