@@ -57,12 +57,12 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     // Visual Layout
     visual_layout->addLayout(flowLayout);
     QHBoxLayout* renderLayout = new QHBoxLayout;
-    upper_view = QLabel("Upper View", this);
-    front_view = QLabel("Front View", this);
-    right_view = QLabel("Right View", this);
-    renderLayout.addWidget(upper_view);
-    renderLayout.addWidget(front_view);
-    renderLayout.addWidget(right_view);
+    upper_view = new QLabel("Upper View", this);
+    front_view = new QLabel("Front View", this);
+    right_view = new QLabel("Right View", this);
+    renderLayout->addWidget(upper_view);
+    renderLayout->addWidget(front_view);
+    renderLayout->addWidget(right_view);
 
     // Control Layout
     bt1_ = new QPushButton("Start", this);
