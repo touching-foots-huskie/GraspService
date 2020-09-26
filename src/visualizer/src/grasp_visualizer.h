@@ -13,10 +13,9 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QScrollArea>
 // Button
 #include <QPushButton>
-#include <iostream>
-#include <sstream>
 
 // ROS
 #include <ros/ros.h>
@@ -40,6 +39,8 @@ using json = nlohmann::json;
 // stream
 #include <istream>
 #include <fstream>
+#include <iostream>
+#include <sstream>
 
 
 namespace rviz

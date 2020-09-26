@@ -54,6 +54,9 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     choice_layout->addWidget(grasp_mode_text);
 
     // Visual Layout
+    QScrollArea* scrollarea = new QScrollArea(this);
+    QVBoxLayout* layout = new QVBoxLayout(scrollarea);
+    layout.addWidget(QLabel("Test"));
 
     // Control Layout
     bt1_ = new QPushButton("Start", this);
