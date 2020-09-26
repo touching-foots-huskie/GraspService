@@ -140,6 +140,7 @@ void GraspVisualizer::start() {
     // go over all grasps
     for(int i = 0; i < grasps_.global_grasp_poses[0].model_names.size(); ++i) {
         render_grasp(i);
+        ros::Duration(3.0).sleep();
     }
 }
 
