@@ -9,7 +9,7 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     model_scale_ = 0.5;
     grasp_mode_ = "box";
     data_path_ = "/root/ocrtoc_materials";
-    grasp_path_ = "/root/GraspService/srv/grasp_srv/grasp_data/"
+    grasp_path_ = "/root/GraspService/srv/grasp_srv/grasp_data/";
 
     // initialize publisher
     grasp_pose_pub_ = nh_.advertise<geometry_msgs::Pose>("grasp_pose", 1);
@@ -118,7 +118,9 @@ void GraspVisualizer::read_image(int grasp_id) {
                                 + "_front.jpg";
     QString qfilename1(image1_filename.c_str());  
     QImage qimage1 = QImage(qfilename1);   
-    QLabel* qlabel1 = new QLabel(qimage1);
+    QPixmap pmap = QPixmap::fromImage(qimage1); // load pixmap
+    QLabel* qlabel1 = new QLabel();
+    qlabel1->setPixmap(pmap);
     grasp_render->addWidget(qlabel1);
     flowLayout->addLayout(grasp_render);
 }
