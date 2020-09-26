@@ -141,8 +141,6 @@ void GraspVisualizer::start() {
     for(int i = 0; i < grasps_.global_grasp_poses[0].model_names.size(); ++i) {
         render_grasp(i);
     }
-
-    render_grasp(0);
 }
 
 void GraspVisualizer::update_modelname() {

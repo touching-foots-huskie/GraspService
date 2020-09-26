@@ -71,6 +71,10 @@ def pose_callback(grasp_pose):
             # save right
             image3_name = "{}/{}_right.jpg".format(image_dir, grasp_id)
             cv2.imwrite(image3_name, image3)
+
+            # release lock
+            model_name_lock = False
+            grasp_id_lock = False
             break
         # sleep once
         rospy.sleep(0.1)
