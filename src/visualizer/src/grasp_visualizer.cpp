@@ -123,7 +123,7 @@ void GraspVisualizer::read_image(int grasp_id) {
     QLabel* qlabel1 = new QLabel("Test");
     // qlabel1->setPixmap(pmap);
     // grasp_render->addWidget(qlabel1);
-    flowLayout->addLayout(qlabel1);
+    flowLayout->addWidget(qlabel1);
 }
 
 // SLOT
