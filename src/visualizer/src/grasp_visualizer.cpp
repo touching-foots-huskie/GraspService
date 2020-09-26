@@ -137,7 +137,11 @@ void GraspVisualizer::start() {
         ROS_ERROR("Failed to call service grasp_gen");
     }
 
-    // test publish
+    // go over all grasps
+    for(int i = 0; i < grasps_.model_names.size(); ++i) {
+        render_grasp(i);
+    }
+
     render_grasp(0);
 }
 
