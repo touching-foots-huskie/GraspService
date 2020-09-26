@@ -56,8 +56,10 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     // Visual Layout
     QScrollArea* scroll_area = new QScrollArea(this);
     QVBoxLayout* scroll_layout = new QVBoxLayout(scroll_area);
-    QLabel* test_label = new QLabel("Test", this);
-    scroll_layout->addWidget(test_label);
+    for(int i = 0; i < 100; ++i) {
+        QLabel* test_label = new QLabel("Test", this);
+        scroll_layout->addWidget(test_label);
+    }
     visual_layout->addWidget(scroll_area);
 
     // Control Layout
