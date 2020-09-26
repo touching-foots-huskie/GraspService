@@ -84,6 +84,7 @@ private:
     ros::Publisher object_name_pub_; // object publisher
     ros::Publisher object_scale_pub_;
     ros::Publisher object_pose_pub_;
+    ros::Publisher grasp_id_pub_;
     // client
     ros::ServiceClient client_;
 

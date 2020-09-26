@@ -17,6 +17,8 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     object_scale_pub_ = nh_.advertise<std_msgs::Float64>("object_scale", 1);
     object_pose_pub_ = nh_.advertise<geometry_msgs::Pose>("object_pose", 1);
 
+    grasp_id_pub_ = nh_.advertise<std_msgs::Int32>("grasp_id", 1);
+
     // initialize client
     client_ = nh_.serviceClient<grasp_srv::GraspGen>("grasp_gen");
     
@@ -90,6 +92,11 @@ void GraspVisualizer::render_grasp(int grasp_id) {
     object_scale_pub_.publish(object_scale_msg);
 
     object_pose_pub_.publish(object_poses_.object_poses[0]);
+
+    // publish id
+    std_msgs::Int32 id_msg;
+    id_msg.data = grasp_id;
+    grasp_id_pub_.publish(id_msg);  // Id 
 }
 
 // SLOT
