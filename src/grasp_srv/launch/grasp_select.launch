@@ -53,7 +53,7 @@
 
     <!-- camera 2 -->
     <group ns="camera2">
-    <node pkg="tf" type="static_transform_publisher" name="camera_broadcaster"
+    <node pkg="tf" type="static_transform_publisher" name="camera_broadcaster2"
         args="0.5 0 0.2 1.578 0 -1.578 world camera2 10" />
     <node name="camera_info" pkg="rostopic" type="rostopic"
         args="pub camera_info sensor_msgs/CameraInfo
