@@ -80,7 +80,7 @@
     <!-- camera 3 -->
     <group ns="camera3">
     <node pkg="tf" type="static_transform_publisher" name="camera_broadcaster"
-        args="0 0.3 0.2 0 3.1415926 -1.578 world camera3 10" />
+        args="0 0.3 0.2 0 3.1415926 1.578 world camera3 10" />
     <node name="camera_info" pkg="rostopic" type="rostopic"
         args="pub camera_info sensor_msgs/CameraInfo
         '{header: {seq: 0, stamp: {secs: 0, nsecs: 0}, frame_id: 'camera3'},
