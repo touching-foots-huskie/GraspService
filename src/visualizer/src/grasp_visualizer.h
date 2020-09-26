@@ -13,6 +13,7 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QListWidget>
 #include <QListWidgetItem>
 // Button
 #include <QPushButton>
@@ -109,7 +110,7 @@ private:
     QLabel* right_view;
 
     // Listwidget
-    QListWidgetItem* list_area;
+    QListWidget* list_area;
 
 };
 #endif // GRASP_VISUALIZER_H
