@@ -117,12 +117,35 @@ void GraspVisualizer::read_image(int grasp_id) {
     std::string image1_filename = grasp_path_ 
                                 + model_name_ 
                                 + "/" + std::to_string(grasp_id)
-                                + "_front.jpg";
+                                + "_upper.jpg";
     // Set upper view
     QString qfilename1(image1_filename.c_str());  
-    QImage qimage1 = QImage(qfilename1);   
-    QPixmap pmap = QPixmap::fromImage(qimage1); // load pixmap
-    upper_view->setPixmap(pmap);
+    QImage qimage1 = QImage(qfilename1);  
+    QImage resize_image1 = qimage1.scaled(320, 240, Qt::KeepAspectRatio); 
+    QPixmap pmap1 = QPixmap::fromImage(resize_image1); // load pixmap
+    upper_view->setPixmap(pmap1);
+
+    // Front view
+    std::string image2_filename = grasp_path_ 
+                                + model_name_ 
+                                + "/" + std::to_string(grasp_id)
+                                + "_front.jpg";
+    QString qfilename2(image2_filename.c_str());  
+    QImage qimage2 = QImage(qfilename2);  
+    QImage resize_image2 = qimage2.scaled(320, 240, Qt::KeepAspectRatio); 
+    QPixmap pmap2 = QPixmap::fromImage(resize_image2); // load pixmap
+    front_view->setPixmap(pmap2);
+
+    // Right view
+    std::string image3_filename = grasp_path_ 
+                                + model_name_ 
+                                + "/" + std::to_string(grasp_id)
+                                + "_right.jpg";
+    QString qfilename3(image3_filename.c_str());  
+    QImage qimage3 = QImage(qfilename3);  
+    QImage resize_image3 = qimage3.scaled(320, 240, Qt::KeepAspectRatio); 
+    QPixmap pmap3 = QPixmap::fromImage(resize_image3); // load pixmap
+    right_view->setPixmap(pmap3);
 }
 
 // SLOT
