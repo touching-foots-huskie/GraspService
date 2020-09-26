@@ -195,7 +195,7 @@ void GraspVisualizer::render() {
     std::cout << "New Line Added"  << std::endl;
     QListWidgetItem *newItem = new QListWidgetItem;
     newItem->setText(QString("test"));
-    listWidget->insertItem(0, newItem);
+    list_area->insertItem(0, newItem);
 }
 
 void GraspVisualizer::update_modelname() {
