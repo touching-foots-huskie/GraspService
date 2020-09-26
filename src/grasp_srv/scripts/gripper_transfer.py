@@ -28,7 +28,7 @@ image3 = np.zeros([480, 640]);
 
 model_name = ""
 grasp_id = 0
-data_dir = "/root/GraspService/srv/grasp_srv/grasp_data/"
+data_dir = "/root/GraspService/src/grasp_srv/grasp_data/"
 model_name_lock = False
 grasp_id_lock = False
 

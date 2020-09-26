@@ -9,7 +9,7 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     model_scale_ = 0.5;
     grasp_mode_ = "box";
     data_path_ = "/root/ocrtoc_materials";
-    grasp_path_ = "/root/GraspService/srv/grasp_srv/grasp_data/";
+    grasp_path_ = "/root/GraspService/src/grasp_srv/grasp_data/";
 
     // initialize publisher
     grasp_pose_pub_ = nh_.advertise<geometry_msgs::Pose>("grasp_pose", 1);
