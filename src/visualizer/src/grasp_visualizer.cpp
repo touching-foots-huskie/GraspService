@@ -54,7 +54,7 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     choice_layout->addWidget(grasp_mode_text);
 
     // Visual Layout
-    FlowLayout* flowLayout = new FlowLayout;
+    QVBoxLayout* flowLayout = new QVBoxLayout;
     QWidget* scrollAreaContent = new QWidget;
     scrollAreaContent->setLayout(flowLayout);
     QScrollArea* scrollArea = new QScrollArea;
