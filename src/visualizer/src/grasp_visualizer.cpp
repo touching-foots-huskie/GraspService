@@ -115,6 +115,7 @@ void GraspVisualizer::read_image(int grasp_id) {
                                 + model_name_ 
                                 + "/" + std::to_string(grasp_id)
                                 + "_front.jpg";
+    std::cout << image1_filename << std::endl;
     QString qfilename1(image1_filename.c_str());  
     QImage qimage1 = QImage(qfilename1);   
     QPixmap pmap = QPixmap::fromImage(qimage1); // load pixmap
