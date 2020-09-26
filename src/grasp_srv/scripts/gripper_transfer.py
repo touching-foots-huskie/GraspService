@@ -29,9 +29,12 @@ image3 = np.zeros([480, 640]);
 model_name = ""
 grasp_id = 0
 data_dir = "/root/GraspService/grasp_data/"
-
+model_name_lock = False
+grasp_id_lock = False
 
 def pose_callback(grasp_pose):
+    global model_name_lock
+    global grasp_id_lock
     # publish object & gripper
     # Rot from ee to tool0
     r = R.from_quat(np.array([grasp_pose.orientation.x,
@@ -49,6 +52,21 @@ def pose_callback(grasp_pose):
          grasp_pose.position.z],
          0)
     rospy.loginfo("Pose Rendered")
+
+    while(True):
+        if model_name_lock and grasp_id_lock:
+            # save image
+            rospy.sleep(2.0)  # wait for 2 seconds
+            image_dir = "{}{}".format(data_dir, model_name)
+            if not os.path.isdir(image_dir):
+                os.mkdir(image_dir)
+
+            image1_name = "{}/{}_upper.jpg".format(image_dir, grasp_id)
+            cv2.imwrite(image1_name, image1)
+            break
+        # sleep once
+        rospy.sleep(0.1)
+
     return
 
 
@@ -62,20 +80,17 @@ def camera1_callback(image_msg):
 
 def model_name_callback(model_name_msg):
     global model_name
+    global model_name_lock
     model_name = model_name_msg.data
-    print("Model Name Update")
+    model_name_lock = True
     return
 
 
 def grasp_id_callback(grasp_id_msg):
+    global grasp_id
+    global grasp_id_lock
     grasp_id = grasp_id_msg.data
-    # save image
-    image_dir = "{}{}".format(data_dir, model_name)
-    if not os.path.isdir(image_dir):
-        os.mkdir(image_dir)
-
-    image1_name = "{}/{}_upper.jpg".format(image_dir, grasp_id)
-    cv2.imwrite(image1_name, image1)
+    grasp_id_lock = True
     return
 
 
