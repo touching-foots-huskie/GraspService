@@ -74,7 +74,6 @@ def camera1_callback(image_msg):
     global image1
     bridge = CvBridge()
     image1 = bridge.imgmsg_to_cv2(image_msg, desired_encoding='passthrough')
-    print("Image Receive")
     return
 
 
