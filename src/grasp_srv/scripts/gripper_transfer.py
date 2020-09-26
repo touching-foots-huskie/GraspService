@@ -22,9 +22,9 @@ import os
 
 
 # global data
-image1 = np.zeros([640, 480]);
-image2 = np.zeros([640, 480]);
-image3 = np.zeros([640, 480]);
+image1 = np.zeros([480, 640]);
+image2 = np.zeros([480, 640]);
+image3 = np.zeros([480, 640]);
 
 model_name = ""
 grasp_id = 0
@@ -55,11 +55,13 @@ def pose_callback(grasp_pose):
 def camera1_callback(image_msg):
     bridge = CvBridge()
     image1 = bridge.imgmsg_to_cv2(image_msg, desired_encoding='passthrough')
+    print("Image Receive")
     return
 
 
 def model_name_callback(model_name_msg):
     model_name = model_name_msg.data
+    print("Model Name Update")
     return
 
 
