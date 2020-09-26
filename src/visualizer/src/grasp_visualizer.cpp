@@ -111,7 +111,7 @@ void GraspVisualizer::render_grasp(int grasp_id) {
 }
 
 void GraspVisualizer::read_image(int grasp_id) {
-    QHBoxLayout* grasp_render;
+    // QHBoxLayout* grasp_render;
     std::string image1_filename = grasp_path_ 
                                 + model_name_ 
                                 + "/" + std::to_string(grasp_id)
@@ -122,8 +122,8 @@ void GraspVisualizer::read_image(int grasp_id) {
     // QPixmap pmap = QPixmap::fromImage(qimage1); // load pixmap
     QLabel* qlabel1 = new QLabel("Test");
     // qlabel1->setPixmap(pmap);
-    grasp_render->addWidget(qlabel1);
-    flowLayout->addLayout(grasp_render);
+    // grasp_render->addWidget(qlabel1);
+    flowLayout->addLayout(qlabel1);
 }
 
 // SLOT
