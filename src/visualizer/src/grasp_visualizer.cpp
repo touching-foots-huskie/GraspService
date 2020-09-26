@@ -56,14 +56,15 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
 
     // Visual Layout
     flowLayout = new QVBoxLayout;
-    QWidget* scrollAreaContent = new QWidget;
-    scrollAreaContent->setLayout(flowLayout);
-    QScrollArea* scrollArea = new QScrollArea;
-    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(scrollAreaContent);
-    visual_layout->addWidget(scrollArea);
+    // QWidget* scrollAreaContent = new QWidget;
+    // scrollAreaContent->setLayout(flowLayout);
+    // QScrollArea* scrollArea = new QScrollArea;
+    // scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    // scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    // scrollArea->setWidgetResizable(true);
+    // scrollArea->setWidget(scrollAreaContent);
+    // visual_layout->addWidget(scrollArea);
+    visual_layout->addLayout(flowLayout);
 
     // Control Layout
     bt1_ = new QPushButton("Start", this);
@@ -121,8 +122,8 @@ void GraspVisualizer::read_image(int grasp_id) {
     QPixmap pmap = QPixmap::fromImage(qimage1); // load pixmap
     QLabel* qlabel1 = new QLabel();
     qlabel1->setPixmap(pmap);
-    // grasp_render->addWidget(qlabel1);
-    // flowLayout->addLayout(grasp_render);
+    grasp_render->addWidget(qlabel1);
+    flowLayout->addLayout(grasp_render);
 }
 
 // SLOT
