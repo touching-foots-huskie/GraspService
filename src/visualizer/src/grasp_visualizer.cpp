@@ -55,7 +55,6 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     choice_layout->addWidget(grasp_mode_text);
 
     // Visual Layout
-    visual_layout->addLayout(flowLayout);
     QHBoxLayout* renderLayout = new QHBoxLayout;
     upper_view = new QLabel("Upper View", this);
     front_view = new QLabel("Front View", this);
@@ -63,6 +62,7 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     renderLayout->addWidget(upper_view);
     renderLayout->addWidget(front_view);
     renderLayout->addWidget(right_view);
+    visual_layout->addLayout(renderLayout);
 
     // Control Layout
     bt1_ = new QPushButton("Start", this);
@@ -70,7 +70,7 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     bt3_ = new QPushButton("Show", this);
     connect(bt1_, SIGNAL(released()), this, SLOT(start()));
     connect(bt2_, SIGNAL(released()), this, SLOT(save()));
-    connect(bt3_, SIGNAL(released()), this, SLOT(show()));
+    connect(bt3_, SIGNAL(released()), this, SLOT(render()));
 
     control_layout->addWidget(bt1_);
     control_layout->addWidget(bt2_);
@@ -165,6 +165,10 @@ void GraspVisualizer::start() {
 
     // go over all grasps
     read_image(0);
+}
+
+void GraspVisualizer::render() {
+
 }
 
 void GraspVisualizer::update_modelname() {

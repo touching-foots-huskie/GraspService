@@ -65,7 +65,7 @@ public:
 private Q_SLOTS:
     void save();
     void start();
-    void show();
+    void render();
     void update_modelname();
     void update_graspmode();
 
