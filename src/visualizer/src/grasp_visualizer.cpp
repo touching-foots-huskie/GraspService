@@ -54,13 +54,17 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     choice_layout->addWidget(grasp_mode_text);
 
     // Visual Layout
-    QScrollArea* scroll_area = new QScrollArea(this);
-    QVBoxLayout* scroll_layout = new QVBoxLayout(scroll_area);
-    for(int i = 0; i < 100; ++i) {
-        QLabel* test_label = new QLabel("Test", this);
-        scroll_layout->addWidget(test_label);
-    }
-    visual_layout->addWidget(scroll_area);
+    FlowLayout* flowLayout = new FlowLayout;
+    QWidget* scrollAreaContent = new QWidget;
+    scrollAreaContent->setLayout(flowLayout);
+    QScrollArea* scrollArea = new QScrollArea;
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(scrollAreaContent);
+    visual_layout->addWidget(scrollArea);
+    QLabel* test_label = new QLabel("Test", this);
+    flowLayout->addWidget(test_label);
 
     // Control Layout
     bt1_ = new QPushButton("Start", this);
