@@ -101,7 +101,7 @@ void GraspVisualizer::start() {
     // set name
     object_poses_msg.object_names.push_back(model_name_);
     // set scale
-    object_poses_msg.object_scales.push_back(1.0);
+    object_poses_msg.object_scales.push_back(model_scale_);
     // set grasp mode
     object_poses_msg.grasp_modes.push_back(grasp_mode_);
     // empty pointcloud
