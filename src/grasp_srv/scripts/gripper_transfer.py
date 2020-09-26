@@ -32,6 +32,7 @@ data_dir = "/root/GraspService/grasp_data/"
 model_name_lock = False
 grasp_id_lock = False
 
+
 def pose_callback(grasp_pose):
     global model_name_lock
     global grasp_id_lock
@@ -61,8 +62,15 @@ def pose_callback(grasp_pose):
             if not os.path.isdir(image_dir):
                 os.mkdir(image_dir)
 
+            # save upper
             image1_name = "{}/{}_upper.jpg".format(image_dir, grasp_id)
             cv2.imwrite(image1_name, image1)
+            # save front
+            image2_name = "{}/{}_front.jpg".format(image_dir, grasp_id)
+            cv2.imwrite(image2_name, image2)
+            # save right
+            image3_name = "{}/{}_right.jpg".format(image_dir, grasp_id)
+            cv2.imwrite(image3_name, image3)
             break
         # sleep once
         rospy.sleep(0.1)
@@ -74,6 +82,20 @@ def camera1_callback(image_msg):
     global image1
     bridge = CvBridge()
     image1 = bridge.imgmsg_to_cv2(image_msg, desired_encoding='passthrough')
+    return
+
+
+def camera2_callback(image_msg):
+    global image2
+    bridge = CvBridge()
+    image2 = bridge.imgmsg_to_cv2(image_msg, desired_encoding='passthrough')
+    return
+
+
+def camera3_callback(image_msg):
+    global image3
+    bridge = CvBridge()
+    image3 = bridge.imgmsg_to_cv2(image_msg, desired_encoding='passthrough')
     return
 
 
@@ -100,6 +122,8 @@ if __name__ == "__main__":
 
     # image subscriber
     rospy.Subscriber("rviz1/camera1/image", sensor_msgs.msg.Image, camera1_callback)
+    rospy.Subscriber("rviz1/camera2/image", sensor_msgs.msg.Image, camera2_callback)
+    rospy.Subscriber("rviz1/camera3/image", sensor_msgs.msg.Image, camera3_callback)
 
     # model_name subscriber
     rospy.Subscriber("object_name", std_msgs.msg.String, model_name_callback)
