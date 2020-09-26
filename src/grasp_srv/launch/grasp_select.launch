@@ -53,8 +53,8 @@
 
     <!-- camera 2 -->
     <group ns="camera2">
-    <node pkg="tf" type="static_transform_publisher" name="camera_broadcaster2"
-        args="0.5 0 0.2 1.578 0 -1.578 world camera2 10" />
+    <node pkg="tf" type="static_transform_publisher" name="camera_broadcaster"
+        args="0.3 0 0.2 1.578 0 -1.578 world camera2 10" />
     <node name="camera_info" pkg="rostopic" type="rostopic"
         args="pub camera_info sensor_msgs/CameraInfo
         '{header: {seq: 0, stamp: {secs: 0, nsecs: 0}, frame_id: 'camera2'},
@@ -70,6 +70,32 @@
 
     <!-- image 2 -->
     <group ns="rviz1/camera2/image">
+    <rosparam param="disable_pub_plugins">
+        - 'image_transport/compressed'
+        - 'image_transport/compressedDepth'
+        - 'image_transport/theora'
+    </rosparam>
+    </group>
+
+    <!-- camera 3 -->
+    <group ns="camera3">
+    <node pkg="tf" type="static_transform_publisher" name="camera_broadcaster"
+        args="0 0.3 0.2 0 0 -1.578 world camera3 10" />
+    <node name="camera_info" pkg="rostopic" type="rostopic"
+        args="pub camera_info sensor_msgs/CameraInfo
+        '{header: {seq: 0, stamp: {secs: 0, nsecs: 0}, frame_id: 'camera3'},
+        height: 480, width: 640, distortion_model: 'plumb_bob',
+        D: [0],
+        K: [500.0, 0.0, 320, 0.0, 500.0, 240.0, 0.0, 0.0, 1.0],
+        R: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0],
+        P: [500.0, 0.0, 320, 0.0, 0.0, 500, 240, 0.0, 0.0, 0.0, 1.0, 0.0],
+        binning_x: 0, binning_y: 0,
+        roi: {x_offset: 0, y_offset: 0, height: 480, width: 640, do_rectify: false}}' -r 2"
+        output="screen"/>
+    </group>
+
+    <!-- image 3 -->
+    <group ns="rviz1/camera3/image">
     <rosparam param="disable_pub_plugins">
         - 'image_transport/compressed'
         - 'image_transport/compressedDepth'
