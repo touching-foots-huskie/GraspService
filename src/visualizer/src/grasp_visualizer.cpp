@@ -117,8 +117,8 @@ void GraspVisualizer::read_image(int grasp_id) {
                                 + "/" + std::to_string(grasp_id)
                                 + "_front.jpg";
     QString qfilename1(image1_filename.c_str());  
-    QImage qimage1 = new QImage(qfilename1);   
-    QLabel qlabel1 = new QLabel(qimage1);
+    QImage qimage1 = QImage(qfilename1);   
+    QLabel* qlabel1 = new QLabel(qimage1);
     grasp_render->addWidget(qlabel1);
     flowLayout->addLayout(grasp_render);
 }
