@@ -64,6 +64,11 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     renderLayout->addWidget(right_view);
     visual_layout->addLayout(renderLayout);
     visual_layout->addWidget(list_area);
+    // test
+    std::cout << "New Line Added"  << std::endl;
+    QListWidgetItem *newItem = new QListWidgetItem;
+    newItem->setText(QString("test"));
+    list_area->insertItem(0, newItem);
 
     // Control Layout
     bt1_ = new QPushButton("Start", this);
@@ -193,9 +198,9 @@ void GraspVisualizer::start() {
 
 void GraspVisualizer::render() {
     std::cout << "New Line Added"  << std::endl;
-    QListWidgetItem *newItem = new QListWidgetItem;
-    newItem->setText(QString("test"));
-    list_area->insertItem(0, newItem);
+    // QListWidgetItem *newItem = new QListWidgetItem;
+    // newItem->setText(QString("test"));
+    // list_area->insertItem(0, newItem);
 }
 
 void GraspVisualizer::update_modelname() {
