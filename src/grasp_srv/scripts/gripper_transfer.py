@@ -70,7 +70,7 @@ def grasp_id_callback(grasp_id_msg):
     if not os.path.isdir(image_dir):
         os.mkdir(image_dir)
 
-    image1_name = "{}/{}_upper.img".format(image_dir, grasp_id)
+    image1_name = "{}/{}_upper.jpg".format(image_dir, grasp_id)
     cv2.imwrite(image1_name, image1)
     return
 
