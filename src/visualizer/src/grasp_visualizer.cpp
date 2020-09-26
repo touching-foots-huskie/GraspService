@@ -117,11 +117,11 @@ void GraspVisualizer::read_image(int grasp_id) {
                                 + "/" + std::to_string(grasp_id)
                                 + "_front.jpg";
     std::cout << image1_filename << std::endl;
-    QString qfilename1(image1_filename.c_str());  
-    QImage qimage1 = QImage(qfilename1);   
-    QPixmap pmap = QPixmap::fromImage(qimage1); // load pixmap
-    QLabel* qlabel1 = new QLabel();
-    qlabel1->setPixmap(pmap);
+    // QString qfilename1(image1_filename.c_str());  
+    // QImage qimage1 = QImage(qfilename1);   
+    // QPixmap pmap = QPixmap::fromImage(qimage1); // load pixmap
+    QLabel* qlabel1 = new QLabel("Test");
+    // qlabel1->setPixmap(pmap);
     grasp_render->addWidget(qlabel1);
     flowLayout->addLayout(grasp_render);
 }
