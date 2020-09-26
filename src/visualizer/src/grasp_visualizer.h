@@ -60,6 +60,7 @@ public:
     virtual ~GraspVisualizer();
     // render and save image
     void render_grasp(int grasp_id);
+    void read_image(int grasp_id);  // read image and render
 
 private Q_SLOTS:
     void save();
@@ -72,6 +73,7 @@ private:
     std::string model_id_;
     std::string grasp_mode_;  // box, can, gpd, flat
     std::string data_path_;   // josn file for object id
+    std::string grasp_path_;
     std::string model_name_; 
     double model_scale_;
 
@@ -99,5 +101,8 @@ private:
 
     // showing label
     QLabel* model_name_label;
+
+    // layout
+    QVBoxLayout* flowLayout;
 };
 #endif // GRASP_VISUALIZER_H

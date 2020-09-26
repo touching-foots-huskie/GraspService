@@ -9,7 +9,8 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     model_scale_ = 0.5;
     grasp_mode_ = "box";
     data_path_ = "/root/ocrtoc_materials";
-    
+    grasp_path_ = "/root/GraspService/srv/grasp_srv/grasp_data/"
+
     // initialize publisher
     grasp_pose_pub_ = nh_.advertise<geometry_msgs::Pose>("grasp_pose", 1);
     // object publisher
@@ -54,7 +55,7 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     choice_layout->addWidget(grasp_mode_text);
 
     // Visual Layout
-    QVBoxLayout* flowLayout = new QVBoxLayout;
+    flowLayout = new QVBoxLayout;
     QWidget* scrollAreaContent = new QWidget;
     scrollAreaContent->setLayout(flowLayout);
     QScrollArea* scrollArea = new QScrollArea;
@@ -64,7 +65,6 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     scrollArea->setWidget(scrollAreaContent);
     visual_layout->addWidget(scrollArea);
     QLabel* test_label = new QLabel("Test", this);
-    flowLayout->addWidget(test_label);
 
     // Control Layout
     bt1_ = new QPushButton("Start", this);
@@ -108,6 +108,19 @@ void GraspVisualizer::render_grasp(int grasp_id) {
     std_msgs::Int32 id_msg;
     id_msg.data = grasp_id;
     grasp_id_pub_.publish(id_msg);  // Id 
+}
+
+void GraspVisualizer::read_image(int grasp_id) {
+    QHBoxLayout* grasp_render;
+    std::string image1_filename = grasp_path_ 
+                                + model_name_ 
+                                + "/" + std::to_string(grasp_id)
+                                + "_front.jpg";
+    QString qfilename1(image1_filename.c_str());  
+    QImage qimage1 = new QImage(qfilename1);   
+    QLabel qlabel1 = new QLabel(qimage1);
+    grasp_render->addWidget(qlabel1);
+    flowLayout->addLayout(grasp_render);
 }
 
 // SLOT
