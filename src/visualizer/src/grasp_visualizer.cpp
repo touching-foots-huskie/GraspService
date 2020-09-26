@@ -64,7 +64,6 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(scrollAreaContent);
     visual_layout->addWidget(scrollArea);
-    QLabel* test_label = new QLabel("Test", this);
 
     // Control Layout
     bt1_ = new QPushButton("Start", this);
@@ -167,6 +166,7 @@ void GraspVisualizer::start() {
     for(int i = 0; i < grasps_.global_grasp_poses[0].model_names.size(); ++i) {
         render_grasp(i);
         ros::Duration(3.0).sleep();
+        read_image(i);
     }
 }
 
