@@ -53,6 +53,7 @@ def pose_callback(grasp_pose):
 
 
 def camera1_callback(image_msg):
+    global image1
     bridge = CvBridge()
     image1 = bridge.imgmsg_to_cv2(image_msg, desired_encoding='passthrough')
     print("Image Receive")
@@ -60,6 +61,7 @@ def camera1_callback(image_msg):
 
 
 def model_name_callback(model_name_msg):
+    global model_name
     model_name = model_name_msg.data
     print("Model Name Update")
     return
