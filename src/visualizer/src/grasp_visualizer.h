@@ -108,5 +108,8 @@ private:
     QLabel* front_view;
     QLabel* right_view;
 
+    // Listwidget
+    QListWidgetItem* list_area;
+
 };
 #endif // GRASP_VISUALIZER_H

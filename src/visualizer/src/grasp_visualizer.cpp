@@ -63,6 +63,7 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     renderLayout->addWidget(front_view);
     renderLayout->addWidget(right_view);
     visual_layout->addLayout(renderLayout);
+    visual_layout->addWidget(list_area);
 
     // Control Layout
     bt1_ = new QPushButton("Start", this);
@@ -191,7 +192,7 @@ void GraspVisualizer::start() {
 }
 
 void GraspVisualizer::render() {
-
+    new QListWidgetItem(tr("test"), list_area);
 }
 
 void GraspVisualizer::update_modelname() {
