@@ -75,7 +75,8 @@
         - 'image_transport/compressedDepth'
         - 'image_transport/theora'
     </rosparam>
-
+    </group>
+    
     <!-- run rviz -->
     <node name="rviz" pkg="rviz" type="rviz"/>
 </launch>
