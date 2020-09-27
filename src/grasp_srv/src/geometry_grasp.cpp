@@ -436,8 +436,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
         Eigen::Vector3d position_v1 = Eigen::Vector3d::Zero();
         position_v1(2) =  size_h / 2.0 + center_h;
         rot_y = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitY());
-        frame_v1 = w_rot * frame_v1 * rot_y;
-        frame_v1 = rot_z * frame_v1;
+        frame_v1 = w_rot * rot_z * rot_y;
         position_v1 = w_rot * rot_z * position_v1;
         frame_array.push_back(frame_v1);
         position_array.push_back(position_v1);
@@ -447,8 +446,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
         Eigen::Vector3d position_v2 = Eigen::Vector3d::Zero();
         position_v2(2) =  -size_h / 2.0 + center_h;
         rot_y = Eigen::AngleAxisd(-M_PI/2.0, Eigen::Vector3d::UnitY());
-        frame_v2 = w_rot * frame_v2 * rot_y;
-        frame_v2 = rot_z * frame_v2;
+        frame_v2 = w_rot * rot_z * rot_y;
         position_v2 = w_rot * rot_z * position_v2;
         frame_array.push_back(frame_v2);
         position_array.push_back(position_v2);
