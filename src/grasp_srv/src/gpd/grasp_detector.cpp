@@ -395,6 +395,7 @@ GraspDetector::GraspDetector(const std::string& config_filename,
     pre_defined_enable_ = config_file.getValueOfKey<bool>("pre_defined_enable", false);
     geometry_enable_ = config_file.getValueOfKey<bool>("geometry_enable", false);
     flip_enable_ = config_file.getValueOfKey<bool>("flip_enable", false);
+    gpd_enable_ = config_file.getValueOfKey<bool>("gpd_enable", false);
 }
 
 std::vector<std::unique_ptr<candidate::Hand>> GraspDetector::detectGrasps(
@@ -943,70 +944,72 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
             }
         }
 
-        // Get PointCloud First
-        util::Cloud cloud;
-        Eigen::Matrix<double, 3, 1> default_view_point;
-        default_view_point << 0., 0., 0.;
-        if(model_name == "raw_pointcloud") {
-            pcl::PointCloud<pcl::PointXYZRGBA> input_pointcloud;
-            pcl::fromROSMsg<pcl::PointXYZRGBA>(req.object_poses.object_point_clouds[obj_i],
-                                                input_pointcloud);	
-            // TODO: support dynamic view points
-            cloud.setPointCloud(input_pointcloud.makeShared(),
-                                default_view_point,
-                                model_scale);
-        }
-        else {
-            // Get pointcloud from file
-            std::ostringstream model_path;
-            model_path << model_dir_ 
-                       << model_name << "/visual_meshes/";
-            std::string pcd_file_name = model_path.str() + "cloud.pcd";
-            cloud.setPointCloud(pcd_file_name, default_view_point, model_scale);
-        }
+        if(gpd_enable_) {
+            // Get PointCloud First
+            util::Cloud cloud;
+            Eigen::Matrix<double, 3, 1> default_view_point;
+            default_view_point << 0., 0., 0.;
+            if(model_name == "raw_pointcloud") {
+                pcl::PointCloud<pcl::PointXYZRGBA> input_pointcloud;
+                pcl::fromROSMsg<pcl::PointXYZRGBA>(req.object_poses.object_point_clouds[obj_i],
+                                                    input_pointcloud);	
+                // TODO: support dynamic view points
+                cloud.setPointCloud(input_pointcloud.makeShared(),
+                                    default_view_point,
+                                    model_scale);
+            }
+            else {
+                // Get pointcloud from file
+                std::ostringstream model_path;
+                model_path << model_dir_ 
+                        << model_name << "/visual_meshes/";
+                std::string pcd_file_name = model_path.str() + "cloud.pcd";
+                cloud.setPointCloud(pcd_file_name, default_view_point, model_scale);
+            }
 
-        // Preprocess the point cloud.
-        preprocessPointCloud(cloud);
+            // Preprocess the point cloud.
+            preprocessPointCloud(cloud);
 
-        // If the object is centered at the origin, reverse all surface normals.
-        if (centered_at_origin_) {
-        printf("Reversing normal directions ...\n");
-        cloud.setNormals(cloud.getNormals() * (-1.0));
-        }
+            // If the object is centered at the origin, reverse all surface normals.
+            if (centered_at_origin_) {
+            printf("Reversing normal directions ...\n");
+            cloud.setNormals(cloud.getNormals() * (-1.0));
+            }
 
-        // Generate Candidates
-        std::vector<std::unique_ptr<candidate::Hand>> grasps = detectGrasps(cloud);
-        // Save grasps into msg
-        if(grasps.size() < 1) {
-        ROS_INFO("No Grasp Pose Found.");
-        } 
-        else {
-        ROS_INFO("Grasp Pose Found");      
-        // Save it into the msg
-        for(int grasp_i = 0; grasp_i < grasps.size();++grasp_i) {
-            // Set Grasp Pose
-            Eigen::Vector3d bottom  = grasps[grasp_i]->getPosition();
-            Eigen::Matrix3d frame   = grasps[grasp_i]->getFrame();
-            float grasp_width = grasps[grasp_i]->getGraspWidth();
-            generate_msg(global_grasp_msg, 
-                         model_name, model_scale, grasp_width,
-                         frame, bottom,
-                         object_frame_matrix,
-                         object_position);
-            if(flip_enable_) {
-                // generate another with symmetric over x-axis
-                Eigen::AngleAxis<double> flip(1.0*M_PI, Eigen::Vector3d(1.,0.,0.));
-                frame = frame * flip.toRotationMatrix();
-                generate_msg(global_grasp_msg, 
-                            model_name, model_scale, grasp_width,
-                            frame, bottom,
-                            object_frame_matrix,
-                            object_position);
+            // Generate Candidates
+            std::vector<std::unique_ptr<candidate::Hand>> grasps = detectGrasps(cloud);
+            // Save grasps into msg
+            if(grasps.size() < 1) {
+                ROS_INFO("No Grasp Pose Found From GPD.");
+            } 
+            else {
+                ROS_INFO("Grasp Pose Found");      
+                // Save it into the msg
+                for(int grasp_i = 0; grasp_i < grasps.size();++grasp_i) {
+                    // Set Grasp Pose
+                    Eigen::Vector3d bottom  = grasps[grasp_i]->getPosition();
+                    Eigen::Matrix3d frame   = grasps[grasp_i]->getFrame();
+                    float grasp_width = grasps[grasp_i]->getGraspWidth();
+                    generate_msg(global_grasp_msg, 
+                                model_name, model_scale, grasp_width,
+                                frame, bottom,
+                                object_frame_matrix,
+                                object_position);
+                    if(flip_enable_) {
+                        // generate another with symmetric over x-axis
+                        Eigen::AngleAxis<double> flip(1.0*M_PI, Eigen::Vector3d(1.,0.,0.));
+                        frame = frame * flip.toRotationMatrix();
+                        generate_msg(global_grasp_msg, 
+                                    model_name, model_scale, grasp_width,
+                                    frame, bottom,
+                                    object_frame_matrix,
+                                    object_position);
+                    }
+                }
             }
         }
         // Add grasp_msg into res
         res.grasps.global_grasp_poses.push_back(global_grasp_msg);
-        }
     }
     return true;
 }

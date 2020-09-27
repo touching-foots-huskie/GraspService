@@ -285,6 +285,7 @@ class GraspDetector {
     bool pre_defined_enable_;
     bool geometry_enable_;
     bool flip_enable_;
+    bool gpd_enable_;
 };
 
 }  // namespace gpd
