@@ -1137,7 +1137,7 @@ void GraspDetector::sort_grasp(grasp_srv::GlobalGraspPose& global_grasp_msg,
         // orientation
         Eigen::Vector3d ori_vector(1.0, 0.0, 0.0);
         ori_vector = grasp_frame * ori_vector;  // world orientation
-        double overlap = ori_vetor.dot(prefer_direction);
+        double overlap = ori_vector.dot(prefer_direction);
         distance_by_id.push_back(std::pair<int, double>(i, overlap));
     }
     // sort by overlap
