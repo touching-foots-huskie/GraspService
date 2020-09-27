@@ -899,22 +899,20 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 json_file >> pose_datas_json;
                 json_file.close();
 
-                std::vector<std::vector<double> > pose_datas;
-                pose_datas = pose_datas_json.get<std::vector<std::vector<double> > >();
                 // Save pose_datas into msg
-                for(auto id = 0; id < pose_datas.size(); ++id) {
-                    Eigen::Vector3d bottom(pose_datas[id][0],
-                                           pose_datas[id][1],
-                                           pose_datas[id][2]);
-                    Eigen::Quaternion<double> frame_quat(pose_datas[id][6],
-                                                         pose_datas[id][3],
-                                                         pose_datas[id][4],
-                                                         pose_datas[id][5]);
+                for(auto& [key, pose_data] : pose_datas_json.items()) {
+                    Eigen::Vector3d bottom(pose_data[0],
+                                           pose_data[1],
+                                           pose_data[2]);
+                    Eigen::Quaternion<double> frame_quat(pose_data[6],
+                                                         pose_data[3],
+                                                         pose_data[4],
+                                                         pose_data[5]);
                     Eigen::Matrix3d frame = frame_quat.matrix();
-                    double pre_scale = pose_datas[id][7];
+                    double pre_scale = pose_data[7];
                     double relative_scale = model_scale / pre_scale;
                     // Generate Msg
-                    float grasp_width = pose_datas[id][8];
+                    float grasp_width = pose_data[8];
                     generate_msg(global_grasp_msg, 
                                  model_name, model_scale, grasp_width,
                                  frame, bottom,
