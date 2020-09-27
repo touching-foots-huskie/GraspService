@@ -119,8 +119,7 @@ void GraspVisualizer::render_grasp(int grasp_id) {
 void GraspVisualizer::read_image(QListWidgetItem *item) {
     std::string id_string = item->text().toStdString();
     std::string delimiter = ":";
-    std::cout << id_string << std::endl;
-    std::string token = id_string.substr(1, id_string.find(delimiter)); 
+    std::string token = id_string.substr(id_string.find(delimiter)+1, id_string.size()); 
     std::cout << token << std::endl;
     // remove space
     std::string::iterator end_pos = std::remove(token.begin(), token.end(), ' ');
