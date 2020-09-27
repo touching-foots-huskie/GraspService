@@ -806,9 +806,13 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         
         // parse
         if(grasp_mode & 1) box_enable_ = true;
+        else box_enable_ = false;
         if(grasp_mode & 2) can_enable_ = true;
+        else can_enable_ = false;
         if(grasp_mode & 4) pre_defined_enable_ = true;
+        else pre_defined_enable_ = false;
         if(grasp_mode & 8) gpd_enable_ = true;
+        else gpd_enable_ = false;
 
         std::cout << "Grasp Mode: " << grasp_mode << std::endl;
         std::cout << "Box : " << box_enable_ << std::endl;
