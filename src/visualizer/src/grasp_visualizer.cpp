@@ -213,8 +213,9 @@ void GraspVisualizer::render() {
             existing_id.push_back(grasp_id);
             QListWidgetItem *item = new QListWidgetItem;
             std::string id_string = std::to_string(grasp_id);
+            id_string = "ID: " + id_string;
             item->setCheckState(Qt::Unchecked);
-            item->setText(QString("ID: " + id_string));
+            item->setText(QString(id_string.c_str()));
             list_area->insertItem(0, item);
         }              
     }    
