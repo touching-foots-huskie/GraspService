@@ -337,4 +337,7 @@ void GraspVisualizer::remove_grasp() {
     std::ofstream out_file(pose_filename);
     out_file << poses_json_;
     out_file.close();
+
+    // call render
+    render();
 }
