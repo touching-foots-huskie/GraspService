@@ -3,6 +3,7 @@
 
 // Qt
 #include <QWidget>
+#include <QFlag>
 // Label
 #include <QPixmap>
 #include <QImage>
