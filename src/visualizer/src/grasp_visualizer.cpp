@@ -297,7 +297,7 @@ void GraspVisualizer::remove_grasp() {
     // get all select 
     QList<QListWidgetItem *> items = list_area->selectedItems();
     for(auto item : items) {
-        std::string id_string = item.text().toStdString();
+        std::string id_string = item->text().toStdString();
         std::string delimiter = ":";
         std::string token = id_string.substr(id_string.find(delimiter)+1, id_string.size()); 
         
@@ -320,9 +320,9 @@ void GraspVisualizer::remove_grasp() {
                                     + model_name_ 
                                     + "/" + std::to_string(grasp_id)
                                     + "_right.jpg";
-        std::remove(image1_filename);
-        std::remove(image2_filename);
-        std::remove(image3_filename);
+        remove(image1_filename);
+        remove(image2_filename);
+        remove(image3_filename);
     }
 
     // save back
