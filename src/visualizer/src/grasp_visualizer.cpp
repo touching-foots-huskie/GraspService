@@ -201,8 +201,10 @@ void GraspVisualizer::render() {
     recursive_directory_iterator end;
     for (recursive_directory_iterator it(image_dir); it != end; ++it) {
         std::string filename = it->path().string();
+        if(filename == "type.json") continue;
         std::string delimiter = "_";
         std::string token = filename.substr(0, filename.find(delimiter)); 
+        std::cout << token << std::endl;
         int grasp_id = std::stoi(token);  
         bool exists = false;
         for(auto d : existing_id) {
