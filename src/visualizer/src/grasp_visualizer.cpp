@@ -120,7 +120,7 @@ void GraspVisualizer::render_grasp(int grasp_id) {
 void GraspVisualizer::start() {
     // update grasp mode
     update_graspmode();
-    
+
     grasp_srv::GraspGen srv;
     grasp_srv::ObjectPoses object_poses_msg;
     // set name
@@ -250,6 +250,7 @@ void GraspVisualizer::update_modelname() {
 }
 
 void GraspVisualizer::update_graspmode() {
+    std::cout << "Grasp Mode Update : " << grasp_mode_ << std::endl;
     QString graspmode_string = grasp_mode_text->text();
     grasp_mode_ = graspmode_string.toStdString();
     // update type json
