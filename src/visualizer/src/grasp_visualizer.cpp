@@ -184,6 +184,7 @@ void GraspVisualizer::start() {
     // render grasps
     for(int i = 0; i < num_grasps; ++i) {
         render_grasp(i);
+        ros::Duration(2.5).sleep();
     }
 }
 
