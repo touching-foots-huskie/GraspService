@@ -83,6 +83,7 @@ private Q_SLOTS:
     void update_graspmode();
     void read_image(QListWidgetItem *item);  // read image and render
     void remove_grasp();  
+    void remove_grasp_all();
 
 private:
     // publishing data
@@ -109,9 +110,10 @@ private:
     ros::ServiceClient client_;
 
     // bt
-    QPushButton* bt1_;  // save
+    QPushButton* bt1_;  // delete
     QPushButton* bt2_;  // start
     QPushButton* bt3_;  // show
+    QPushButton* bt4_;  // delete all
 
     // edit
     QLineEdit* model_id_text;

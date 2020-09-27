@@ -70,16 +70,18 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
 
     // Control Layout
     bt1_ = new QPushButton("Start", this);
-    bt2_ = new QPushButton("Save", this);
-    bt3_ = new QPushButton("Show", this);
+    bt2_ = new QPushButton("Show", this);
+    bt3_ = new QPushButton("Delete", this);
+    bt4_ = new QPushButton("Delete All", this);
     connect(bt1_, SIGNAL(released()), this, SLOT(start()));
-    connect(bt2_, SIGNAL(released()), this, SLOT(remove_grasp()));
-    connect(bt3_, SIGNAL(released()), this, SLOT(render()));
+    connect(bt2_, SIGNAL(released()), this, SLOT(render()));
+    connect(bt3_, SIGNAL(released()), this, SLOT(remove_grasp()));
+    connect(bt4_, SIGNAL(released()), this, SLOT(remove_grasp_all()));
 
     control_layout->addWidget(bt1_);
     control_layout->addWidget(bt2_);
     control_layout->addWidget(bt3_);
-
+    control_layout->addWidget(bt4_);
 
     // initialize function
     update_modelname();
@@ -317,6 +319,52 @@ void GraspVisualizer::remove_grasp() {
 
         if(item->checkState() != Qt::Checked) continue;
 
+        std::string id_string = item->text().toStdString();
+        std::string delimiter = ":";
+        std::string token = id_string.substr(id_string.find(delimiter)+1, id_string.size()); 
+        
+        // remove space
+        std::string::iterator end_pos = std::remove(token.begin(), token.end(), ' ');
+        token.erase(end_pos, token.end());
+        int grasp_id = std::stoi(token); 
+        poses_json_.erase(std::to_string(grasp_id));
+
+        // remove images
+        std::string image1_filename = grasp_path_ 
+                                    + model_name_ 
+                                    + "/" + std::to_string(grasp_id)
+                                    + "_upper.jpg";
+        std::string image2_filename = grasp_path_ 
+                                    + model_name_ 
+                                    + "/" + std::to_string(grasp_id)
+                                    + "_front.jpg";
+        std::string image3_filename = grasp_path_ 
+                                    + model_name_ 
+                                    + "/" + std::to_string(grasp_id)
+                                    + "_right.jpg";
+        remove(image1_filename);
+        remove(image2_filename);
+        remove(image3_filename);
+    }
+
+    // save back
+    std::string pose_filename = grasp_path_ 
+                              + model_name_ 
+                              + "/"
+                              + "pose.json";
+    std::ofstream out_file(pose_filename);
+    out_file << poses_json_;
+    out_file.close();
+
+    // call render
+    render();
+}
+
+void GraspVisualizer::remove_grasp_all() {
+    // get all select 
+    int item_num = list_area->count();
+    for(int i = 0; i < item_num; ++i) {
+        QListWidgetItem* item = list_area->item(i);
         std::string id_string = item->text().toStdString();
         std::string delimiter = ":";
         std::string token = id_string.substr(id_string.find(delimiter)+1, id_string.size()); 
