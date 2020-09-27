@@ -70,7 +70,6 @@ public:
     virtual ~GraspVisualizer();
     // render and save image
     void render_grasp(int grasp_id);
-    void read_image(int grasp_id);  // read image and render
 
 private Q_SLOTS:
     void save();
@@ -78,6 +77,7 @@ private Q_SLOTS:
     void render();
     void update_modelname();
     void update_graspmode();
+    void read_image(QListWidgetItem *item);  // read image and render
 
 private:
     // publishing data

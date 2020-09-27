@@ -66,6 +66,7 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     // test
     list_area = new QListWidget(this);
     visual_layout->addWidget(list_area);
+    connect(list_area, SIGNAL(itemActivated(QListWidgetItem)), this, SLOT(read_image(QListWidgetItem)));
     
     // Control Layout
     bt1_ = new QPushButton("Start", this);
@@ -115,7 +116,11 @@ void GraspVisualizer::render_grasp(int grasp_id) {
     grasp_id_pub_.publish(id_msg);  // Id 
 }
 
-void GraspVisualizer::read_image(int grasp_id) {
+void GraspVisualizer::read_image(QListWidgetItem *item) {
+    QString id_string = item->text();
+    std::string delimiter = ":";
+    std::string token = id_string.substr(0, id_string.find(delimiter)); 
+    int grasp_id = std::stoi(token); 
     // QHBoxLayout* grasp_render;
     std::string image1_filename = grasp_path_ 
                                 + model_name_ 
@@ -188,13 +193,9 @@ void GraspVisualizer::start() {
     else {
         ROS_ERROR("Failed to call service grasp_gen");
     }
-
-    // go over all grasps
-    read_image(0);
 }
 
 void GraspVisualizer::render() {
-    std::cout << "New Line Added"  << std::endl;
     std::string image_dir = grasp_path_ + model_name_;
     // iterate over directory
     std::vector<int> existing_id;
@@ -204,7 +205,6 @@ void GraspVisualizer::render() {
         if(filename == "type.json") continue;
         std::string delimiter = "_";
         std::string token = filename.substr(0, filename.find(delimiter)); 
-        std::cout << token << std::endl;
         int grasp_id = std::stoi(token);  
         bool exists = false;
         for(auto d : existing_id) {
