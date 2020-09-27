@@ -65,9 +65,9 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     visual_layout->addLayout(renderLayout);
     // test
     list_area = new QListWidget(this);
-    connect(list_area, SIGNAL(itemActivated(QListWidgetItem)), this, SLOT(read_image(QListWidgetItem)));
+    connect(list_area, SIGNAL(itemClicked(QListWidgetItem)), this, SLOT(read_image(QListWidgetItem)));
     visual_layout->addWidget(list_area);
-    
+
     // Control Layout
     bt1_ = new QPushButton("Start", this);
     bt2_ = new QPushButton("Save", this);
