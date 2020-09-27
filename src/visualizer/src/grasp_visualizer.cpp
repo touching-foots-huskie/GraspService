@@ -126,6 +126,7 @@ void GraspVisualizer::read_image(QListWidgetItem *item) {
                                 + model_name_ 
                                 + "/" + std::to_string(grasp_id)
                                 + "_upper.jpg";
+    std::cout << image1_filename << std::endl;
     // Set upper view
     QString qfilename1(image1_filename.c_str());  
     QImage qimage1 = QImage(qfilename1);  
