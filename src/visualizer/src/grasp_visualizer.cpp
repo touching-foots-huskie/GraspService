@@ -196,8 +196,8 @@ void GraspVisualizer::start() {
 void GraspVisualizer::render() {
     std::cout << "New Line Added"  << std::endl;
     QListWidgetItem *item = new QListWidgetItem;
-    item->setFlags(Qt::ItemIsUserCheckable);
-    // item->setCheckState(Qt::Unchecked);
+    // item->setFlags(Qt::ItemIsUserCheckable);
+    item->setCheckState(Qt::Unchecked);
     item->setText(QString("test"));
     list_area->insertItem(0, item);
 }
