@@ -23,8 +23,8 @@ void can_parse(std::string filename, double& size_r, double& size_h,
 
 // generate grasp pose by geometry
 void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
-               std::string filename, double scale, int num_slice=1);
+               std::string filename, double scale, int num_slice=2);
 void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
-               std::string filename, double scale, int num_angle=8, int num_slice=1);
+               std::string filename, double scale, int num_angle=8, int num_slice=2);
 
 #endif

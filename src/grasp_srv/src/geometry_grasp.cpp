@@ -131,7 +131,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         frame_array.push_back(frame);
         position_array.push_back(position);
 
-        for(int i = 0; i < num_slice; ++i) {
+        for(int i = 1; i < num_slice; ++i) {
             // +
             frame_array.push_back(frame);
             position(2) = double(i) * slice_z + center_z;
@@ -148,7 +148,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         frame_array.push_back(frame);
         position_array.push_back(position);
 
-        for(int i = 0; i < num_slice; ++i) {
+        for(int i = 1; i < num_slice; ++i) {
             // +
             frame_array.push_back(frame);
             position(1) = double(i) * slice_y + center_y;
@@ -172,7 +172,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         frame_array.push_back(frame);
         position_array.push_back(position);
 
-        for(int i = 0; i < num_slice; ++i) {
+        for(int i = 1; i < num_slice; ++i) {
             // +
             frame_array.push_back(frame);
             position(2) = double(i) * slice_z + center_z;
@@ -189,7 +189,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         frame_array.push_back(frame);
         position_array.push_back(position);
 
-        for(int i = 0; i < num_slice; ++i) {
+        for(int i = 1; i < num_slice; ++i) {
             // +
             frame_array.push_back(frame);
             position(1) = double(i) * slice_y + center_y;
@@ -214,7 +214,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         frame_array.push_back(frame);
         position_array.push_back(position);
 
-        for(int i = 0; i < num_slice; ++i) {
+        for(int i = 1; i < num_slice; ++i) {
             // +
             frame_array.push_back(frame);
             position(2) = double(i) * slice_z + center_z;
@@ -231,7 +231,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         frame_array.push_back(frame);
         position_array.push_back(position);
 
-        for(int i = 0; i < num_slice; ++i) {
+        for(int i = 1; i < num_slice; ++i) {
             // +
             frame_array.push_back(frame);
             position(0) = double(i) * slice_x + center_x;
@@ -255,7 +255,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         frame_array.push_back(frame);
         position_array.push_back(position);
 
-        for(int i = 0; i < num_slice; ++i) {
+        for(int i = 1; i < num_slice; ++i) {
             // +
             frame_array.push_back(frame);
             position(2) = double(i) * slice_z + center_z;
@@ -272,7 +272,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         frame_array.push_back(frame);
         position_array.push_back(position);
 
-        for(int i = 0; i < num_slice; ++i) {
+        for(int i = 1; i < num_slice; ++i) {
             // +
             frame_array.push_back(frame);
             position(0) = double(i) * slice_x + center_x;
@@ -297,7 +297,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         frame_array.push_back(frame);
         position_array.push_back(position);
 
-        for(int i = 0; i < num_slice; ++i) {
+        for(int i = 1; i < num_slice; ++i) {
             // +
             frame_array.push_back(frame);
             position(0) = double(i) * slice_x + center_x;
@@ -313,7 +313,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         frame = frame * rot_x;
         frame_array.push_back(frame);
         position_array.push_back(position);
-        for(int i = 0; i < num_slice; ++i) {
+        for(int i = 1; i < num_slice; ++i) {
             // +
             frame_array.push_back(frame);
             position(1) = double(i) * slice_y + center_y;
@@ -337,7 +337,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         frame_array.push_back(frame);
         position_array.push_back(position);
 
-        for(int i = 0; i < num_slice; ++i) {
+        for(int i = 1; i < num_slice; ++i) {
             // +
             frame_array.push_back(frame);
             position(0) = double(i) * slice_x + center_x;
@@ -354,7 +354,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
         frame_array.push_back(frame);
         position_array.push_back(position);
 
-        for(int i = 0; i < num_slice; ++i) {
+        for(int i = 1; i < num_slice; ++i) {
             // +
             frame_array.push_back(frame);
             position(1) = double(i) * slice_y + center_y;
@@ -418,7 +418,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
         position_array.push_back(rot_position);
 
         // add slices
-        for(int i = 0; i < num_slice; ++i) {
+        for(int i = 1; i < num_slice; ++i) {
             // +
             frame_array.push_back(frame);
             position(2) = double(i) * slice_h + center_h;
