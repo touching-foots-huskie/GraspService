@@ -1008,6 +1008,9 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 }
             }
         }
+        // sort msg by prefer-direction
+        Eigen::Vector3d prefer_direction(0.0, 0.0, -1.0);
+        sort_grasp(global_grasp_msg, prefer_direction);
         // Add grasp_msg into res
         res.grasps.global_grasp_poses.push_back(global_grasp_msg);
     }
@@ -1110,4 +1113,57 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     global_grasp_msg.model_names.push_back(model_name);
     global_grasp_msg.scales.push_back(model_scale);
 }
+
+// map cmp
+bool cmp(pair<int, double>& a, 
+         pair<int, double>& b) { 
+    return a.second < b.second; 
+} 
+
+void GraspDetector::sort_grasp(grasp_srv::GlobalGraspPose& global_grasp_msg,
+                               const Eigen::Vector3d& prefer_direction) {
+    // establish a sorting_index
+    std::vector<std::pair<int, double> > distance_by_id; 
+    for(int i = 0; i < global_grasp_msg.grasp_poses.size(); ++i) {
+        // get frame matrix
+        Eigen::Quaternion<double> grasp_frame_quat(
+            local_pose.orientation.w,
+            local_pose.orientation.x,
+            local_pose.orientation.y,
+            local_pose.orientation.z);
+        Eigen::Matrix3d grasp_frame = grasp_frame_quat.matrix();
+        // orientation
+        Eigen::Vector3d ori_vector(1.0, 0.0, 0.0);
+        ori_vector = grasp_frame * ori_vector;  // world orientation
+        double overlap = ori_vetor.dot(prefer_direction);
+        distance_by_id.push_back(std::pair<int, double>(i, overlap));
+    }
+    // sort by overlap
+    std::sort(distance_by_id.begin(), distance_by_id.end(), cmp);
+
+    // rearrange order
+    grasp_srv::GlobalGraspPose sorted_grasp_msg;
+    for(auto p : distance_by_id) {
+        int grasp_id = p->first;
+        sorted_grasp_msg.grasp_poses.push_back(
+            global_grasp_msg.grasp_poses[grasp_id]);
+        sorted_grasp_msg.pre_grasp_poses.push_back(
+            global_grasp_msg.pre_grasp_poses[grasp_id]);
+        sorted_grasp_msg.local_poses.push_back(
+            global_grasp_msg.local_poses[grasp_id]);
+
+        // Set grasp width
+        sorted_grasp_msg.grasp_widths.push_back(
+            global_grasp_msg.grasp_widths[grasp_id]);
+        sorted_grasp_msg.model_names.push_back(
+            global_grasp_msg.model_names[grasp_id]);
+        sorted_grasp_msg.scales.push_back(
+            global_grasp_msg.scales[grasp_id]);
+    }
+
+    // re-assign
+    global_grasp_msg = sorted_grasp_msg;
+    return;
+}
+
 }  // namespace gpd
