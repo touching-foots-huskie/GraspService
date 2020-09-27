@@ -117,7 +117,7 @@ void GraspVisualizer::render_grasp(int grasp_id) {
 }
 
 void GraspVisualizer::read_image(QListWidgetItem *item) {
-    QString id_string = item->text();
+    std::string id_string = item->text().toStdString();
     std::string delimiter = ":";
     std::string token = id_string.substr(0, id_string.find(delimiter)); 
     int grasp_id = std::stoi(token); 
