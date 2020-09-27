@@ -392,9 +392,7 @@ GraspDetector::GraspDetector(const std::string& config_filename,
                                             hand_search_params.num_orientations_);
    // OCRTOC Related
     centered_at_origin_ = config_file.getValueOfKey<bool>("centered_at_origin", false);
-    pre_defined_enable_ = config_file.getValueOfKey<bool>("pre_defined_enable", false);
     flip_enable_ = config_file.getValueOfKey<bool>("flip_enable", false);
-    gpd_enable_ = config_file.getValueOfKey<bool>("gpd_enable", false);
 }
 
 std::vector<std::unique_ptr<candidate::Hand>> GraspDetector::detectGrasps(
