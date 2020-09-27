@@ -65,7 +65,7 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     visual_layout->addLayout(renderLayout);
     // test
     list_area = new QListWidget(this);
-    connect(list_area, SIGNAL(itemClicked(QListWidgetItem)), this, SLOT(read_image(QListWidgetItem)));
+    connect(list_area, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(read_image(QListWidgetItem*)));
     visual_layout->addWidget(list_area);
 
     // Control Layout
@@ -117,6 +117,7 @@ void GraspVisualizer::render_grasp(int grasp_id) {
 }
 
 void GraspVisualizer::read_image(QListWidgetItem *item) {
+    std::cout << "Activated" << std::endl;
     std::string id_string = item->text().toStdString();
     std::string delimiter = ":";
     std::string token = id_string.substr(0, id_string.find(delimiter)); 
@@ -126,7 +127,6 @@ void GraspVisualizer::read_image(QListWidgetItem *item) {
                                 + model_name_ 
                                 + "/" + std::to_string(grasp_id)
                                 + "_upper.jpg";
-    std::cout << image1_filename << std::endl;
     // Set upper view
     QString qfilename1(image1_filename.c_str());  
     QImage qimage1 = QImage(qfilename1);  
