@@ -1141,7 +1141,7 @@ void GraspDetector::sort_grasp(grasp_srv::GlobalGraspPose& global_grasp_msg,
         distance_by_id.push_back(std::pair<int, double>(i, overlap));
     }
     // sort by overlap
-    std::sort(distance_by_id.begin(), distance_by_id.end(), cmp);
+    std::stable_sort(distance_by_id.begin(), distance_by_id.end(), cmp);
 
     // rearrange order
     grasp_srv::GlobalGraspPose sorted_grasp_msg;
