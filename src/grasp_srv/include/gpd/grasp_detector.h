@@ -237,7 +237,7 @@ class GraspDetector {
                       const double comp_distance = 0.11,
                       const double pre_distance = 0.15,
                       const double angle_ratio = 0.5);
-                      
+
     // grasp sort : descending with the direction
     void sort_grasp(grasp_srv::GlobalGraspPose& global_grasp_msg,
                     const Eigen::Vector3d& prefer_direction);
@@ -287,7 +287,8 @@ class GraspDetector {
     std::string grasp_dir_;
     bool centered_at_origin_;
     bool pre_defined_enable_;
-    bool geometry_enable_;
+    bool box_enable_;
+    bool can_enable_;
     bool flip_enable_;
     bool gpd_enable_;
 };

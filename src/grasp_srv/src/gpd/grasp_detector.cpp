@@ -393,7 +393,6 @@ GraspDetector::GraspDetector(const std::string& config_filename,
    // OCRTOC Related
     centered_at_origin_ = config_file.getValueOfKey<bool>("centered_at_origin", false);
     pre_defined_enable_ = config_file.getValueOfKey<bool>("pre_defined_enable", false);
-    geometry_enable_ = config_file.getValueOfKey<bool>("geometry_enable", false);
     flip_enable_ = config_file.getValueOfKey<bool>("flip_enable", false);
     gpd_enable_ = config_file.getValueOfKey<bool>("gpd_enable", false);
 }
@@ -783,11 +782,36 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                               grasp_srv::GraspGen::Response &res) {
     int object_num = req.object_poses.object_names.size();
     // local parameters
-    double compensate_distance = 0.1;
-    double pre_distance = 0.15;
 
     for(int obj_i = 0; obj_i < object_num; ++obj_i) {
         std::string model_name = req.object_poses.object_names[obj_i];
+        /*
+        chose grasp mode by model_name
+        1: box
+        2: can
+        4: pre-load
+        8: gpd
+        16: flat
+        */
+        std::string grasp_mode_path = grasp_dir_ + "grasp_mode.json";
+        std::ifstream grasp_mode_file(grasp_mode_path);
+        json grasp_mode_json;
+        grasp_mode_file >> grasp_mode_json; 
+        grasp_mode_file.close();
+        int grasp_mode;
+        if(grasp_mode_json.contains(model_name)) {
+            grasp_mode = grasp_mode_json[model_name];
+        }
+        else {
+            grasp_mode = 9;  // box + gpd
+        }
+        
+        // parse
+        if(grasp_mode & 1) box_enable_ = true;
+        if(grasp_mode & 2) can_enable_ = true;
+        if(grasp_mode & 4) pre_defined_enable_ = true;
+        if(grasp_mode & 8) gpd_enable_ = true;
+
         double model_scale = req.object_poses.object_scales[obj_i];
         // Get Object Pose  
         geometry_msgs::Pose object_pose = req.object_poses.object_poses[obj_i];
@@ -803,14 +827,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         grasp_srv::GlobalGraspPose global_grasp_msg;
         
         // Enable geometry pre-defined pose
-        if(geometry_enable_) {
-            // type filename
-            std::string pose_dir;
-            std::string type_filename;
-            pose_dir = grasp_dir_ + model_name;
-            // where the grasp file saved
-            type_filename = pose_dir + "/type.json";
-
+        {
             // model filename
             std::ostringstream model_path;
             model_path << model_dir_ 
@@ -818,32 +835,13 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
             std::string pcd_file_name = model_path.str() + "cloud.pcd";
 
             try {
-                // Check Directory Existense 
-                if(!exists_file(pose_dir)) {
-                    boost::filesystem::create_directories(pose_dir); 
-                }
-
-                // File Check
-                if(!exists_file(type_filename)) {
-                    std::ofstream ofs;
-                    ofs.open(type_filename, std::ofstream::out);
-                    ofs << "{\"type\": \"unknown\"}";
-                    ofs.close(); 
-                }
-
-                std::ifstream json_file(type_filename);
-                json type_data_json;
-                json_file >> type_data_json;
-                json_file.close();
-                std::string type_name = type_data_json["type"];
-
                 // generate grasp pose
                 VectorArray position_array;
                 MatrixArray frame_array;
-                if(type_name == "box") {
+                if(box_enable_) {
                     box_grasp(frame_array, position_array, pcd_file_name, model_scale);
                 }
-                else if(type_name == "can") {
+                if(can_enable_) {
                     can_grasp(frame_array, position_array, pcd_file_name, model_scale);
                 }
                 // generate msg
@@ -872,7 +870,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 }
             }
             catch(std::exception& e) {
-                ROS_INFO("Fail Pre-defined Pose.");
+                ROS_INFO("Fail to generate Geometry Pose.");
             }
         }
 
@@ -1011,7 +1009,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         }
         // sort msg by prefer-direction
         Eigen::Vector3d prefer_direction(0.0, 0.0, -1.0);
-        // sort_grasp(global_grasp_msg, prefer_direction);
+        sort_grasp(global_grasp_msg, prefer_direction);
         // Add grasp_msg into res
         res.grasps.global_grasp_poses.push_back(global_grasp_msg);
     }
