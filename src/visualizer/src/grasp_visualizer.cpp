@@ -251,8 +251,11 @@ void GraspVisualizer::update_graspmode() {
     grasp_mode_ = graspmode_string.toStdString();
     // update type json
     json type_json;
+    std::string type_filename = grasp_path_ 
+                              + model_name_ 
+                              + "/"
+                              + "type.json";
     type_json["type"] = grasp_mode_;
-
     // write json
     std::ofstream out_file(type_filename);
     out_file << type_json;
