@@ -846,7 +846,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 else if(type_name == "can") {
                     can_grasp(frame_array, position_array, pcd_file_name, model_scale);
                 }
-
+                std::cout << "Grasp SIZE: " << frame_array.size() << std::endl;
                 // generate msg
                 for(int gi = 0; gi < frame_array.size(); ++gi) {
                     Eigen::Matrix3d frame = frame_array[gi];
@@ -871,6 +871,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                     false);
                     }
                 }
+                std::cout << "Grasp SIZE: " << global_grasp_msg.grasp_poses.size() << std::endl;
             }
             catch(std::exception& e) {
                 ROS_INFO("Fail Pre-defined Pose.");
@@ -922,7 +923,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                  frame, bottom,
                                  object_frame_matrix,
                                  object_position,
-                                 true,
+                                 false,
                                  relative_scale);
                     if(flip_enable_) {
                         // generate another with symmetric over x-axis
@@ -933,7 +934,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                     frame, bottom,
                                     object_frame_matrix,
                                     object_position,
-                                    true,
+                                    false,
                                     relative_scale);
                     }
                 }
@@ -994,7 +995,8 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                 model_name, model_scale, grasp_width,
                                 frame, bottom,
                                 object_frame_matrix,
-                                object_position);
+                                object_position,
+                                false);
                     if(flip_enable_) {
                         // generate another with symmetric over x-axis
                         Eigen::AngleAxis<double> flip(1.0*M_PI, Eigen::Vector3d(1.,0.,0.));
@@ -1003,14 +1005,17 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                     model_name, model_scale, grasp_width,
                                     frame, bottom,
                                     object_frame_matrix,
-                                    object_position);
+                                    object_position,
+                                    false);
                     }
                 }
             }
         }
         // sort msg by prefer-direction
+        std::cout << "Grasp SIZE: " << global_grasp_msg.grasp_poses.size() << std::endl;
         Eigen::Vector3d prefer_direction(0.0, 0.0, -1.0);
         sort_grasp(global_grasp_msg, prefer_direction);
+        std::cout << "Grasp SIZE: " << global_grasp_msg.grasp_poses.size() << std::endl;
         // Add grasp_msg into res
         res.grasps.global_grasp_poses.push_back(global_grasp_msg);
     }

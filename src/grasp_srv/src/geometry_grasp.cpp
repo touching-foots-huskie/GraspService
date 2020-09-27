@@ -402,7 +402,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
     for(int i = 0; i < num_angle; ++i)
     {
         Eigen::Matrix3d rot_z, rot_y;
-        float angle = float(i) / float(num_angle) * M_PI;
+        float angle = float(i) / float(num_angle) * 2.0 * M_PI;
         rot_z = Eigen::AngleAxisd(angle, Eigen::Vector3d::UnitZ());
 
         // horizontal
