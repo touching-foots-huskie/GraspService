@@ -31,11 +31,17 @@ grasp_id = 0
 data_dir = "/root/GraspService/src/grasp_srv/grasp_data/"
 model_name_lock = False
 grasp_id_lock = False
+image_1_lock = False
+image_2_lock = False
+image_3_lock = False
 
 
 def pose_callback(grasp_pose):
     global model_name_lock
     global grasp_id_lock
+    global image_1_lock
+    global image_2_lock
+    global image_3_lock
     # publish object & gripper
     # Rot from ee to tool0
     r = R.from_quat(np.array([grasp_pose.orientation.x,
@@ -57,7 +63,9 @@ def pose_callback(grasp_pose):
     while(True):
         if model_name_lock and grasp_id_lock:
             # save image
-            rospy.sleep(2.0)  # wait for 2 seconds
+            rospy.sleep(1.0)  # wait for rviz to response
+            image_1_lock = image_2_lock = image_3_lock = True
+            
             image_dir = "{}{}".format(data_dir, model_name)
             if not os.path.isdir(image_dir):
                 os.mkdir(image_dir)
@@ -75,6 +83,7 @@ def pose_callback(grasp_pose):
             # release lock
             model_name_lock = False
             grasp_id_lock = False
+            image_1_lock = image_2_lock = image_3_lock = False
             break
         # sleep once
         rospy.sleep(0.1)
@@ -84,39 +93,44 @@ def pose_callback(grasp_pose):
 
 def camera1_callback(image_msg):
     global image1
-    bridge = CvBridge()
-    image1 = bridge.imgmsg_to_cv2(image_msg, desired_encoding='passthrough')
-    return
+    if not image_1_lock:
+        bridge = CvBridge()
+        image1 = bridge.imgmsg_to_cv2(image_msg, desired_encoding='passthrough')
+        return
 
 
 def camera2_callback(image_msg):
     global image2
-    bridge = CvBridge()
-    image2 = bridge.imgmsg_to_cv2(image_msg, desired_encoding='passthrough')
-    return
+    if not image_2_lock:
+        bridge = CvBridge()
+        image2 = bridge.imgmsg_to_cv2(image_msg, desired_encoding='passthrough')
+        return
 
 
 def camera3_callback(image_msg):
     global image3
-    bridge = CvBridge()
-    image3 = bridge.imgmsg_to_cv2(image_msg, desired_encoding='passthrough')
-    return
+    if not image_3_lock:
+        bridge = CvBridge()
+        image3 = bridge.imgmsg_to_cv2(image_msg, desired_encoding='passthrough')
+        return
 
 
 def model_name_callback(model_name_msg):
     global model_name
     global model_name_lock
-    model_name = model_name_msg.data
-    model_name_lock = True
-    return
+    if not model_name_lock:
+        model_name = model_name_msg.data
+        model_name_lock = True
+        return
 
 
 def grasp_id_callback(grasp_id_msg):
     global grasp_id
     global grasp_id_lock
-    grasp_id = grasp_id_msg.data
-    grasp_id_lock = True
-    return
+    if not grasp_id_lock:
+        grasp_id = grasp_id_msg.data
+        grasp_id_lock = True
+        return
 
 
 if __name__ == "__main__":

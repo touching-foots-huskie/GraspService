@@ -846,7 +846,6 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 else if(type_name == "can") {
                     can_grasp(frame_array, position_array, pcd_file_name, model_scale);
                 }
-                std::cout << "Grasp SIZE: " << frame_array.size() << std::endl;
                 // generate msg
                 for(int gi = 0; gi < frame_array.size(); ++gi) {
                     Eigen::Matrix3d frame = frame_array[gi];
@@ -871,7 +870,6 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                     false);
                     }
                 }
-                std::cout << "Grasp SIZE: " << global_grasp_msg.grasp_poses.size() << std::endl;
             }
             catch(std::exception& e) {
                 ROS_INFO("Fail Pre-defined Pose.");
@@ -1012,10 +1010,8 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
             }
         }
         // sort msg by prefer-direction
-        std::cout << "Grasp SIZE: " << global_grasp_msg.grasp_poses.size() << std::endl;
         Eigen::Vector3d prefer_direction(0.0, 0.0, -1.0);
         sort_grasp(global_grasp_msg, prefer_direction);
-        std::cout << "Grasp SIZE: " << global_grasp_msg.grasp_poses.size() << std::endl;
         // Add grasp_msg into res
         res.grasps.global_grasp_poses.push_back(global_grasp_msg);
     }
@@ -1166,7 +1162,6 @@ void GraspDetector::sort_grasp(grasp_srv::GlobalGraspPose& global_grasp_msg,
             global_grasp_msg.model_names[grasp_id]);
         sorted_grasp_msg.scales.push_back(
             global_grasp_msg.scales[grasp_id]);
-        std::cout << p.second << std::endl;
     }
 
     // re-assign
