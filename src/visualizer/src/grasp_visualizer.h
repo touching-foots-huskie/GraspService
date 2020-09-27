@@ -78,6 +78,7 @@ private Q_SLOTS:
     void update_modelname();
     void update_graspmode();
     void read_image(QListWidgetItem *item);  // read image and render
+    void remove_grasp(QListWidgetItem *item);  
 
 private:
     // publishing data
@@ -91,7 +92,7 @@ private:
     // grasps data
     grasp_srv::Grasps grasps_;
     grasp_srv::ObjectPoses object_poses_;
-    std::map<int, geometry_msgs::Pose> poses_map_;
+    json poses_json_;  // json : <id, local pose, scale>
 
     // Ros Publisher
     ros::NodeHandle nh_;

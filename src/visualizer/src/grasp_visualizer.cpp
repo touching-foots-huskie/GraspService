@@ -120,11 +120,9 @@ void GraspVisualizer::read_image(QListWidgetItem *item) {
     std::string id_string = item->text().toStdString();
     std::string delimiter = ":";
     std::string token = id_string.substr(id_string.find(delimiter)+1, id_string.size()); 
-    std::cout << token << std::endl;
     // remove space
     std::string::iterator end_pos = std::remove(token.begin(), token.end(), ' ');
     token.erase(end_pos, token.end());
-    std::cout << token << std::endl;
     int grasp_id = std::stoi(token); 
     // QHBoxLayout* grasp_render;
     std::string image1_filename = grasp_path_ 
@@ -198,6 +196,35 @@ void GraspVisualizer::start() {
     else {
         ROS_ERROR("Failed to call service grasp_gen");
     }
+
+    // set json file
+    poses_json_.clear();
+    int num_grasps = grasps_.global_grasp_poses[0].local_poses.size();
+    for(int i = 0; i < num_grasps; ++i) {
+        geometry_msgs::Pose local_pose = 
+            grasps_.global_grasp_poses[0].local_poses[i];
+        double scale = grasps_.global_grasp_poses[0].scales[i];
+        double grasp_width = grasps_.global_grasp_poses[0].grasp_widths[i];
+        std::vector<double> pose_array = {
+            local_pose.position.x,
+            local_pose.position.y,
+            local_pose.position.z,
+            local_pose.orientation.x,
+            local_pose.orientation.y,
+            local_pose.orientation.z,
+            local_pose.orientation.w,
+            scale,
+            grasp_width};
+        poses_json_[std::to_string(i)] = pose_array;
+    }
+    // save json file
+    std::string pose_filename = grasp_path_ 
+                              + model_name_ 
+                              + "/"
+                              + "pose.json";
+    std::ofstream out_file(pose_filename);
+    out_file << poses_json_;
+    out_file.close();
 }
 
 void GraspVisualizer::render() {
@@ -207,7 +234,8 @@ void GraspVisualizer::render() {
     recursive_directory_iterator end;
     for (recursive_directory_iterator it(image_dir); it != end; ++it) {
         std::string filename = it->path().filename().string();
-        if(filename == "type.json") continue;
+        if((filename == "type.json") && (filename == "pose.json"))
+            continue;
         std::string delimiter = "_";
         std::string token = filename.substr(0, filename.find(delimiter)); 
         int grasp_id = std::stoi(token);  
