@@ -195,11 +195,29 @@ void GraspVisualizer::start() {
 
 void GraspVisualizer::render() {
     std::cout << "New Line Added"  << std::endl;
-    QListWidgetItem *item = new QListWidgetItem;
-    // item->setFlags(Qt::ItemIsUserCheckable);
-    item->setCheckState(Qt::Unchecked);
-    item->setText(QString("test"));
-    list_area->insertItem(0, item);
+    std::string image_dir = grasp_path_ + model_name_;
+    // iterate over directory
+    std::vector<int> existing_id;
+    recursive_directory_iterator end;
+    for (recursive_directory_iterator it(image_dir); it != end; ++it) {
+        std::string filename = it->path();
+        std::string delimiter = "_";
+        std::string token = filename.substr(0, filename.find(delimiter)); 
+        int grasp_id = std::stoi(token);  
+        bool exists = false;
+        for(auto d : existing_id) {
+            if(d == grasp_id) exists = true; 
+        }      
+
+        if(!exists) {
+            existing_id.push_back(grasp_id);
+            QListWidgetItem *item = new QListWidgetItem;
+            std::string id_string = std::to_string(grasp_id);
+            item->setCheckState(Qt::Unchecked);
+            item->setText(QString("ID: " + id_string));
+            list_area->insertItem(0, item);
+        }              
+    }    
 }
 
 void GraspVisualizer::update_modelname() {

@@ -44,6 +44,10 @@ using json = nlohmann::json;
 #include <iostream>
 #include <sstream>
 
+// Boost
+#include <boost/filesystem.hpp>
+using namespace boost::filesystem;
+
 
 namespace rviz
 {
