@@ -78,7 +78,7 @@ private Q_SLOTS:
     void update_modelname();
     void update_graspmode();
     void read_image(QListWidgetItem *item);  // read image and render
-    void remove_grasp(QListWidgetItem *item);  
+    // void remove_grasp(QListWidgetItem *item);  
 
 private:
     // publishing data
