@@ -328,11 +328,12 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
     // grasp along -z-axis 
     {
         Eigen::Matrix3d frame = Eigen::Matrix3d::Identity();
-        Eigen::Vector3d position = Eigen::Vector3d::Zero();
+        Eigen::Vector3d position;
+        position << center_x, center_y, center_z;
         Eigen::Matrix3d rot_y;
         rot_y = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitY());
         frame = frame * rot_y;
-        position(2) =  size_z / 2.0;
+        position(2) =  size_z / 2.0 + center_z;
         frame_array.push_back(frame);
         position_array.push_back(position);
 
