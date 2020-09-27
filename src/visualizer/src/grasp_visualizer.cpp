@@ -184,7 +184,7 @@ void GraspVisualizer::start() {
     // render grasps
     for(int i = 0; i < num_grasps; ++i) {
         render_grasp(i);
-        ros::Duration(2.5).sleep();
+        ros::Duration(3.0).sleep();
     }
 }
 
@@ -199,6 +199,7 @@ void GraspVisualizer::render() {
             continue;
         std::string delimiter = "_";
         std::string token = filename.substr(0, filename.find(delimiter)); 
+        std::cout << token << " render " << std::endl;
         int grasp_id = std::stoi(token);  
         bool exists = false;
         for(auto d : existing_id) {
@@ -258,6 +259,7 @@ void GraspVisualizer::read_image(QListWidgetItem *item) {
     // remove space
     std::string::iterator end_pos = std::remove(token.begin(), token.end(), ' ');
     token.erase(end_pos, token.end());
+    std::cout << token << " read_image" << std::endl;
     int grasp_id = std::stoi(token); 
     // QHBoxLayout* grasp_render;
     std::string image1_filename = grasp_path_ 
@@ -305,6 +307,7 @@ void GraspVisualizer::remove_grasp() {
         // remove space
         std::string::iterator end_pos = std::remove(token.begin(), token.end(), ' ');
         token.erase(end_pos, token.end());
+        std::cout << token << " remove grasp" << std::endl;
         int grasp_id = std::stoi(token); 
         poses_json_.erase(std::to_string(grasp_id));
 
