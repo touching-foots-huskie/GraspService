@@ -1161,6 +1161,7 @@ void GraspDetector::sort_grasp(grasp_srv::GlobalGraspPose& global_grasp_msg,
             global_grasp_msg.model_names[grasp_id]);
         sorted_grasp_msg.scales.push_back(
             global_grasp_msg.scales[grasp_id]);
+        std::cout << p.second << std::endl;
     }
 
     // re-assign
