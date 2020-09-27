@@ -1011,7 +1011,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         }
         // sort msg by prefer-direction
         Eigen::Vector3d prefer_direction(0.0, 0.0, -1.0);
-        sort_grasp(global_grasp_msg, prefer_direction);
+        // sort_grasp(global_grasp_msg, prefer_direction);
         // Add grasp_msg into res
         res.grasps.global_grasp_poses.push_back(global_grasp_msg);
     }
