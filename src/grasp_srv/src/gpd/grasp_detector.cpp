@@ -1115,8 +1115,8 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
 }
 
 // map cmp
-bool cmp(pair<int, double>& a, 
-         pair<int, double>& b) { 
+bool cmp(std::pair<int, double>& a, 
+         std::pair<int, double>& b) { 
     return a.second < b.second; 
 } 
 
