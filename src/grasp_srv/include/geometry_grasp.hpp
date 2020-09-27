@@ -16,13 +16,15 @@ using MatrixArray = std::vector<Eigen::Matrix3d, Eigen::aligned_allocator<Eigen:
 
 enum AXIS{x_axis, y_axis, z_axis};
 
-void box_parse(std::string filename, double& size_x, double& size_y, double& size_z);
-void can_parse(std::string filename, double& size_r, double& size_h, AXIS& axis);
+void box_parse(std::string filename, double& size_x, double& size_y, double& size_z,
+               double& center_x, double& center_y, double& center_z);
+void can_parse(std::string filename, double& size_r, double& size_h, 
+               double& center_h, AXIS& axis);
 
 // generate grasp pose by geometry
 void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
-               std::string filename, double scale);
+               std::string filename, double scale, int num_slice=4);
 void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
-               std::string filename, double scale, int num_angle=12);
+               std::string filename, double scale, int num_angle=12, int num_slice=4);
 
 #endif
