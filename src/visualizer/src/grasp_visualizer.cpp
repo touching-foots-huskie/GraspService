@@ -123,7 +123,7 @@ void GraspVisualizer::read_image(QListWidgetItem *item) {
     // remove space
     std::string::iterator end_pos = std::remove(token.begin(), token.end(), ' ');
     token.erase(end_pos, token.end());
-    std::cout << "token" << std::endl;
+    std::cout << token << std::endl;
     int grasp_id = std::stoi(token); 
     // QHBoxLayout* grasp_render;
     std::string image1_filename = grasp_path_ 
