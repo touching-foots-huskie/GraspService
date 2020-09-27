@@ -65,7 +65,7 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     visual_layout->addLayout(renderLayout);
     // test
     list_area = new QListWidget(this);
-    connect(list_area, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(read_image(QListWidgetItem*)));
+    connect(list_area, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(read_image(QListWidgetItem*)));
     visual_layout->addWidget(list_area);
 
     // Control Layout
@@ -117,10 +117,13 @@ void GraspVisualizer::render_grasp(int grasp_id) {
 }
 
 void GraspVisualizer::read_image(QListWidgetItem *item) {
-    std::cout << "Activated" << std::endl;
     std::string id_string = item->text().toStdString();
     std::string delimiter = ":";
     std::string token = id_string.substr(0, id_string.find(delimiter)); 
+    // remove space
+    std::string::iterator end_pos = std::remove(token.begin(), token.end(), ' ');
+    token.erase(end_pos, token.end());
+    std::cout << "token" << std::endl;
     int grasp_id = std::stoi(token); 
     // QHBoxLayout* grasp_render;
     std::string image1_filename = grasp_path_ 
