@@ -195,7 +195,7 @@ void GraspVisualizer::render() {
     recursive_directory_iterator end;
     for (recursive_directory_iterator it(image_dir); it != end; ++it) {
         std::string filename = it->path().filename().string();
-        if((filename == "type.json") && (filename == "pose.json"))
+        if((filename == "type.json") || (filename == "pose.json"))
             continue;
         std::string delimiter = "_";
         std::string token = filename.substr(0, filename.find(delimiter)); 
