@@ -213,14 +213,19 @@ void GraspVisualizer::render() {
 
         if(!exists) {
             existing_id.push_back(grasp_id);
-            QListWidgetItem *item = new QListWidgetItem;
-            std::string id_string = std::to_string(grasp_id);
-            id_string = "ID: " + id_string;
-            item->setCheckState(Qt::Unchecked);
-            item->setText(QString(id_string.c_str()));
-            list_area->insertItem(0, item);
         }              
-    }    
+    }
+
+    // sort
+    std::sort(existing_id.begin(), existing_id.end());
+    for(auto grasp_id : existing_id) {
+        QListWidgetItem *item = new QListWidgetItem;
+        std::string id_string = std::to_string(grasp_id);
+        id_string = "ID: " + id_string;
+        item->setCheckState(Qt::Unchecked);
+        item->setText(QString(id_string.c_str()));
+        list_area->insertItem(0, item);
+    }
 }
 
 void GraspVisualizer::update_modelname() {

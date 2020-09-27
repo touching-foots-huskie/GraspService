@@ -48,6 +48,9 @@ using json = nlohmann::json;
 #include <boost/filesystem.hpp>
 using namespace boost::filesystem;
 
+// Algorithm 
+#include <algorithm>
+
 
 namespace rviz
 {
