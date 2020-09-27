@@ -234,7 +234,7 @@ class GraspDetector {
                       const Eigen::Vector3d& object_position = Eigen::Vector3d::Zero(),
                       const bool enable_filter = true,
                       const double relative_scale = 1.0,
-                      const double comp_distance = 0.13,
+                      const double comp_distance = 0.11,
                       const double pre_distance = 0.15,
                       const double angle_ratio = 0.5);
     
@@ -284,6 +284,7 @@ class GraspDetector {
     bool centered_at_origin_;
     bool pre_defined_enable_;
     bool geometry_enable_;
+    bool flip_enable_;
 };
 
 }  // namespace gpd

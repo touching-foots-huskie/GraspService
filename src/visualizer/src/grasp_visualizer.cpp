@@ -118,6 +118,9 @@ void GraspVisualizer::render_grasp(int grasp_id) {
 
 // SLOT
 void GraspVisualizer::start() {
+    // update grasp mode
+    update_graspmode();
+    
     grasp_srv::GraspGen srv;
     grasp_srv::ObjectPoses object_poses_msg;
     // set name
