@@ -49,6 +49,7 @@ using json = nlohmann::json;
 using namespace boost::filesystem;
 
 // Algorithm 
+#include <functional>
 #include <algorithm>
 
 

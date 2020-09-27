@@ -217,7 +217,7 @@ void GraspVisualizer::render() {
     }
 
     // sort
-    std::sort(existing_id.begin(), existing_id.end());
+    std::sort(existing_id.begin(), existing_id.end(), std::less<int>());
     for(auto grasp_id : existing_id) {
         QListWidgetItem *item = new QListWidgetItem;
         std::string id_string = std::to_string(grasp_id);
