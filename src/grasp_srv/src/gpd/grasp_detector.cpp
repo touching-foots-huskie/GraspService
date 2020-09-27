@@ -1125,12 +1125,14 @@ void GraspDetector::sort_grasp(grasp_srv::GlobalGraspPose& global_grasp_msg,
     // establish a sorting_index
     std::vector<std::pair<int, double> > distance_by_id; 
     for(int i = 0; i < global_grasp_msg.grasp_poses.size(); ++i) {
+        // local pose
+        geometry_msgs::Pose grasp_pose = global_grasp_msg.grasp_poses[i];
         // get frame matrix
         Eigen::Quaternion<double> grasp_frame_quat(
-            local_pose.orientation.w,
-            local_pose.orientation.x,
-            local_pose.orientation.y,
-            local_pose.orientation.z);
+            grasp_pose.orientation.w,
+            grasp_pose.orientation.x,
+            grasp_pose.orientation.y,
+            grasp_pose.orientation.z);
         Eigen::Matrix3d grasp_frame = grasp_frame_quat.matrix();
         // orientation
         Eigen::Vector3d ori_vector(1.0, 0.0, 0.0);
@@ -1144,7 +1146,7 @@ void GraspDetector::sort_grasp(grasp_srv::GlobalGraspPose& global_grasp_msg,
     // rearrange order
     grasp_srv::GlobalGraspPose sorted_grasp_msg;
     for(auto p : distance_by_id) {
-        int grasp_id = p->first;
+        int grasp_id = p.first;
         sorted_grasp_msg.grasp_poses.push_back(
             global_grasp_msg.grasp_poses[grasp_id]);
         sorted_grasp_msg.pre_grasp_poses.push_back(
