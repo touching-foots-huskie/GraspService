@@ -1,6 +1,9 @@
 #ifndef GRASP_VISUALIZER_H
 #define GRASP_VISUALIZER_H
 
+// std
+#include <stdio.h>
+
 // Qt
 #include <QWidget>
 #include <QFlag>
@@ -18,6 +21,8 @@
 #include <QListWidgetItem>
 // Button
 #include <QPushButton>
+// Container
+#include <QList>
 
 // ROS
 #include <ros/ros.h>
@@ -72,13 +77,12 @@ public:
     void render_grasp(int grasp_id);
 
 private Q_SLOTS:
-    void save();
     void start();
     void render();
     void update_modelname();
     void update_graspmode();
     void read_image(QListWidgetItem *item);  // read image and render
-    // void remove_grasp(QListWidgetItem *item);  
+    void remove_grasp();  
 
 private:
     // publishing data

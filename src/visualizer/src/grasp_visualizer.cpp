@@ -73,7 +73,7 @@ GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
     bt2_ = new QPushButton("Save", this);
     bt3_ = new QPushButton("Show", this);
     connect(bt1_, SIGNAL(released()), this, SLOT(start()));
-    connect(bt2_, SIGNAL(released()), this, SLOT(save()));
+    connect(bt2_, SIGNAL(released()), this, SLOT(remove_grasp()));
     connect(bt3_, SIGNAL(released()), this, SLOT(render()));
 
     control_layout->addWidget(bt1_);
@@ -116,52 +116,7 @@ void GraspVisualizer::render_grasp(int grasp_id) {
     grasp_id_pub_.publish(id_msg);  // Id 
 }
 
-void GraspVisualizer::read_image(QListWidgetItem *item) {
-    std::string id_string = item->text().toStdString();
-    std::string delimiter = ":";
-    std::string token = id_string.substr(id_string.find(delimiter)+1, id_string.size()); 
-    // remove space
-    std::string::iterator end_pos = std::remove(token.begin(), token.end(), ' ');
-    token.erase(end_pos, token.end());
-    int grasp_id = std::stoi(token); 
-    // QHBoxLayout* grasp_render;
-    std::string image1_filename = grasp_path_ 
-                                + model_name_ 
-                                + "/" + std::to_string(grasp_id)
-                                + "_upper.jpg";
-    // Set upper view
-    QString qfilename1(image1_filename.c_str());  
-    QImage qimage1 = QImage(qfilename1);  
-    QImage resize_image1 = qimage1.scaled(320, 240, Qt::KeepAspectRatio); 
-    QPixmap pmap1 = QPixmap::fromImage(resize_image1); // load pixmap
-    upper_view->setPixmap(pmap1);
-
-    // Front view
-    std::string image2_filename = grasp_path_ 
-                                + model_name_ 
-                                + "/" + std::to_string(grasp_id)
-                                + "_front.jpg";
-    QString qfilename2(image2_filename.c_str());  
-    QImage qimage2 = QImage(qfilename2);  
-    QImage resize_image2 = qimage2.scaled(320, 240, Qt::KeepAspectRatio); 
-    QPixmap pmap2 = QPixmap::fromImage(resize_image2); // load pixmap
-    front_view->setPixmap(pmap2);
-
-    // Right view
-    std::string image3_filename = grasp_path_ 
-                                + model_name_ 
-                                + "/" + std::to_string(grasp_id)
-                                + "_right.jpg";
-    QString qfilename3(image3_filename.c_str());  
-    QImage qimage3 = QImage(qfilename3);  
-    QImage resize_image3 = qimage3.scaled(320, 240, Qt::KeepAspectRatio); 
-    QPixmap pmap3 = QPixmap::fromImage(resize_image3); // load pixmap
-    right_view->setPixmap(pmap3);
-}
-
 // SLOT
-void GraspVisualizer::save() {}
-
 void GraspVisualizer::start() {
     grasp_srv::GraspGen srv;
     grasp_srv::ObjectPoses object_poses_msg;
@@ -225,6 +180,11 @@ void GraspVisualizer::start() {
     std::ofstream out_file(pose_filename);
     out_file << poses_json_;
     out_file.close();
+
+    // render grasps
+    for(int i = 0; i < num_grasps; ++i) {
+        render_grasp(i);
+    }
 }
 
 void GraspVisualizer::render() {
@@ -250,6 +210,7 @@ void GraspVisualizer::render() {
     }
 
     // sort
+    list_area->clear();  // clear list
     std::sort(existing_id.begin(), existing_id.end(), std::greater<int>());
     for(auto grasp_id : existing_id) {
         QListWidgetItem *item = new QListWidgetItem;
@@ -259,6 +220,14 @@ void GraspVisualizer::render() {
         item->setText(QString(id_string.c_str()));
         list_area->insertItem(0, item);
     }
+
+    // read json
+    poses_json_.clear();
+    std::string grasp_path = grasp_path_ + model_name_;
+    std::string pose_filename = grasp_path + "/pose.json";
+    std::ifstream json_file(pose_filename);
+    json_file >> poses_json_;
+    json_file.close();
 }
 
 void GraspVisualizer::update_modelname() {
@@ -279,4 +248,89 @@ void GraspVisualizer::update_modelname() {
 void GraspVisualizer::update_graspmode() {
     QString graspmode_string = grasp_mode_text->text();
     grasp_mode_ = graspmode_string.toStdString();
+}
+
+void GraspVisualizer::read_image(QListWidgetItem *item) {
+    std::string id_string = item->text().toStdString();
+    std::string delimiter = ":";
+    std::string token = id_string.substr(id_string.find(delimiter)+1, id_string.size()); 
+    // remove space
+    std::string::iterator end_pos = std::remove(token.begin(), token.end(), ' ');
+    token.erase(end_pos, token.end());
+    int grasp_id = std::stoi(token); 
+    // QHBoxLayout* grasp_render;
+    std::string image1_filename = grasp_path_ 
+                                + model_name_ 
+                                + "/" + std::to_string(grasp_id)
+                                + "_upper.jpg";
+    // Set upper view
+    QString qfilename1(image1_filename.c_str());  
+    QImage qimage1 = QImage(qfilename1);  
+    QImage resize_image1 = qimage1.scaled(320, 240, Qt::KeepAspectRatio); 
+    QPixmap pmap1 = QPixmap::fromImage(resize_image1); // load pixmap
+    upper_view->setPixmap(pmap1);
+
+    // Front view
+    std::string image2_filename = grasp_path_ 
+                                + model_name_ 
+                                + "/" + std::to_string(grasp_id)
+                                + "_front.jpg";
+    QString qfilename2(image2_filename.c_str());  
+    QImage qimage2 = QImage(qfilename2);  
+    QImage resize_image2 = qimage2.scaled(320, 240, Qt::KeepAspectRatio); 
+    QPixmap pmap2 = QPixmap::fromImage(resize_image2); // load pixmap
+    front_view->setPixmap(pmap2);
+
+    // Right view
+    std::string image3_filename = grasp_path_ 
+                                + model_name_ 
+                                + "/" + std::to_string(grasp_id)
+                                + "_right.jpg";
+    QString qfilename3(image3_filename.c_str());  
+    QImage qimage3 = QImage(qfilename3);  
+    QImage resize_image3 = qimage3.scaled(320, 240, Qt::KeepAspectRatio); 
+    QPixmap pmap3 = QPixmap::fromImage(resize_image3); // load pixmap
+    right_view->setPixmap(pmap3);
+}
+
+void GraspVisualizer::remove_grasp() {
+    // get all select 
+    QList<QListWidgetItem *> items = list_area->selectedItems();
+    for(auto item : items) {
+        std::string id_string = item.text().toStdString();
+        std::string delimiter = ":";
+        std::string token = id_string.substr(id_string.find(delimiter)+1, id_string.size()); 
+        
+        // remove space
+        std::string::iterator end_pos = std::remove(token.begin(), token.end(), ' ');
+        token.erase(end_pos, token.end());
+        int grasp_id = std::stoi(token); 
+        poses_json_.erase(std::to_string(grasp_id));
+
+        // remove images
+        std::string image1_filename = grasp_path_ 
+                                    + model_name_ 
+                                    + "/" + std::to_string(grasp_id)
+                                    + "_upper.jpg";
+        std::string image2_filename = grasp_path_ 
+                                    + model_name_ 
+                                    + "/" + std::to_string(grasp_id)
+                                    + "_front.jpg";
+        std::string image3_filename = grasp_path_ 
+                                    + model_name_ 
+                                    + "/" + std::to_string(grasp_id)
+                                    + "_right.jpg";
+        std::remove(image1_filename);
+        std::remove(image2_filename);
+        std::remove(image3_filename);
+    }
+
+    // save back
+    std::string pose_filename = grasp_path_ 
+                              + model_name_ 
+                              + "/"
+                              + "pose.json";
+    std::ofstream out_file(pose_filename);
+    out_file << poses_json_;
+    out_file.close();
 }
