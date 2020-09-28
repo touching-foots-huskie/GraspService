@@ -40,7 +40,8 @@
 #include <cmath>
 
 // Json
-#include "json_tools.h"
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 
 // stream
 #include <istream>
