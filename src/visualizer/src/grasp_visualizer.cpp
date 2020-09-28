@@ -190,8 +190,7 @@ void GraspVisualizer::start() {
     // save json file
     std::string pose_filename = grasp_path_ 
                               + model_name_ 
-                              + "/"
-                              + "pose.json";
+                              + "/pose.json";
     std::ofstream out_file(pose_filename);
     out_file << poses_json_;
     out_file.close();
@@ -251,7 +250,7 @@ void GraspVisualizer::update_modelname() {
     model_id_ = model_id_string.toStdString();
 
     // get model name
-    std::string jsonfile_path = grasp_path_ + "/object_id.json";
+    std::string jsonfile_path = grasp_path_ + "object_id.json";
     std::ifstream json_file(jsonfile_path);
     json object_datas;
     json_file >> object_datas;
@@ -260,7 +259,7 @@ void GraspVisualizer::update_modelname() {
     model_name_label->setText(qname);
 
     // create directory
-    std::string model_dir = data_path_ + model_name_;
+    std::string model_dir = grasp_path_ + model_name_;
     if(!exists_file(model_dir)) {
         boost::filesystem::create_directories(model_dir); 
         std::cout << model_dir << " Created" << std::endl;
