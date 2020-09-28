@@ -1,4 +1,7 @@
 #include "grasp_visualizer.h"
+#include <sys/stat.h>
+#include <unistd.h>
+
 
 // Tools
 inline bool exists_file(const std::string& name) {
