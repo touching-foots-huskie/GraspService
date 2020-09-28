@@ -186,8 +186,6 @@ void GraspVisualizer::start() {
     std::ofstream out_file(pose_filename);
     out_file << poses_json_;
     out_file.close();
-    std::cout << "FilePath: " << pose_filename << std::endl;
-    std::cout << "Pose File Write of Size: " << num_grasps << std::endl;
     // render grasps
     for(int i = 0; i < num_grasps; ++i) {
         render_grasp(i);
@@ -251,6 +249,13 @@ void GraspVisualizer::update_modelname() {
     model_name_ = object_datas[model_id_];
     QString qname = QString::fromStdString(model_name_);
     model_name_label->setText(qname);
+
+    // create directory
+    std::string model_dir = data_path_ + model_name_;
+    if(!exists_file(model_dir)) {
+        boost::filesystem::create_directories(model_dir); 
+    }
+
 }
 
 void GraspVisualizer::update_graspmode() {
