@@ -6,6 +6,10 @@
 #include <unistd.h>
 #include <string>
 #include <fstream>
+
+// Eigen
+#include <Eigen/Eigen>
+
 // for convenience
 using json = nlohmann::json;
 
