@@ -16,6 +16,10 @@ using MatrixArray = std::vector<Eigen::Matrix3d, Eigen::aligned_allocator<Eigen:
 
 enum AXIS{x_axis, y_axis, z_axis};
 
+/*
+TODO: Add Bowl 
+*/
+
 void box_parse(std::string filename, double& size_x, double& size_y, double& size_z,
                double& center_x, double& center_y, double& center_z);
 void can_parse(std::string filename, double& size_r, double& size_h, 
