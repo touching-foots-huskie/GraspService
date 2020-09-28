@@ -263,6 +263,7 @@ void GraspVisualizer::update_modelname() {
     std::string model_dir = data_path_ + model_name_;
     if(!exists_file(model_dir)) {
         boost::filesystem::create_directories(model_dir); 
+        std::cout << model_dir << " Created" << std::endl;
     }
 
 }
