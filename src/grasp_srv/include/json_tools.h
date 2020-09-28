@@ -2,6 +2,9 @@
 #ifndef JSON_TOOLS
 #define JSON_TOOLS
 #include <nlohmann/json.hpp>
+// for convenience
+using json = nlohmann::json;
+
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string>
@@ -9,9 +12,6 @@
 
 // Eigen
 #include <Eigen/Eigen>
-
-// for convenience
-using json = nlohmann::json;
 
 
 void matrix_parse(Eigen::Matrix4d& matrix, const json& json_matrix) {
