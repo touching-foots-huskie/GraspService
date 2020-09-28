@@ -242,7 +242,7 @@ void GraspVisualizer::update_modelname() {
     model_id_ = model_id_string.toStdString();
 
     // get model name
-    std::string jsonfile_path = data_path_ + "/object_id.json";
+    std::string jsonfile_path = grasp_path_ + "/object_id.json";
     std::ifstream json_file(jsonfile_path);
     json object_datas;
     json_file >> object_datas;
