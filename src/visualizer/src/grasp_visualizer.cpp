@@ -186,6 +186,7 @@ void GraspVisualizer::start() {
     std::ofstream out_file(pose_filename);
     out_file << poses_json_;
     out_file.close();
+    std::cout << "FilePath: " << pose_filename << std::endl;
     std::cout << "Pose File Write of Size: " << num_grasps << std::endl;
     // render grasps
     for(int i = 0; i < num_grasps; ++i) {
