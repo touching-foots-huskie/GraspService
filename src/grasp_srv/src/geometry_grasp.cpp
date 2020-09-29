@@ -209,7 +209,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
     double slice_x = size_x / (2.0*(double)num_slice);
     double slice_y = size_y / (2.0*(double)num_slice);
     double slice_z = size_z / (2.0*(double)num_slice);
-    double slice_sizes = Eigen::Vector3d(slice_x, slice_y, slice_z);
+    Eigen::Vector3d slice_sizes(slice_x, slice_y, slice_z);
 
     // retreat distance
     double retreat_x = -size_x + finger_len;
