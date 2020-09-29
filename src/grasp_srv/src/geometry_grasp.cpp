@@ -209,13 +209,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
     double slice_x = size_x / (2.0*(double)num_slice);
     double slice_y = size_y / (2.0*(double)num_slice);
     double slice_z = size_z / (2.0*(double)num_slice);
-    Eigen::Vector3d slice_vector_x(0.0, 0.0, slice_x);
-    Eigen::Vector3d slice_vector_y(0.0, 0.0, slice_x);
-    Eigen::Vector3d slice_vector_z(0.0, 0.0, slice_y);
-    VectorArray slice_vectors;
-    slice_vectors.push_back(slice_vector_x);
-    slice_vectors.push_back(slice_vector_y);
-    slice_vectors.push_back(slice_vector_z);
+    double slice_sizes = Eigen::Vector3d(slice_x, slice_y, slice_z);
 
     // retreat distance
     double retreat_x = -size_x + finger_len;
@@ -281,11 +275,12 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
             Eigen::Matrix3d frame_ij = frame_i * local_rot;
             Eigen::Vector3d pose_ij;
             // slices
+            Eigen::Vector3d slice_vector(0.0, 0.0, 1.0);
+            slice_vector = frame_ij * slice_vector;
+            slice_vector = slice_vector.cwiseProduct(slice_sizes);
             for(int k = 0; k < num_slice; ++k) {
-                Eigen::Vector3d slice_vector;
-                slice_vector = slice_vectors[i/2];
                 for(int s = 0; s < 2; ++s) {
-                    pose_ij = pose_i + signs[s] * double(k) * frame_ij * slice_vector;
+                    pose_ij = pose_i + signs[s] * double(k) * slice_vector;
                     // retreat
                     Eigen::Vector3d retreat_vector(1.0, 0.0, 0.0);
                     retreat_vector = frame_ij * retreat_vector;
