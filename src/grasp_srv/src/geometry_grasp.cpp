@@ -152,7 +152,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
             for(int k = 0; k < 2; ++k) {
                 frame = w_rot * rot_z;
                 frame_array.push_back(frame);
-                position(2) = signs[k] * double(i) * slice_h + center_h;
+                position(2) = signs[k] * double(j) * slice_h + center_h;
                 rot_position = frame * position;
                 // retreat
                 double retreat_len;
@@ -162,7 +162,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
                 else {
                     retreat_len = retreat_r;
                 }
-                rot_position += frame * retreat_len * retreat_vector;
+                rot_position -= frame * retreat_len * retreat_vector;
                 position_array.push_back(rot_position);
                 if(j == 0) break;
             }
@@ -185,6 +185,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
     }
     return;
 }
+
 
 // ReIm: generate grasp pose
 void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
