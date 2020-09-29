@@ -290,7 +290,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
                     retreat_vector = frame_ij * retreat_vector;
                     // find retreat direction
                     for(int r = 0; r < 3; ++r) {
-                        if(retreat_vector(r) > 0.0001) {
+                        if(fabs(retreat_vector(r)) > 0.0001) {
                             double retreat_len = 0.;
                             if(finger_len < sizes[r]) {
                                 // no retreat
