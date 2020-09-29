@@ -116,7 +116,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
     // retreat
     double retreat_r = -size_r + finger_len;
     double retreat_h = -size_h + finger_len;
-    Eigen::Vector3d retreat_vector(1.f, 0.f, 0.f);
+    Eigen::Vector3d retreat_vector(1., 0., 0.);
 
     // choose axis
     Eigen::Matrix3d w_rot = Eigen::Matrix3d::Identity();
@@ -137,7 +137,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
     for(int i = 0; i < num_angle; ++i)
     {
         Eigen::Matrix3d rot_z, rot_y;
-        float angle = float(i) / float(num_angle) * 2.0 * M_PI;
+        double angle = double(i) / double(num_angle) * 2.0 * M_PI;
         rot_z = Eigen::AngleAxisd(angle, Eigen::Vector3d::UnitZ());
 
         // horizontal
@@ -157,7 +157,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
                 // retreat
                 double retreat_len;
                 if(size_r > finger_len) {
-                    retreat_len = 0.f;
+                    retreat_len = 0.;
                 }
                 else {
                     retreat_len = retreat_r;
@@ -289,17 +289,17 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
                 Eigen::Vector3d slice_vector;
                 slice_vector = slice_vectors[k];
                 for(int s = 0; s < 2; ++s) {
-                    pose_ij = pose_i + signs[s] * float(k) * frame_ij * slice_vector;
+                    pose_ij = pose_i + signs[s] * double(k) * frame_ij * slice_vector;
                     // retreat
-                    Eigen::Matrix3d retreat_vector(1.0, 0.0, 0.0);
+                    Eigen::Vector3d retreat_vector(1.0, 0.0, 0.0);
                     retreat_vector = frame_ij * retreat_vector;
                     // find retreat direction
                     for(int r = 0; r < 3; ++r) {
-                        if(retreat_vector(r) > 0.0001f) {
-                            double retreat_len = 0.f;
+                        if(retreat_vector(r) > 0.0001) {
+                            double retreat_len = 0.;
                             if(finger_len < sizes[r]) {
                                 // no retreat
-                                retreat_len = 0.f;
+                                retreat_len = 0.;
                             }
                             else {
                                 retreat_len = retreats[r];
