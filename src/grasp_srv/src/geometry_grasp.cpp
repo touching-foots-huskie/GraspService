@@ -208,9 +208,9 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
     double slice_x = size_x / (2.0*(double)num_slice);
     double slice_y = size_y / (2.0*(double)num_slice);
     double slice_z = size_z / (2.0*(double)num_slice);
-    Eigen::Vector3d slice_vector_x(0.0, slice_x, 0.0);
-    Eigen::Vector3d slice_vector_y(0.0, slice_x, 0.0);
-    Eigen::Vector3d slice_vector_z(0.0, slice_y, 0.0);
+    Eigen::Vector3d slice_vector_x(0.0, 0.0, slice_x);
+    Eigen::Vector3d slice_vector_y(0.0, 0.0, slice_x);
+    Eigen::Vector3d slice_vector_z(0.0, 0.0, slice_y);
     VectorArray slice_vectors;
     slice_vectors.push_back(slice_vector_x);
     slice_vectors.push_back(slice_vector_y);
@@ -223,7 +223,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
     double retreats[3] = {retreat_x, retreat_y, retreat_z};
 
     // signs
-    double signs[2] = {1., -1.};
+    double signs[2] = {-1., 1.};
 
     // frames & poses
     MatrixArray frames;
@@ -234,24 +234,19 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
     // +x
     frames[0] = frame;
     // -x
-    rot = Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitZ());
-    frame = frame * rot;
+    frame = Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitZ());
     frames[1] = frame;
     // +y
-    rot = Eigen::AngleAxisd(-M_PI/2.0, Eigen::Vector3d::UnitZ());
-    frame = frame * rot;
+    frame = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitZ());
     frames[2] = frame;
     // -y
-    rot = Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitZ());
-    frame = frame * rot;
+    frame = Eigen::AngleAxisd(-M_PI/2.0, Eigen::Vector3d::UnitZ());
     frames[3] = frame;
     // +z
-    rot = Eigen::AngleAxisd(-M_PI/2.0, Eigen::Vector3d::UnitX());
-    frame = frame * rot;
+    frame = Eigen::AngleAxisd(-M_PI/2.0, Eigen::Vector3d::UnitY());
     frames[4] = frame;
     // -z
-    rot = Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitX());
-    frame = frame * rot;
+    frame = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitY());
     frames[5] = frame;
 
     // poses
