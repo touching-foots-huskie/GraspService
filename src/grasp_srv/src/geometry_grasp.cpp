@@ -100,8 +100,8 @@ void can_parse(std::string filename, double& size_r, double& size_h,
 
 
 // generate grasp pose
-void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
-               std::string filename, double scale, double finger_len, int num_angle, int num_slice) {
+void can_grasp(MatrixArray& frame_array, VectorArray& position_array, std::string filename, 
+               double scale, double finger_len, double slice_thresh, int num_angle, int num_slice) {
     // parse information
     double size_r, size_h, center_h;
     AXIS axis;
@@ -188,8 +188,8 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
 
 
 // ReIm: generate grasp pose
-void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
-               std::string filename, double scale, double finger_len, int num_slice) {
+void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::string filename, 
+               double scale, double finger_len, double slice_thresh, int num_slice) {
     // parse information
     double size_x, size_y, size_z;
     double center_x, center_y, center_z;
