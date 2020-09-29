@@ -147,7 +147,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
         
         position(0) =  -size_r / 2.0;
         // add slices
-        double signs = {1.0f, -1.0f};
+        double signs[2] = {1.0f, -1.0f};
         for(int j = 0; j < num_slice; ++j) {
             for(int k = 0; k < 2; ++k) {
                 frame = w_rot * rot_z;
@@ -279,7 +279,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
 
     for(int i = 0; i < 6; ++i) {
         Eigen::Matrix3d frame_i = frames[i];
-        Eigen::Vector pose_i = poses[i];
+        Eigen::Vector3d pose_i = poses[i];
         for(int j = 0; j < 2; ++j) {
             Eigen::Matrix3d local_rot = rot_xs[j];
             Eigen::Matrix3d frame_ij = frame_i * local_rot;
