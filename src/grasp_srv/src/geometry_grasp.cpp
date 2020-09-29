@@ -100,279 +100,8 @@ void can_parse(std::string filename, double& size_r, double& size_h,
 
 
 // generate grasp pose
-void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
-               std::string filename, double scale, int num_slice) {
-    // parse information
-    double size_x, size_y, size_z;
-    double center_x, center_y, center_z;
-    box_parse(filename, size_x, size_y, size_z, center_x, center_y, center_z);
-    // rescale size
-    size_x *= scale;
-    size_y *= scale;
-    size_z *= scale;
-    center_x *= scale;
-    center_y *= scale;
-    center_z *= scale;
-
-    // slices
-    double slice_x = size_x / (2.0*(double)num_slice);
-    double slice_y = size_y / (2.0*(double)num_slice);
-    double slice_z = size_z / (2.0*(double)num_slice);
-    // rot_x
-    Eigen::Matrix3d rot_x;
-    rot_x = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitX());
-
-    // grasp along +x-axis 
-    {
-        Eigen::Matrix3d frame = Eigen::Matrix3d::Identity();
-        Eigen::Vector3d position;
-        position << center_x, center_y, center_z;
-        position(0) = -size_x / 2.0 + center_x;
-        frame_array.push_back(frame);
-        position_array.push_back(position);
-
-        for(int i = 1; i < num_slice; ++i) {
-            // +
-            frame_array.push_back(frame);
-            position(2) = double(i) * slice_z + center_z;
-            position_array.push_back(position);
-            // -
-            frame_array.push_back(frame);
-            position(2) = -double(i) * slice_z + center_z;
-            position_array.push_back(position);
-        }
-        position(2) = center_z;
-
-        // vertical grasp pose
-        frame = frame * rot_x;
-        frame_array.push_back(frame);
-        position_array.push_back(position);
-
-        for(int i = 1; i < num_slice; ++i) {
-            // +
-            frame_array.push_back(frame);
-            position(1) = double(i) * slice_y + center_y;
-            position_array.push_back(position);
-            // -
-            frame_array.push_back(frame);
-            position(1) = -double(i) * slice_y + center_y;
-            position_array.push_back(position);
-        }
-        position(1) = center_y;
-    }
-    // grasp along -x-axis 
-    {
-        Eigen::Matrix3d frame = Eigen::Matrix3d::Identity();
-        Eigen::Vector3d position;
-        position << center_x, center_y, center_z;
-        Eigen::Matrix3d rot_z;
-        rot_z = Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitZ());
-        frame = frame * rot_z;
-        position(0) =  size_x / 2.0 + center_x;
-        frame_array.push_back(frame);
-        position_array.push_back(position);
-
-        for(int i = 1; i < num_slice; ++i) {
-            // +
-            frame_array.push_back(frame);
-            position(2) = double(i) * slice_z + center_z;
-            position_array.push_back(position);
-            // -
-            frame_array.push_back(frame);
-            position(2) = -double(i) * slice_z + center_z;
-            position_array.push_back(position);
-        }
-        position(2) = center_z;
-
-        // vertical grasp pose
-        frame = frame * rot_x;
-        frame_array.push_back(frame);
-        position_array.push_back(position);
-
-        for(int i = 1; i < num_slice; ++i) {
-            // +
-            frame_array.push_back(frame);
-            position(1) = double(i) * slice_y + center_y;
-            position_array.push_back(position);
-            // -
-            frame_array.push_back(frame);
-            position(1) = -double(i) * slice_y + center_y;
-            position_array.push_back(position);
-        }
-        position(1) = center_y;
-    }
-
-    // grasp along +y-axis 
-    {
-        Eigen::Matrix3d frame = Eigen::Matrix3d::Identity();
-        Eigen::Vector3d position;
-        position << center_x, center_y, center_z;
-        Eigen::Matrix3d rot_z;
-        rot_z = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitZ());
-        frame = frame * rot_z;
-        position(1) =  -size_y / 2.0 + center_y;
-        frame_array.push_back(frame);
-        position_array.push_back(position);
-
-        for(int i = 1; i < num_slice; ++i) {
-            // +
-            frame_array.push_back(frame);
-            position(2) = double(i) * slice_z + center_z;
-            position_array.push_back(position);
-            // -
-            frame_array.push_back(frame);
-            position(2) = -double(i) * slice_z + center_z;
-            position_array.push_back(position);
-        }
-        position(2) = center_z;
-
-        // vertical grasp pose
-        frame = frame * rot_x;
-        frame_array.push_back(frame);
-        position_array.push_back(position);
-
-        for(int i = 1; i < num_slice; ++i) {
-            // +
-            frame_array.push_back(frame);
-            position(0) = double(i) * slice_x + center_x;
-            position_array.push_back(position);
-            // -
-            frame_array.push_back(frame);
-            position(0) = -double(i) * slice_x + center_x;
-            position_array.push_back(position);
-        }
-        position(0) = center_x;
-    }
-    // grasp along -y-axis 
-    {
-        Eigen::Matrix3d frame = Eigen::Matrix3d::Identity();
-        Eigen::Vector3d position;
-        position << center_x, center_y, center_z;
-        Eigen::Matrix3d rot_z;
-        rot_z = Eigen::AngleAxisd(-M_PI/2.0, Eigen::Vector3d::UnitZ());
-        frame = frame * rot_z;
-        position(1) =  size_y / 2.0 + center_y;
-        frame_array.push_back(frame);
-        position_array.push_back(position);
-
-        for(int i = 1; i < num_slice; ++i) {
-            // +
-            frame_array.push_back(frame);
-            position(2) = double(i) * slice_z + center_z;
-            position_array.push_back(position);
-            // -
-            frame_array.push_back(frame);
-            position(2) = -double(i) * slice_z + center_z;
-            position_array.push_back(position);
-        }
-        position(2) = center_z;
-
-        // vertical grasp pose
-        frame = frame * rot_x;
-        frame_array.push_back(frame);
-        position_array.push_back(position);
-
-        for(int i = 1; i < num_slice; ++i) {
-            // +
-            frame_array.push_back(frame);
-            position(0) = double(i) * slice_x + center_x;
-            position_array.push_back(position);
-            // -
-            frame_array.push_back(frame);
-            position(0) = -double(i) * slice_x + center_x;
-            position_array.push_back(position);
-        }
-        position(0) = center_x;
-    }
-
-    // grasp along +z-axis 
-    {
-        Eigen::Matrix3d frame = Eigen::Matrix3d::Identity();
-        Eigen::Vector3d position;
-        position << center_x, center_y, center_z;
-        Eigen::Matrix3d rot_y;
-        rot_y = Eigen::AngleAxisd(-M_PI/2.0, Eigen::Vector3d::UnitY());
-        frame = frame * rot_y;
-        position(2) =  -size_z / 2.0 + center_z;
-        frame_array.push_back(frame);
-        position_array.push_back(position);
-
-        for(int i = 1; i < num_slice; ++i) {
-            // +
-            frame_array.push_back(frame);
-            position(0) = double(i) * slice_x + center_x;
-            position_array.push_back(position);
-            // -
-            frame_array.push_back(frame);
-            position(0) = -double(i) * slice_x + center_x;
-            position_array.push_back(position);
-        }
-        position(0) = center_x;
-
-        // vertical grasp pose
-        frame = frame * rot_x;
-        frame_array.push_back(frame);
-        position_array.push_back(position);
-        for(int i = 1; i < num_slice; ++i) {
-            // +
-            frame_array.push_back(frame);
-            position(1) = double(i) * slice_y + center_y;
-            position_array.push_back(position);
-            // -
-            frame_array.push_back(frame);
-            position(1) = -double(i) * slice_y + center_y;
-            position_array.push_back(position);
-        }
-        position(1) = center_y;
-    }
-    // grasp along -z-axis 
-    {
-        Eigen::Matrix3d frame = Eigen::Matrix3d::Identity();
-        Eigen::Vector3d position;
-        position << center_x, center_y, center_z;
-        Eigen::Matrix3d rot_y;
-        rot_y = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitY());
-        frame = frame * rot_y;
-        position(2) =  size_z / 2.0 + center_z;
-        frame_array.push_back(frame);
-        position_array.push_back(position);
-
-        for(int i = 1; i < num_slice; ++i) {
-            // +
-            frame_array.push_back(frame);
-            position(0) = double(i) * slice_x + center_x;
-            position_array.push_back(position);
-            // -
-            frame_array.push_back(frame);
-            position(0) = -double(i) * slice_x + center_x;
-            position_array.push_back(position);
-        }
-        position(0) = center_x;
-
-        // vertical grasp pose
-        frame = frame * rot_x;
-        frame_array.push_back(frame);
-        position_array.push_back(position);
-
-        for(int i = 1; i < num_slice; ++i) {
-            // +
-            frame_array.push_back(frame);
-            position(1) = double(i) * slice_y + center_y;
-            position_array.push_back(position);
-            // -
-            frame_array.push_back(frame);
-            position(1) = -double(i) * slice_y + center_y;
-            position_array.push_back(position);
-        }
-        position(1) = center_y;
-    }
-    return;
-}
-
-
-// generate grasp pose
 void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
-               std::string filename, double scale, int num_angle, int num_slice) {
+               std::string filename, double scale, double finger_len, int num_angle, int num_slice) {
     // parse information
     double size_r, size_h, center_h;
     AXIS axis;
@@ -383,6 +112,12 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
     center_h *= scale;
 
     double slice_h = size_h / (2.0 * double(num_slice));
+    
+    // retreat
+    double retreat_r = -size_r + finger_len;
+    double retreat_h = -size_h + finger_len;
+    Eigen::Vector3d retreat_vector(1.f, 0.f, 0.f);
+
     // choose axis
     Eigen::Matrix3d w_rot = Eigen::Matrix3d::Identity();
     switch (axis)
@@ -409,47 +144,174 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
         Eigen::Matrix3d frame = Eigen::Matrix3d::Identity();
         Eigen::Vector3d position = Eigen::Vector3d::Zero();
         Eigen::Vector3d rot_position;
-        position(2) = center_h;
         
         position(0) =  -size_r / 2.0;
-        frame = w_rot * rot_z * frame;
-        rot_position = w_rot * rot_z * position;
-        frame_array.push_back(frame);
-        position_array.push_back(rot_position);
-
         // add slices
-        for(int i = 1; i < num_slice; ++i) {
-            // +
-            frame_array.push_back(frame);
-            position(2) = double(i) * slice_h + center_h;
-            rot_position = w_rot * rot_z * position;
-            position_array.push_back(rot_position);
-            // -
-            frame_array.push_back(frame);
-            position(2) = -double(i) * slice_h + center_h;
-            rot_position = w_rot * rot_z * position;
-            position_array.push_back(rot_position);
+        double signs = {1.0f, -1.0f};
+        for(int j = 0; j < num_slice; ++j) {
+            for(int k = 0; k < 2; ++k) {
+                frame = w_rot * rot_z;
+                frame_array.push_back(frame);
+                position(2) = signs[k] * double(i) * slice_h + center_h;
+                rot_position = frame * position;
+                // retreat
+                double retreat_len;
+                if(size_r > finger_len) {
+                    retreat_len = 0.f;
+                }
+                else {
+                    retreat_len = retreat_r;
+                }
+                rot_position += frame * retreat_len * retreat_vector;
+                position_array.push_back(rot_position);
+                if(j == 0) break;
+            }
         }
 
-        // vertical 1
-        Eigen::Matrix3d frame_v1 = Eigen::Matrix3d::Identity();
-        Eigen::Vector3d position_v1 = Eigen::Vector3d::Zero();
-        position_v1(2) =  size_h / 2.0 + center_h;
-        rot_y = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitY());
-        frame_v1 = w_rot * rot_z * rot_y;
-        position_v1 = w_rot * rot_z * position_v1;
-        frame_array.push_back(frame_v1);
-        position_array.push_back(position_v1);
-
-        // vertical 2
-        Eigen::Matrix3d frame_v2 = Eigen::Matrix3d::Identity();
-        Eigen::Vector3d position_v2 = Eigen::Vector3d::Zero();
-        position_v2(2) =  -size_h / 2.0 + center_h;
-        rot_y = Eigen::AngleAxisd(-M_PI/2.0, Eigen::Vector3d::UnitY());
-        frame_v2 = w_rot * rot_z * rot_y;
-        position_v2 = w_rot * rot_z * position_v2;
-        frame_array.push_back(frame_v2);
-        position_array.push_back(position_v2);
+        // vertical
+        position = Eigen::Vector3d::Zero();;
+        for(int k = 0; k < 2; ++k) {
+            rot_y = Eigen::AngleAxisd(signs[k] * M_PI/2.0, Eigen::Vector3d::UnitY());
+            frame = w_rot * rot_z * rot_y;
+            // retreat
+            if(size_h > finger_len) 
+                position(0) =  size_h / 2.0 + center_h;
+            else
+                position(0) = size_h / 2.0 + center_h - retreat_h;
+            rot_position = frame * position;
+            frame_array.push_back(frame);
+            position_array.push_back(rot_position);
+        }
     }
     return;
+}
+
+// ReIm: generate grasp pose
+void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
+               std::string filename, double scale, double finger_len, int num_slice) {
+    // parse information
+    double size_x, size_y, size_z;
+    double center_x, center_y, center_z;
+    box_parse(filename, size_x, size_y, size_z, center_x, center_y, center_z);
+    
+    // rescale size & centers
+    size_x *= scale;
+    size_y *= scale;
+    size_z *= scale;
+    center_x *= scale;
+    center_y *= scale;
+    center_z *= scale;
+    double sizes[3] = {size_x, size_y, size_z};
+    double centers[3] = {center_x, center_y, center_z};
+
+    // slices
+    double slice_x = size_x / (2.0*(double)num_slice);
+    double slice_y = size_y / (2.0*(double)num_slice);
+    double slice_z = size_z / (2.0*(double)num_slice);
+    Eigen::Vector3d slice_vector_x(0.0, slice_x, 0.0);
+    Eigen::Vector3d slice_vector_y(0.0, slice_x, 0.0);
+    Eigen::Vector3d slice_vector_z(0.0, slice_y, 0.0);
+    VectorArray slice_vectors;
+    slice_vectors.push_back(slice_vector_x);
+    slice_vectors.push_back(slice_vector_y);
+    slice_vectors.push_back(slice_vector_z);
+
+    // retreat distance
+    double retreat_x = -size_x + finger_len;
+    double retreat_y = -size_y + finger_len;
+    double retreat_z = -size_z + finger_len;
+    double retreats[3] = {retreat_x, retreat_y, retreat_z};
+
+    // signs
+    double signs[2] = {1., -1.};
+
+    // frames & poses
+    MatrixArray frames;
+    VectorArray poses;
+    frames.reserve(6);
+    Eigen::Matrix3d frame = Eigen::Matrix3d::Identity();
+    Eigen::Matrix3d rot;
+    // +x
+    frames[0] = frame;
+    // -x
+    rot = Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitZ());
+    frame = frame * rot;
+    frames[1] = frame;
+    // +y
+    rot = Eigen::AngleAxisd(-M_PI/2.0, Eigen::Vector3d::UnitZ());
+    frame = frame * rot;
+    frames[2] = frame;
+    // -y
+    rot = Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitZ());
+    frame = frame * rot;
+    frames[3] = frame;
+    // +z
+    rot = Eigen::AngleAxisd(-M_PI/2.0, Eigen::Vector3d::UnitX());
+    frame = frame * rot;
+    frames[4] = frame;
+    // -z
+    rot = Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitX());
+    frame = frame * rot;
+    frames[5] = frame;
+
+    // poses
+    for(int di = 0; di < 3; ++di) {
+        for(int si = 0; si < 2; ++si) {
+            Eigen::Vector3d position;
+            // position
+            position << center_x, center_y, center_z;  // Assign center
+            position[di] = signs[si] * sizes[di] / 2.0 + centers[di];
+            // direction
+            poses.push_back(position);
+        }
+    }
+
+    // slice & rot
+    MatrixArray rot_xs;
+    Eigen::Matrix3d id_x = Eigen::Matrix3d::Identity();
+    Eigen::Matrix3d rot_x;
+    rot_x = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitX());
+    rot_xs.push_back(id_x);
+    rot_xs.push_back(rot_x);
+
+    Eigen::Vector3d shape_size;
+    shape_size << size_x, size_y, size_z;
+
+    for(int i = 0; i < 6; ++i) {
+        Eigen::Matrix3d frame_i = frames[i];
+        Eigen::Vector pose_i = poses[i];
+        for(int j = 0; j < 2; ++j) {
+            Eigen::Matrix3d local_rot = rot_xs[j];
+            Eigen::Matrix3d frame_ij = frame_i * local_rot;
+            Eigen::Vector3d pose_ij;
+            // slices
+            for(int k = 0; k < num_slice; ++k) {
+                Eigen::Vector3d slice_vector;
+                slice_vector = slice_vectors[k];
+                for(int s = 0; s < 2; ++s) {
+                    pose_ij = pose_i + signs[s] * float(k) * frame_ij * slice_vector;
+                    // retreat
+                    Eigen::Matrix3d retreat_vector(1.0, 0.0, 0.0);
+                    retreat_vector = frame_ij * retreat_vector;
+                    // find retreat direction
+                    for(int r = 0; r < 3; ++r) {
+                        if(retreat_vector(r) > 0.0001f) {
+                            double retreat_len = 0.f;
+                            if(finger_len < sizes[r]) {
+                                // no retreat
+                                retreat_len = 0.f;
+                            }
+                            else {
+                                retreat_len = retreats[r];
+                            }
+                            pose_ij = pose_ij - retreat_vector * retreat_len;
+                        }
+                    }
+                    position_array.push_back(pose_ij);
+                    frame_array.push_back(frame_ij);
+                    if(k == 0) break;  // not repeating k==0
+                }
+            }
+        }
+    }
 }
