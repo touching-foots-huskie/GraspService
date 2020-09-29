@@ -283,7 +283,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
             // slices
             for(int k = 0; k < num_slice; ++k) {
                 Eigen::Vector3d slice_vector;
-                slice_vector = slice_vectors[k];
+                slice_vector = slice_vectors[i/2];
                 for(int s = 0; s < 2; ++s) {
                     pose_ij = pose_i + signs[s] * double(k) * frame_ij * slice_vector;
                     // retreat
