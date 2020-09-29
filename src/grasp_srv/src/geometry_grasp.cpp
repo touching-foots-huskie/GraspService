@@ -175,9 +175,9 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
             frame = w_rot * rot_z * rot_y;
             // retreat
             if(size_h > finger_len) 
-                position(0) =  size_h / 2.0 + center_h;
+                position(0) =  -size_h/2.0 - center_h;
             else
-                position(0) = size_h / 2.0 + center_h - retreat_h;
+                position(0) = -size_h/2.0 - center_h - retreat_h;
             rot_position = frame * position;
             frame_array.push_back(frame);
             position_array.push_back(rot_position);
