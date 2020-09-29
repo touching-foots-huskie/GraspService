@@ -330,5 +330,5 @@ catkin_install_python(PROGRAMS scripts/grasp_test.py
                                scripts/gripper_transfer.py
                       DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-install(grasp_gen_server grasp_gen_server 
+install(TARGET grasp_gen_server 
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
