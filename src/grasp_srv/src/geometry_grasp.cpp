@@ -301,7 +301,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
             Eigen::Vector3i num_slice_vector = slice_vector.cast<int>();
             slice_vector = slice_vector * slice_step; 
             num_slice_vector = num_slice_vector.cwiseProduct(num_slices);
-            
+            std::cout << num_slice_vector << std::endl;
             for(int k = 0; k < num_slice_vector.cwiseAbs().maxCoeff(); ++k) {
                 for(int s = 0; s < 2; ++s) {
                     pose_ij = pose_i + signs[s] * double(k) * slice_vector;
