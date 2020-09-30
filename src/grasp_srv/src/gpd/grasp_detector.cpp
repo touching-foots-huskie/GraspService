@@ -799,34 +799,28 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         
         // Start Parse
         std::vector<bool> block_list;
+
+        // Initialization
+        box_enable_ = false;
+        can_enable_ = false;
+        bowl_enable_ = false;
+        gpd_enable_ = false;
+        pre_defined_enable_ = false;
+        block_list = {false, false, false, false, false, false, false, false, false, false, false, false};
+
         if(grasp_mode_json.contains(model_name)) {
             // parse type
             json grasp_for_model = grasp_mode_json[model_name].get<json>();
             auto basic_types = grasp_for_model["basic_type"].get<std::vector<std::string>>();
             for(auto basic_type : basic_types) {
                 if(basic_type == "box") box_enable_ = true;
-                else box_enable_ = false;
                 if(basic_type == "can") can_enable_ = true;
-                else can_enable_ = false;
                 if(basic_type == "bowl") bowl_enable_ = true;
-                else bowl_enable_ = false;
                 if(basic_type == "gpd") gpd_enable_ = true;
-                else gpd_enable_ = false;
                 if(basic_type == "pre_defined") pre_defined_enable_ = true;
-                else pre_defined_enable_ = false;
             }
             // parse block_list
             block_list = grasp_for_model["block_list"].get<std::vector<bool>>();
-        }
-        else {
-            // intelligent_name_parse
-            // default box mode
-            box_enable_ = true;
-            can_enable_ = false;
-            bowl_enable_ = false;
-            gpd_enable_ = true;
-            pre_defined_enable_ = false;
-            block_list = {false, false, false, false, false, false, false, false, false, false, false, false};
         }
         
         double model_scale = req.object_poses.object_scales[obj_i];
