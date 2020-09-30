@@ -1,1 +1,1602 @@
-{"c_lego_duplo": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "tuna_fish_can": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "f_lego_duplo": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "correction_fuid": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "wood_block": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "bowl": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "h_cups": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "b_lego_duplo": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "scissors": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "redbull": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "extra_large_clamp": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "b_cups": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "knife": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "c_cups": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "a_lego_duplo": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "rubiks_cube": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "f_cups": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "potted_meat_can": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "green_arrow": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "conditioner": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "hello_kitty_cup": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "master_chef_can": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "cracker_box": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "nine_hole_peg_test": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "wooden_puzzle1": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "doraemon_spoon": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "wooden_puzzle3": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "wooden_puzzle2": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "pigeon": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "prism": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "phillips_screwdriver": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "pitcher_base": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "mug": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "e_toy_airplane": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "g_lego_duplo": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "sugar_box": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "cup_small": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "medium_clamp": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "d_lego_duplo": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "banana": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "tea_can1": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "foam_brick": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "fork": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "plate": {"block_list": [true, false, true, true, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "b_toy_airplane": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "large_clamp": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "j_cups": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "object": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "d_cups": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "power_drill": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "pudding_box": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "pan_tefal": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "doraemon_cup": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "large_marker": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "mustard_bottle": {"block_list": [false, false, false, false, false, false, false, false, true, true, true, true], "basic_types": ["box"], "hard": false}, "a_cups": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "pepsi": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "a_toy_airplane": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "e_lego_duplo": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "i_cups": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "red_car": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "bleach_cleanser": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "gelatin_box": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "spoon": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "flat_screwdriver": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "green_car": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "e_cups": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "pure_zhen": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "bowl_a": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "adjustable_wrench": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "hello_kitty_bowl": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "d_toy_airplane": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "hammer": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "doraemon_bowl": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "g_cups": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "hello_kitty_plate": {"block_list": [true, false, true, true, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "realsense_box": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "tomato_soup_can": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["can"], "hard": false}, "jenga": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}, "c_toy_airplane": {"block_list": [false, false, false, false, false, false, false, false, false, false, false, false], "basic_types": ["box"], "hard": false}}
+{
+    "c_lego_duplo": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "tuna_fish_can": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "f_lego_duplo": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "correction_fuid": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "wood_block": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "bowl": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "h_cups": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "b_lego_duplo": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "scissors": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "redbull": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "extra_large_clamp": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "b_cups": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "knife": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "c_cups": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "a_lego_duplo": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "rubiks_cube": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "f_cups": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "potted_meat_can": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "green_arrow": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "conditioner": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "hello_kitty_cup": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "master_chef_can": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "cracker_box": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "nine_hole_peg_test": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "wooden_puzzle1": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "doraemon_spoon": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "wooden_puzzle3": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "wooden_puzzle2": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "pigeon": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "prism": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "phillips_screwdriver": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "pitcher_base": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "mug": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "e_toy_airplane": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "g_lego_duplo": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "sugar_box": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "cup_small": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "medium_clamp": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "d_lego_duplo": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "banana": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "tea_can1": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "foam_brick": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "fork": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "plate": {
+        "block_list": [
+            true,
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "b_toy_airplane": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "large_clamp": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "j_cups": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "object": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "d_cups": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "power_drill": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "pudding_box": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "pan_tefal": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "doraemon_cup": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "large_marker": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "mustard_bottle": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "a_cups": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "pepsi": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "a_toy_airplane": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "e_lego_duplo": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "i_cups": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "red_car": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "bleach_cleanser": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "gelatin_box": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "spoon": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "flat_screwdriver": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "green_car": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "e_cups": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "pure_zhen": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "bowl_a": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "adjustable_wrench": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "hello_kitty_bowl": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "d_toy_airplane": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "hammer": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "doraemon_bowl": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "g_cups": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "hello_kitty_plate": {
+        "block_list": [
+            true,
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "realsense_box": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "tomato_soup_can": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "can"
+        ],
+        "hard": false
+    },
+    "jenga": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    },
+    "c_toy_airplane": {
+        "block_list": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ],
+        "basic_types": [
+            "box"
+        ],
+        "hard": false
+    }
+}
