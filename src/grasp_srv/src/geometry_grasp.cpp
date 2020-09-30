@@ -74,7 +74,7 @@ void can_parse(std::string filename, double& size_r, double& size_h,
     gap_xz = std::fabs(size_x - size_z);
 
     if((gap_xy < gap_yz) && (gap_xy < gap_xz)) {
-        size_r = size_x;
+        size_r = (size_x + size_y) / 2.0;  // average radius
         size_h = size_z;
         center_h = (z_max + z_min) / 2.0;
         axis = z_axis;
@@ -82,7 +82,7 @@ void can_parse(std::string filename, double& size_r, double& size_h,
     }
 
     if((gap_yz < gap_xy) && (gap_yz < gap_xz)) {
-        size_r = size_y;
+        size_r = (size_y + size_z) / 2.0;  // average radius
         size_h = size_x;
         center_h = (x_max + x_min) / 2.0;
         axis = x_axis;
@@ -90,7 +90,7 @@ void can_parse(std::string filename, double& size_r, double& size_h,
     }
 
     if((gap_xz < gap_xy) && (gap_xz < gap_yz)) {
-        size_r = size_x;
+        size_r = (size_x + size_z) / 2.0;
         size_h = size_y;
         center_h = (y_max + y_min) / 2.0;
         axis = y_axis;
