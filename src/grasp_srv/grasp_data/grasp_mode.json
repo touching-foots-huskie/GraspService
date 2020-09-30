@@ -8,5 +8,10 @@
         "basic_type" : ["box"],
         "block_list" : [false, false, false, false, false, false, false, false, true, true, true, true],
         "hard" : false 
+    },
+    "plate": {
+        "basic_type" : ["can"],
+        "block_list" : [true, false, true, true, false, false, false, false, false, false, false, false],
+        "hard" : false 
     }
 }
