@@ -828,12 +828,6 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
             block_list = {false, false, false, false, false, false, false, false, false, false, false, false};
         }
         
-        std::cout << "Grasp Mode: " << grasp_mode << std::endl;
-        std::cout << "Box : " << box_enable_ << std::endl;
-        std::cout << "Can : " << can_enable_ << std::endl;
-        std::cout << "Pre : " << pre_defined_enable_ << std::endl;
-        std::cout << "Gpd : " << gpd_enable_ << std::endl;
-
         double model_scale = req.object_poses.object_scales[obj_i];
         // Get Object Pose  
         geometry_msgs::Pose object_pose = req.object_poses.object_poses[obj_i];
