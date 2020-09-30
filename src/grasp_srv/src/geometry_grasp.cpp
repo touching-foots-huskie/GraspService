@@ -207,7 +207,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
 
 // ReIm: generate grasp pose
 void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::string filename, 
-               double scale, std::vector<bool>& block_list, double finger_len, double slice_thresh, int num_slice) {
+               double scale, std::vector<bool>& block_list, double finger_len, double slice_thresh, double slice_step) {
     // parse information
     double size_x, size_y, size_z;
     double center_x, center_y, center_z;
@@ -224,10 +224,10 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
     double centers[3] = {center_x, center_y, center_z};
 
     // slices
-    double slice_x = size_x / (2.0*(double)num_slice);
-    double slice_y = size_y / (2.0*(double)num_slice);
-    double slice_z = size_z / (2.0*(double)num_slice);
-    Eigen::Vector3d slice_sizes(slice_x, slice_y, slice_z);
+    int num_slice_x = 2 * int(size_x / slice_step);
+    int num_slice_y = 2 * int(size_y / slice_step);
+    int num_slice_z = 2 * int(size_z / slice_step);
+    Eigen::Vector3i num_slices(num_slice_x, num_slice_y, num_slice_z);
 
     // retreat distance
     double retreat_x = -size_x + finger_len;
@@ -296,10 +296,13 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
             Eigen::Matrix3d frame_ij = frame_i * local_rot;
             Eigen::Vector3d pose_ij;
             // slices
-            Eigen::Vector3d slice_vector(0.0, 0.0, 1.0);
+            Eigen::Vector3d slice_vector(0., 0., 1.);
             slice_vector = frame_ij * slice_vector;
-            slice_vector = slice_vector.cwiseProduct(slice_sizes);
-            for(int k = 0; k < num_slice; ++k) {
+            Eigen::Vector3i num_slice_vector = slice_vector.cast<int>();
+            slice_vector = slice_vector * slice_step; 
+            num_slice_vector = num_slice_vector.cwiseProduct(num_slices);
+            
+            for(int k = 0; k < num_slice_vector.cwiseAbs().maxCoeff(); ++k) {
                 for(int s = 0; s < 2; ++s) {
                     pose_ij = pose_i + signs[s] * double(k) * slice_vector;
                     // retreat
