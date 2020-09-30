@@ -1057,8 +1057,8 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     T.translate(bottom).rotate(frame).scale(relative_scale);
     Eigen::Matrix4d T_matrix = T.matrix();
     // update frame & bottom
-    frame = T_matrix.block_list(0, 0, 3, 3);
-    bottom = T_matrix.block_list(0, 3, 3, 1);
+    frame = T_matrix.block(0, 0, 3, 3);
+    bottom = T_matrix.block(0, 3, 3, 1);
     
     Eigen::Vector3d raw_bottom = bottom;
     Eigen::Vector3d comp_vector(-comp_distance, 0.0, 0.0);
