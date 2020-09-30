@@ -101,7 +101,7 @@ void can_parse(std::string filename, double& size_r, double& size_h,
 
 // generate grasp pose
 void can_grasp(MatrixArray& frame_array, VectorArray& position_array, std::string filename, 
-               double scale, std::vector<bool>& block_list, double finger_len, double slice_thresh, int num_angle, int num_slice) {
+               double scale, std::vector<bool>& block_list, double finger_len, double slice_thresh, int num_angle, double slice_step) {
     // parse information
     double size_r, size_h, center_h;
     AXIS axis;
@@ -111,8 +111,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
     size_h *= scale;
     center_h *= scale;
 
-    double slice_h = size_h / (2.0 * double(num_slice));
-    
+    int num_slice_h = int(size_h / (2.0*slice_step));
     // retreat
     double retreat_r = -size_r + finger_len;
     double retreat_h = -size_h + finger_len;
@@ -161,11 +160,11 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
         for(int w = 0; w < 2; ++w) {
             if(block_list[w]) continue;  // block certain direction
             Eigen::Matrix3d local_rot = rot_xs[w];
-            for(int j = 0; j < num_slice; ++j) {
+            for(int j = 0; j < num_slice_h; ++j) {
                 for(int k = 0; k < 2; ++k) {
                     frame = w_rot * rot_z * local_rot;
                     frame_array.push_back(frame);
-                    position(2) = signs[k] * double(j) * slice_h + center_h;
+                    position(2) = signs[k] * double(j) * slice_step + center_h;
                     rot_position = frame * position;
                     // retreat
                     double retreat_len;

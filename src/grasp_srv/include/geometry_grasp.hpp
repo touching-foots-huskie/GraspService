@@ -36,6 +36,6 @@ block_list: (3, ) horizontal block, top-down block,  bottom-up block
 */
 void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
                std::string filename, double scale, std::vector<bool>& block_list,
-               double finger_len=0.035, double slice_thresh=0.05, int num_angle=8, int num_slice=2);
+               double finger_len=0.035, double slice_thresh=0.05, int num_angle=8, double slice_step=0.01);
 
 #endif
