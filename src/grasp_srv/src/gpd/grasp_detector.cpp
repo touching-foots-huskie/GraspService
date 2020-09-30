@@ -822,6 +822,54 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
             // parse block_list
             block_list = grasp_for_model["block_list"].get<std::vector<bool>>();
         }
+        else {
+            // Intellgient parse
+            // box proto-type
+            if ((model_name.find("box") != std::string::npos)  ||
+                (model_name.find("cube") != std::string::npos) ||
+                (model_name.find("block") != std::string::npos)) {
+                box_enable_ = true;
+                can_enable_ = false;
+                bowl_enable_ = false;
+                gpd_enable_ = false;
+                pre_defined_enable_ = false;
+                block_list = {false, false, false, false, false, false, false, false, false, false, false, false};
+            }
+            else if((model_name.find("can") != std::string::npos) || 
+                    (model_name.find("cup") != std::string::npos)) {
+                box_enable_ = false;
+                can_enable_ = true;
+                bowl_enable_ = false;
+                gpd_enable_ = false;
+                pre_defined_enable_ = false;
+                block_list = {false, false, false, false, false, false, false, false, false, false, false, false};
+            }
+            else if(model_name.find("plate") != std::string::npos) {
+                box_enable_ = false;
+                can_enable_ = true;
+                bowl_enable_ = false;
+                gpd_enable_ = false;
+                pre_defined_enable_ = false;
+                block_list = {true, false, true, true, false, false, false, false, false, false, false, false};
+            }
+            else if(model_name.find("bottle") != std::string::npos) {
+                box_enable_ = true;
+                can_enable_ = false;
+                bowl_enable_ = false;
+                gpd_enable_ = false;
+                pre_defined_enable_ = false;
+                block_list = {false, false, false, false, false, false, false, false, true, true, true, true};
+            }
+            else {
+                // know nothing
+                box_enable_ = true;
+                can_enable_ = false;
+                bowl_enable_ = false;
+                gpd_enable_ = true;
+                pre_defined_enable_ = false;
+                block_list = {false, false, false, false, false, false, false, false, false, false, false, false};
+            }
+        }
         
         double model_scale = req.object_poses.object_scales[obj_i];
         // Get Object Pose  
