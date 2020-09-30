@@ -224,9 +224,9 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
     double centers[3] = {center_x, center_y, center_z};
 
     // slices
-    int num_slice_x = 2 * int(size_x / slice_step);
-    int num_slice_y = 2 * int(size_y / slice_step);
-    int num_slice_z = 2 * int(size_z / slice_step);
+    int num_slice_x = int(size_x /(2.0 * slice_step));
+    int num_slice_y = int(size_y /(2.0 * slice_step));
+    int num_slice_z = int(size_z /(2.0 * slice_step));
     Eigen::Vector3i num_slices(num_slice_x, num_slice_y, num_slice_z);
 
     // retreat distance
@@ -301,7 +301,6 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
             Eigen::Vector3i num_slice_vector = slice_vector.cast<int>();
             slice_vector = slice_vector * slice_step; 
             num_slice_vector = num_slice_vector.cwiseProduct(num_slices);
-            std::cout << num_slice_vector << std::endl;
             for(int k = 0; k < num_slice_vector.cwiseAbs().maxCoeff(); ++k) {
                 for(int s = 0; s < 2; ++s) {
                     pose_ij = pose_i + signs[s] * double(k) * slice_vector;
