@@ -5,7 +5,7 @@
         "hard" : false 
     },
     "mustard_bottle": {
-        "basic_type" : ["box", "gpd"],
+        "basic_type" : ["box"],
         "block_list" : [false, false, false, false, false, false, false, false, true, true, true, true],
         "hard" : false 
     }
