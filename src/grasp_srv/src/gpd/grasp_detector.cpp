@@ -798,7 +798,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         grasp_mode_file.close();
         
         // Start Parse
-        std::vector<bool> block_list
+        std::vector<bool> block_list;
         if(grasp_mode_json.contains(model_name)) {
             // parse type
             auto basic_types = grasp_mode_json["mode_name"]["basic_type"].get<std::vector<std::string>>();
