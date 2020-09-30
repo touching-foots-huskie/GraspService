@@ -801,7 +801,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         std::vector<bool> block_list;
         if(grasp_mode_json.contains(model_name)) {
             // parse type
-            json grasp_for_model = grasp_mode_json["mode_name"].get<json>();
+            json grasp_for_model = grasp_mode_json[model_name].get<json>();
             auto basic_types = grasp_for_model["basic_type"].get<std::vector<std::string>>();
             for(auto basic_type : basic_types) {
                 if(basic_type == "box") box_enable_ = true;
