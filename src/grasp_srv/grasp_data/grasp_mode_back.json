@@ -1,0 +1,12 @@
+{
+    "c_lego_duplo": {
+        "basic_type" : ["box", "gpd"],
+        "block_list" : [false, false, false, false, false, false, false, false, false, false, false, false],
+        "hard" : false 
+    },
+    "mustard_bottle": {
+        "basic_type" : ["box", "gpd"],
+        "block_list" : [false, false, false, false, false, false, false, false, false, false, false, false],
+        "hard" : false 
+    }
+}

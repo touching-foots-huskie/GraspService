@@ -289,6 +289,7 @@ class GraspDetector {
     bool pre_defined_enable_;
     bool box_enable_;
     bool can_enable_;
+    bool bowl_enable_;
     bool flip_enable_;
     bool gpd_enable_;
 };

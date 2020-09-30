@@ -798,22 +798,34 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         grasp_mode_file.close();
         int grasp_mode;
         if(grasp_mode_json.contains(model_name)) {
-            grasp_mode = grasp_mode_json[model_name];
+            // parse type
+            auto basic_types = grasp_mode_json["mode_name"]["basic_type"].get<std::vector<std::string>>();
+            for(auto basic_type : basic_types) {
+                if(basic_type == "box") box_enable_ = true;
+                else box_enable_ = false;
+                if(basic_type == "can") can_enable_ = true;
+                else can_enable_ = false;
+                if(basic_type == "bowl") bowl_enable_ = true;
+                else bowl_enable_ = false;
+                if(basic_type == "gpd") gpd_enable_ = true;
+                else gpd_enable_ = false;
+                if(basic_type == "pre_defined") pre_defined_enable_ = true;
+                else pre_defined_enable_ = false;
+            }
+            // parse block_list
+            auto block_list = grasp_mode_json["mode_name"]["block_list"].get<std::vector<bool>>();
         }
         else {
-            grasp_mode = 9;  // box + gpd
+            // intelligent_name_parse
+            // default box mode
+            box_enable_ = true;
+            can_enable_ = false;
+            bowl_enable_ = false;
+            gpd_enable_ = true;
+            pre_defined_enable_ = false;
+            std::vector<bool> block_list = {false, false, false, false, false, false, false, false, false, false, false, false};
         }
         
-        // parse
-        if(grasp_mode & 1) box_enable_ = true;
-        else box_enable_ = false;
-        if(grasp_mode & 2) can_enable_ = true;
-        else can_enable_ = false;
-        if(grasp_mode & 4) pre_defined_enable_ = true;
-        else pre_defined_enable_ = false;
-        if(grasp_mode & 8) gpd_enable_ = true;
-        else gpd_enable_ = false;
-
         std::cout << "Grasp Mode: " << grasp_mode << std::endl;
         std::cout << "Box : " << box_enable_ << std::endl;
         std::cout << "Can : " << can_enable_ << std::endl;
@@ -847,10 +859,10 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 VectorArray position_array;
                 MatrixArray frame_array;
                 if(box_enable_) {
-                    box_grasp(frame_array, position_array, pcd_file_name, model_scale);
+                    box_grasp(frame_array, position_array, pcd_file_name, model_scale, block_list);
                 }
                 if(can_enable_) {
-                    can_grasp(frame_array, position_array, pcd_file_name, model_scale);
+                    can_grasp(frame_array, position_array, pcd_file_name, model_scale, block_list);
                 }
                 // generate msg
                 for(int gi = 0; gi < frame_array.size(); ++gi) {
@@ -1045,8 +1057,8 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     T.translate(bottom).rotate(frame).scale(relative_scale);
     Eigen::Matrix4d T_matrix = T.matrix();
     // update frame & bottom
-    frame = T_matrix.block(0, 0, 3, 3);
-    bottom = T_matrix.block(0, 3, 3, 1);
+    frame = T_matrix.block_list(0, 0, 3, 3);
+    bottom = T_matrix.block_list(0, 3, 3, 1);
     
     Eigen::Vector3d raw_bottom = bottom;
     Eigen::Vector3d comp_vector(-comp_distance, 0.0, 0.0);

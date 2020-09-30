@@ -101,7 +101,7 @@ void can_parse(std::string filename, double& size_r, double& size_h,
 
 // generate grasp pose
 void can_grasp(MatrixArray& frame_array, VectorArray& position_array, std::string filename, 
-               double scale, double finger_len, double slice_thresh, int num_angle, int num_slice) {
+               double scale, std::vector<bool>& block_list, double finger_len, double slice_thresh, int num_angle, int num_slice) {
     // parse information
     double size_r, size_h, center_h;
     AXIS axis;
@@ -148,29 +148,47 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
         position(0) =  -size_r / 2.0;
         // add slices
         double signs[2] = {1.0f, -1.0f};
-        for(int j = 0; j < num_slice; ++j) {
-            for(int k = 0; k < 2; ++k) {
-                frame = w_rot * rot_z;
-                frame_array.push_back(frame);
-                position(2) = signs[k] * double(j) * slice_h + center_h;
-                rot_position = frame * position;
-                // retreat
-                double retreat_len;
-                if(size_r > finger_len) {
-                    retreat_len = 0.;
+
+        // local rot
+        MatrixArray rot_xs;
+        Eigen::Matrix3d id_x = Eigen::Matrix3d::Identity();
+        Eigen::Matrix3d rot_x;
+        rot_x = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitX());
+        rot_xs.push_back(id_x);
+        rot_xs.push_back(rot_x);
+        // deciding if block horizontal pose
+        
+        for(int w = 0; w < 2; ++w) {
+            if(block_list[w]) continue;  // block certain direction
+            Eigen::Matrix3d local_rot = rot_xs[w];
+            for(int j = 0; j < num_slice; ++j) {
+                for(int k = 0; k < 2; ++k) {
+                    frame = w_rot * rot_z * local_rot;
+                    frame_array.push_back(frame);
+                    position(2) = signs[k] * double(j) * slice_h + center_h;
+                    rot_position = frame * position;
+                    // retreat
+                    double retreat_len;
+                    if(size_r > finger_len) {
+                        retreat_len = 0.;
+                    }
+                    else {
+                        retreat_len = retreat_r;
+                    }
+                    rot_position -= frame * retreat_len * retreat_vector;
+                    position_array.push_back(rot_position);
+                    if(j == 0 || w == 1) break;
                 }
-                else {
-                    retreat_len = retreat_r;
-                }
-                rot_position -= frame * retreat_len * retreat_vector;
-                position_array.push_back(rot_position);
-                if(j == 0) break;
+                if(w == 1) break;
             }
         }
+        
+        
 
         // vertical
         position = Eigen::Vector3d::Zero();;
         for(int k = 0; k < 2; ++k) {
+            if(block_list[k+2]) continue;
             rot_y = Eigen::AngleAxisd(signs[k] * M_PI/2.0, Eigen::Vector3d::UnitY());
             frame = w_rot * rot_z * rot_y;
             // retreat
@@ -189,7 +207,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
 
 // ReIm: generate grasp pose
 void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::string filename, 
-               double scale, double finger_len, double slice_thresh, int num_slice) {
+               double scale, std::vector<bool>& block_list, double finger_len, double slice_thresh, int num_slice) {
     // parse information
     double size_x, size_y, size_z;
     double center_x, center_y, center_z;
@@ -271,6 +289,9 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
         Eigen::Matrix3d frame_i = frames[i];
         Eigen::Vector3d pose_i = poses[i];
         for(int j = 0; j < 2; ++j) {
+            // block grasp pose
+            if(block_list[2 * i + j]) continue;
+
             Eigen::Matrix3d local_rot = rot_xs[j];
             Eigen::Matrix3d frame_ij = frame_i * local_rot;
             Eigen::Vector3d pose_ij;
