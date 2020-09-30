@@ -796,7 +796,9 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         json grasp_mode_json;
         grasp_mode_file >> grasp_mode_json; 
         grasp_mode_file.close();
-        int grasp_mode;
+        
+        // Start Parse
+        std::vector<bool> block_list
         if(grasp_mode_json.contains(model_name)) {
             // parse type
             auto basic_types = grasp_mode_json["mode_name"]["basic_type"].get<std::vector<std::string>>();
@@ -813,7 +815,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 else pre_defined_enable_ = false;
             }
             // parse block_list
-            auto block_list = grasp_mode_json["mode_name"]["block_list"].get<std::vector<bool>>();
+            block_list = grasp_mode_json["mode_name"]["block_list"].get<std::vector<bool>>();
         }
         else {
             // intelligent_name_parse
@@ -823,7 +825,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
             bowl_enable_ = false;
             gpd_enable_ = true;
             pre_defined_enable_ = false;
-            std::vector<bool> block_list = {false, false, false, false, false, false, false, false, false, false, false, false};
+            block_list = {false, false, false, false, false, false, false, false, false, false, false, false};
         }
         
         std::cout << "Grasp Mode: " << grasp_mode << std::endl;
