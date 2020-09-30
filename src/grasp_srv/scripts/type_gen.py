@@ -11,24 +11,24 @@ if __name__ == "__main__":
     for key, name in name_dict.items():
         grasp_mode = dict()
         if "box" in name or "cube" in name or "block" in name:
-            grasp_mode["basic_types"] = ["box"];
+            grasp_mode["basic_type"] = ["box"];
             grasp_mode["block_list"] = [False, False, False, False, False, False, False, False, False, False, False, False];
             grasp_mode["hard"] = False
         elif "cup" in name or "can" in name:
-            grasp_mode["basic_types"] = ["can"];
+            grasp_mode["basic_type"] = ["can"];
             grasp_mode["block_list"] = [False, False, False, False, False, False, False, False, False, False, False, False];
             grasp_mode["hard"] = False
         elif "plate" in name:
-            grasp_mode["basic_types"] = ["can"];
+            grasp_mode["basic_type"] = ["can"];
             grasp_mode["block_list"] = [True, False, True, True, False, False, False, False, False, False, False, False];
             grasp_mode["hard"] = False
         elif "bottle" in name:
-            grasp_mode["basic_types"] = ["box"];
+            grasp_mode["basic_type"] = ["box"];
             grasp_mode["block_list"] = [False, False, False, False, False, False, False, False, True, True, True, True];
             grasp_mode["hard"] = False
         else:
             # default as box for now
-            grasp_mode["basic_types"] = ["box"];
+            grasp_mode["basic_type"] = ["box"];
             grasp_mode["block_list"] = [False, False, False, False, False, False, False, False, False, False, False, False];
             grasp_mode["hard"] = False
         type_dict[name] = grasp_mode

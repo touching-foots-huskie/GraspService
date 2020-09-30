@@ -14,7 +14,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -34,7 +34,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -54,7 +54,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -74,7 +74,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -94,7 +94,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -114,7 +114,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -134,7 +134,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -154,7 +154,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -174,7 +174,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -194,7 +194,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -214,7 +214,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -234,7 +234,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -254,7 +254,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -274,7 +274,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -294,7 +294,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -314,7 +314,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -334,7 +334,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -354,7 +354,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -374,7 +374,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -394,7 +394,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -414,7 +414,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -434,7 +434,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -454,7 +454,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -474,7 +474,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -494,7 +494,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -514,7 +514,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -534,7 +534,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -554,7 +554,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -574,7 +574,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -594,7 +594,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -614,7 +614,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -634,7 +634,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -654,7 +654,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -674,7 +674,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -694,7 +694,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -714,7 +714,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -734,7 +734,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -754,7 +754,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -774,7 +774,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -794,7 +794,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -814,7 +814,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -834,7 +834,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -854,7 +854,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -874,7 +874,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -894,7 +894,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -914,7 +914,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -934,7 +934,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -954,7 +954,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -974,7 +974,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -994,7 +994,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1014,7 +1014,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1034,7 +1034,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1054,7 +1054,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -1074,7 +1074,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1094,7 +1094,7 @@
             true,
             true
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1114,7 +1114,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -1134,7 +1134,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1154,7 +1154,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1174,7 +1174,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1194,7 +1194,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -1214,7 +1214,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1234,7 +1234,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1254,7 +1254,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1274,7 +1274,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1294,7 +1294,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1314,7 +1314,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1334,7 +1334,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -1354,7 +1354,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1374,7 +1374,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1394,7 +1394,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1414,7 +1414,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1434,7 +1434,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1454,7 +1454,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1474,7 +1474,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1494,7 +1494,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -1514,7 +1514,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -1534,7 +1534,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1554,7 +1554,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "can"
         ],
         "hard": false
@@ -1574,7 +1574,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
@@ -1594,7 +1594,7 @@
             false,
             false
         ],
-        "basic_types": [
+        "basic_type": [
             "box"
         ],
         "hard": false
