@@ -111,7 +111,7 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
     size_h *= scale;
     center_h *= scale;
 
-    int num_slice_h = int(size_h / (2.0*slice_step));
+    int num_slice_h = std::max(int(size_h / (2.0*slice_step)), 1);
     // retreat
     double retreat_r = -size_r + finger_len;
     double retreat_h = -size_h + finger_len;
@@ -223,9 +223,9 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
     double centers[3] = {center_x, center_y, center_z};
 
     // slices
-    int num_slice_x = int(size_x /(2.0 * slice_step));
-    int num_slice_y = int(size_y /(2.0 * slice_step));
-    int num_slice_z = int(size_z /(2.0 * slice_step));
+    int num_slice_x = std::max(int(size_x /(2.0 * slice_step)), 1);
+    int num_slice_y = std::max(int(size_y /(2.0 * slice_step)), 1);
+    int num_slice_z = std::max(int(size_z /(2.0 * slice_step)), 1);
     Eigen::Vector3i num_slices(num_slice_x, num_slice_y, num_slice_z);
 
     // retreat distance
