@@ -30,12 +30,12 @@ block_list: (12,) deciding which grasp pose to block
 */
 void box_grasp(MatrixArray& frame_array, VectorArray& position_array,
                std::string filename, double scale, std::vector<bool>& block_list,
-               double finger_len=0.035, double slice_thresh=0.05, double slice_step=0.01);
+               double finger_len=0.035, double slice_thresh=0.05, double slice_step=0.025);
 /*
 block_list: (3, ) horizontal block, top-down block,  bottom-up block
 */
 void can_grasp(MatrixArray& frame_array, VectorArray& position_array,
                std::string filename, double scale, std::vector<bool>& block_list,
-               double finger_len=0.035, double slice_thresh=0.05, int num_angle=8, double slice_step=0.01);
+               double finger_len=0.035, double slice_thresh=0.05, int num_angle=8, double slice_step=0.025);
 
 #endif

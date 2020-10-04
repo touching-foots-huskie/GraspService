@@ -615,7 +615,7 @@
             false
         ],
         "basic_type": [
-            "box"
+            "can"
         ],
         "hard": false
     },
@@ -1229,10 +1229,10 @@
             false,
             false,
             false,
-            false,
-            false,
-            false,
-            false
+            true,
+            true,
+            true,
+            true
         ],
         "basic_type": [
             "box"
@@ -1295,7 +1295,7 @@
             false
         ],
         "basic_type": [
-            "box"
+            "can"
         ],
         "hard": false
     },

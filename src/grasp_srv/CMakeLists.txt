@@ -332,3 +332,6 @@ catkin_install_python(PROGRAMS scripts/grasp_test.py
 
 install(TARGETS grasp_gen_server 
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+install(DIRECTORY grasp_data/
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/grasp_data)
