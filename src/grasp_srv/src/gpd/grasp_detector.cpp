@@ -885,54 +885,6 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
 
         grasp_srv::GlobalGraspPose global_grasp_msg;
         
-        // Enable geometry pre-defined pose
-        {
-            // model filename
-            std::ostringstream model_path;
-            model_path << model_dir_ 
-                       << model_name << "/visual_meshes/";
-            std::string pcd_file_name = model_path.str() + "cloud.pcd";
-
-            try {
-                // generate grasp pose
-                VectorArray position_array;
-                MatrixArray frame_array;
-                if(box_enable_) {
-                    box_grasp(frame_array, position_array, pcd_file_name, model_scale, block_list);
-                }
-                if(can_enable_) {
-                    can_grasp(frame_array, position_array, pcd_file_name, model_scale, block_list);
-                }
-                // generate msg
-                for(int gi = 0; gi < frame_array.size(); ++gi) {
-                    Eigen::Matrix3d frame = frame_array[gi];
-                    Eigen::Vector3d bottom = position_array[gi];
-                    // Generate Msg
-                    float grasp_width = 0.12;  // default width
-                    generate_msg(global_grasp_msg,  
-                                 model_name, model_scale, grasp_width,
-                                 frame, bottom,
-                                 object_frame_matrix,
-                                 object_position,
-                                 true);
-                    if(flip_enable_) {
-                        // generate another with symmetric over x-axis
-                        Eigen::AngleAxis<double> flip(1.0*M_PI, Eigen::Vector3d(1.,0.,0.));
-                        frame = frame * flip.toRotationMatrix();
-                        generate_msg(global_grasp_msg, 
-                                    model_name, model_scale, grasp_width,
-                                    frame, bottom,
-                                    object_frame_matrix,
-                                    object_position,
-                                    true);
-                    }
-                }
-            }
-            catch(std::exception& e) {
-                ROS_INFO("Fail to generate Geometry Pose.");
-            }
-        }
-
         // Load Predefined Pose
         if(pre_defined_enable_) {
             std::string pose_dir;
@@ -997,6 +949,54 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
             }
             catch(std::exception& e) {
                 ROS_INFO("Fail Pre-defined Pose.");
+            }
+        }
+
+        // Enable geometry pre-defined pose
+        {
+            // model filename
+            std::ostringstream model_path;
+            model_path << model_dir_ 
+                       << model_name << "/visual_meshes/";
+            std::string pcd_file_name = model_path.str() + "cloud.pcd";
+
+            try {
+                // generate grasp pose
+                VectorArray position_array;
+                MatrixArray frame_array;
+                if(box_enable_) {
+                    box_grasp(frame_array, position_array, pcd_file_name, model_scale, block_list);
+                }
+                if(can_enable_) {
+                    can_grasp(frame_array, position_array, pcd_file_name, model_scale, block_list);
+                }
+                // generate msg
+                for(int gi = 0; gi < frame_array.size(); ++gi) {
+                    Eigen::Matrix3d frame = frame_array[gi];
+                    Eigen::Vector3d bottom = position_array[gi];
+                    // Generate Msg
+                    float grasp_width = 0.12;  // default width
+                    generate_msg(global_grasp_msg,  
+                                 model_name, model_scale, grasp_width,
+                                 frame, bottom,
+                                 object_frame_matrix,
+                                 object_position,
+                                 true);
+                    if(flip_enable_) {
+                        // generate another with symmetric over x-axis
+                        Eigen::AngleAxis<double> flip(1.0*M_PI, Eigen::Vector3d(1.,0.,0.));
+                        frame = frame * flip.toRotationMatrix();
+                        generate_msg(global_grasp_msg, 
+                                    model_name, model_scale, grasp_width,
+                                    frame, bottom,
+                                    object_frame_matrix,
+                                    object_position,
+                                    true);
+                    }
+                }
+            }
+            catch(std::exception& e) {
+                ROS_INFO("Fail to generate Geometry Pose.");
             }
         }
 
