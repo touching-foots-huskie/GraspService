@@ -353,7 +353,7 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
                         edge_vector = edge_vector.cwiseProduct(size_vector);
                         double edge_len = edge_vector.norm();
                         std::cout << edge_len << std::endl;
-                        if(edge_len >= finger_len) break;
+                        if(edge_len >= finger_gap) break;
                     }
 
                     position_array.push_back(pose_ij);
