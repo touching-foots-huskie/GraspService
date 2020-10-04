@@ -101,7 +101,8 @@ void can_parse(std::string filename, double& size_r, double& size_h,
 
 // generate grasp pose
 void can_grasp(MatrixArray& frame_array, VectorArray& position_array, std::string filename, 
-               double scale, std::vector<bool>& block_list, double finger_len, double slice_thresh, int num_angle, double slice_step) {
+               double scale, std::vector<bool>& block_list, double finger_len, double finger_gap,
+               int num_angle, double slice_step, bool bb_pruning) {
     // parse information
     double size_r, size_h, center_h;
     AXIS axis;
@@ -163,6 +164,17 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
             for(int j = 0; j < num_slice_h; ++j) {
                 for(int k = 0; k < 2; ++k) {
                     frame = w_rot * rot_z * local_rot;
+
+                    // bb_checking
+                    if(bb_pruning) {
+                        Eigen::Vector3d edge_vector(0.0, 1.0, 0.0);
+                        edge_vector = frame * edge_vector;
+                        Eigen::Vector3d size_vector(size_r, size_r, size_h);
+                        size_vector = w_rot * size_vector;
+                        edge_vector = edge_vector.cwiseProduct(size_vector);
+                        if(edge_vector.norm() >= finger_gap) break;
+                    }
+
                     frame_array.push_back(frame);
                     position(2) = signs[k] * double(j) * slice_step + center_h;
                     rot_position = frame * position;
@@ -196,6 +208,17 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
             else
                 position(0) = -size_h/2.0 - center_h - retreat_h;
             rot_position = frame * position;
+
+            // bb_checking
+            if(bb_pruning) {
+                Eigen::Vector3d edge_vector(0.0, 1.0, 0.0);
+                edge_vector = frame * edge_vector;
+                Eigen::Vector3d size_vector(size_r, size_r, size_h);
+                size_vector = w_rot * size_vector;
+                edge_vector = edge_vector.cwiseProduct(size_vector);
+                if(edge_vector.norm() >= finger_gap) break;
+            }
+
             frame_array.push_back(frame);
             position_array.push_back(rot_position);
         }
@@ -206,7 +229,8 @@ void can_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
 
 // ReIm: generate grasp pose
 void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::string filename, 
-               double scale, std::vector<bool>& block_list, double finger_len, double slice_thresh, double slice_step) {
+               double scale, std::vector<bool>& block_list, double finger_len, double finger_gap,
+               double slice_step, bool bb_pruning) {
     // parse information
     double size_x, size_y, size_z;
     double center_x, center_y, center_z;
@@ -320,6 +344,16 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
                             pose_ij = pose_ij - retreat_vector * retreat_len;
                         }
                     }
+
+                    // bb_checking
+                    if(bb_pruning) {
+                        Eigen::Vector3d edge_vector(0.0, 1.0, 0.0);
+                        edge_vector = frame_ij * edge_vector;
+                        Eigen::Vector3d size_vector(sizes[0], sizes[1], sizes[2]);
+                        edge_vector = edge_vector.cwiseProduct(size_vector);
+                        if(edge_vector.norm() >= 0.12) break;
+                    }
+
                     position_array.push_back(pose_ij);
                     frame_array.push_back(frame_ij);
                     if(k == 0) break;  // not repeating k==0
