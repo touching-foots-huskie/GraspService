@@ -33,6 +33,7 @@
 #define GRASP_DETECTOR_H_
 
 // System
+#include <cmath>
 #include <algorithm>
 #include <memory>
 #include <vector>

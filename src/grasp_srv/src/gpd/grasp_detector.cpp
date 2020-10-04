@@ -914,7 +914,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                  frame, bottom,
                                  object_frame_matrix,
                                  object_position,
-                                 false);
+                                 true);
                     if(flip_enable_) {
                         // generate another with symmetric over x-axis
                         Eigen::AngleAxis<double> flip(1.0*M_PI, Eigen::Vector3d(1.,0.,0.));
@@ -924,7 +924,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                     frame, bottom,
                                     object_frame_matrix,
                                     object_position,
-                                    false);
+                                    true);
                     }
                 }
             }
@@ -978,7 +978,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                  frame, bottom,
                                  object_frame_matrix,
                                  object_position,
-                                 false,
+                                 true,
                                  relative_scale);
                     if(flip_enable_) {
                         // generate another with symmetric over x-axis
@@ -989,7 +989,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                     frame, bottom,
                                     object_frame_matrix,
                                     object_position,
-                                    false,
+                                    true,
                                     relative_scale);
                     }
                 }
@@ -1051,7 +1051,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                 frame, bottom,
                                 object_frame_matrix,
                                 object_position,
-                                false);
+                                true);
                     if(flip_enable_) {
                         // generate another with symmetric over x-axis
                         Eigen::AngleAxis<double> flip(1.0*M_PI, Eigen::Vector3d(1.,0.,0.));
@@ -1061,7 +1061,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                                     frame, bottom,
                                     object_frame_matrix,
                                     object_position,
-                                    false);
+                                    true);
                     }
                 }
             }
@@ -1118,7 +1118,7 @@ void GraspDetector::generate_msg(grasp_srv::GlobalGraspPose& global_grasp_msg,
     if(enable_filter) {
         bool reachable = false;
         double grasp_z = ori_vector.z();
-        if(grasp_z < 0) {
+        if(grasp_z < std::sin(M_PI/180.*30.)) {
             reachable = true;
         }
 
