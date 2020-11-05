@@ -14,7 +14,7 @@ if __name__ == "__main__":
             grasp_mode["basic_type"] = ["box"];
             grasp_mode["block_list"] = [False, False, False, False, False, False, False, False, False, False, False, False];
             grasp_mode["hard"] = False
-        elif "cup" in name or "can" in name:
+        elif "cup" in name or "can" in name or "cocacola" in name or "pepsi" in name or "redbull" in name:
             grasp_mode["basic_type"] = ["can"];
             grasp_mode["block_list"] = [False, False, False, False, False, False, False, False, False, False, False, False];
             grasp_mode["hard"] = False
