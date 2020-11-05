@@ -11,15 +11,14 @@ inline bool exists_file(const std::string& name) {
 
 
 // Constructor
-GraspVisualizer::GraspVisualizer(QWidget* parent) : QWidget(parent) {
+GraspVisualizer::GraspVisualizer(std::string grasp_dir, QWidget* parent) : QWidget(parent) {
     // data initialization
     model_id_ = "0";
     model_name_ = "";
-    model_scale_ = 0.5;
+    model_scale_ = 1.0;
     grasp_mode_ = "box";
-    data_path_ = "/root/ocrtoc_materials";
-    grasp_path_ = "/root/GraspService/src/grasp_srv/grasp_data/";
 
+    grasp_path_ = grasp_dir;
     // initialize publisher
     grasp_pose_pub_ = nh_.advertise<geometry_msgs::Pose>("grasp_pose", 1);
     // object publisher

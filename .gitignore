@@ -5,3 +5,5 @@ devel/*
 src/grasp_srv/kinect_data/*
 .vscode/
 .catkin_workspace
+*.png
+*.jpg

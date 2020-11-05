@@ -12,17 +12,17 @@
 
 int main(int argc, char **argv)
 {
-  if(!ros::isInitialized())
-  {
-    ros::init(argc, argv, "visualizer", ros::init_options::AnonymousName);
-  }
+    if(!ros::isInitialized())
+    {
+        ros::init(argc, argv, "visualizer", ros::init_options::AnonymousName);
+    }
 
-  QApplication app(argc, argv);
+    QApplication app(argc, argv);
 
-  Visualizer* myviz = new Visualizer();
-  myviz->show();
+    Visualizer* myviz = new Visualizer();
+    myviz->show();
 
-  app.exec();
+    app.exec();
 
-  delete myviz;
+    delete myviz;
 }

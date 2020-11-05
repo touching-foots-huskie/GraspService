@@ -363,3 +363,132 @@ void box_grasp(MatrixArray& frame_array, VectorArray& position_array, std::strin
         }
     }
 }
+
+
+// generate grasp pose
+void bowl_grasp(MatrixArray& frame_array, VectorArray& position_array, 
+                std::string filename, double scale, double finger_len, double finger_gap, int num_angle) {
+    // parse information
+    double size_r, size_h, center_h;
+    AXIS axis;
+    can_parse(filename, size_r, size_h, center_h, axis);
+    // rescale size
+    size_r *= scale;
+    size_h *= scale;
+    center_h *= scale;
+    double size_d = std::sqrt(size_h*size_h + size_r*size_r/4.0);
+    double bottom = center_h - (size_h/2.0);
+    Eigen::Vector3d bottom_vector;
+    bottom_vector << 0., 0., bottom;
+
+    double angle_y = std::atan2(size_r/2., size_h);
+    double size_retreat = size_d - std::tan(angle_y) * finger_gap / 2.;
+    double retreat_d = -size_retreat + finger_len;
+    Eigen::Vector3d retreat_vector(1., 0., 0.);
+
+    // choose axis
+    Eigen::Matrix3d w_rot = Eigen::Matrix3d::Identity();
+    switch (axis)
+    {
+    case x_axis:
+        w_rot = Eigen::AngleAxisd(-M_PI/2.0, Eigen::Vector3d::UnitY());
+        break;
+    case y_axis:
+        w_rot = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitX());
+        break;
+    case z_axis:
+        break;
+    default:
+        break;
+    }
+    // grasp along +r-axis 
+    for(int i = 0; i < num_angle; ++i)
+    {
+        Eigen::Matrix3d rot_z, rot_y, rot_x;
+        double angle = double(i) / double(num_angle) * 2.0 * M_PI;
+        rot_z = Eigen::AngleAxisd(angle, Eigen::Vector3d::UnitZ());
+
+        // vertical
+        rot_y = Eigen::AngleAxisd(M_PI/2.0-angle_y, Eigen::Vector3d::UnitY());
+        rot_x = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitX());
+        Eigen::Matrix3d frame = w_rot * rot_z * rot_y * rot_x;
+        // retreat
+        Eigen::Vector3d position = Eigen::Vector3d::Zero();
+        if(size_retreat > finger_len) 
+            position(0) =  - size_d;
+        else
+            position(0) = - size_d - retreat_d;
+        Eigen::Vector3d rot_position = frame * position;
+        rot_position += w_rot * bottom_vector;
+        frame_array.push_back(frame);
+        position_array.push_back(rot_position);
+        
+    }
+    return;
+}
+
+
+// generate grasp pose
+void square_bowl_grasp(MatrixArray& frame_array, VectorArray& position_array, 
+                       std::string filename, double scale, std::vector<bool>& block_list, double finger_len, double finger_gap, int num_angle) {
+    // parse information
+    double size_x, size_y, size_z;
+    double center_x, center_y, center_z;
+    box_parse(filename, size_x, size_y, size_z, center_x, center_y, center_z);
+    
+    // rescale size & centers
+    size_x *= scale;
+    size_y *= scale;
+    size_z *= scale;
+    center_x *= scale;
+    center_y *= scale;
+    center_z *= scale;
+
+    // frames & poses
+    MatrixArray frames;
+    VectorArray poses;
+
+    Eigen::Vector3d position;
+    position << center_x, center_y + size_y/2., center_z + size_z/2.;
+    poses.push_back(position);
+    position << center_x + size_x/2., center_y, center_z + size_z/2.;
+    poses.push_back(position);
+    position << center_x, center_y - size_y/2., center_z + size_z/2.;
+    poses.push_back(position);
+    position << center_x - size_x/2., center_y, center_z + size_z/2.;
+    poses.push_back(position);
+    
+    // local rot
+    MatrixArray rot_xs;
+    Eigen::Matrix3d id_x = Eigen::Matrix3d::Identity();
+    Eigen::Matrix3d rot_x;
+    rot_x = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitX());
+    rot_xs.push_back(id_x);
+    rot_xs.push_back(rot_x);
+
+    // frame
+    Eigen::Matrix3d frame;
+    frame = Eigen::AngleAxisd(M_PI/2.0, Eigen::Vector3d::UnitY());
+
+    double retreat_len;
+    for(int i = 0; i < 2; ++i) {    
+        for(int j = 0; j < 2; ++j) {
+            // block grasp pose
+            if(block_list[2*i+j]) continue;
+            Eigen::Matrix3d local_rot = rot_xs[j];
+            Eigen::Matrix3d frame_ij = frame * local_rot;
+            Eigen::Vector3d pose_ij = poses[2*i+j];
+            if(finger_len < size_z/2.) {
+                // no retreat
+                retreat_len = 0.;
+            }
+            else {
+                retreat_len = -size_z/2. + finger_len;
+            }
+            pose_ij(2) += retreat_len;
+            position_array.push_back(pose_ij);
+            frame_array.push_back(frame_ij);
+        }
+    }
+    return;
+}

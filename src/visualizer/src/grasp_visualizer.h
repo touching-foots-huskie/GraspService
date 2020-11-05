@@ -71,7 +71,7 @@ class GraspVisualizer: public QWidget
 {
 Q_OBJECT
 public:
-    GraspVisualizer(QWidget* parent = 0);
+    GraspVisualizer(std::string grasp_dir, QWidget* parent = 0);
     virtual ~GraspVisualizer();
     // render and save image
     void render_grasp(int grasp_id);

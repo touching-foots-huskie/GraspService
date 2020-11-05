@@ -804,6 +804,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
         box_enable_ = false;
         can_enable_ = false;
         bowl_enable_ = false;
+        square_bowl_enable_ = false;
         gpd_enable_ = false;
         pre_defined_enable_ = false;
         block_list = {false, false, false, false, false, false, false, false, false, false, false, false};
@@ -816,6 +817,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 if(basic_type == "box") box_enable_ = true;
                 if(basic_type == "can") can_enable_ = true;
                 if(basic_type == "bowl") bowl_enable_ = true;
+                if(basic_type == "square_bowl") square_bowl_enable_ = true;
                 if(basic_type == "gpd") gpd_enable_ = true;
                 if(basic_type == "pre_defined") pre_defined_enable_ = true;
             }
@@ -831,6 +833,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 box_enable_ = true;
                 can_enable_ = false;
                 bowl_enable_ = false;
+                square_bowl_enable_ = false;
                 gpd_enable_ = false;
                 pre_defined_enable_ = false;
                 block_list = {false, false, false, false, false, false, false, false, false, false, false, false};
@@ -840,6 +843,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 box_enable_ = false;
                 can_enable_ = true;
                 bowl_enable_ = false;
+                square_bowl_enable_ = false;
                 gpd_enable_ = false;
                 pre_defined_enable_ = false;
                 block_list = {false, false, false, false, false, false, false, false, false, false, false, false};
@@ -848,6 +852,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 box_enable_ = false;
                 can_enable_ = true;
                 bowl_enable_ = false;
+                square_bowl_enable_ = false;
                 gpd_enable_ = false;
                 pre_defined_enable_ = false;
                 block_list = {true, false, true, true, false, false, false, false, false, false, false, false};
@@ -856,6 +861,7 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 box_enable_ = true;
                 can_enable_ = false;
                 bowl_enable_ = false;
+                square_bowl_enable_ = false;
                 gpd_enable_ = false;
                 pre_defined_enable_ = false;
                 block_list = {false, false, false, false, false, false, false, false, true, true, true, true};
@@ -865,11 +871,17 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 box_enable_ = true;
                 can_enable_ = false;
                 bowl_enable_ = false;
-                gpd_enable_ = true;
+                square_bowl_enable_ = false;
+                gpd_enable_ = false;
                 pre_defined_enable_ = false;
                 block_list = {false, false, false, false, false, false, false, false, false, false, false, false};
             }
         }
+        std::cout << "Box : " << box_enable_ << std::endl;
+        std::cout << "Can : " << can_enable_ << std::endl;
+        std::cout << "Bowl : " << bowl_enable_ << std::endl;
+        std::cout << "Square Bowl : " << square_bowl_enable_ << std::endl;
+        std::cout << "GPD : " << gpd_enable_ << std::endl;
         
         double model_scale = req.object_poses.object_scales[obj_i];
         // Get Object Pose  
@@ -912,19 +924,20 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 json_file.close();
 
                 // Save pose_datas into msg
-                for(auto& [key, pose_data] : pose_datas_json.items()) {
-                    Eigen::Vector3d bottom(pose_data[0],
-                                           pose_data[1],
-                                           pose_data[2]);
-                    Eigen::Quaternion<double> frame_quat(pose_data[6],
-                                                         pose_data[3],
-                                                         pose_data[4],
-                                                         pose_data[5]);
+                for(auto& el : pose_datas_json.items()) {
+
+                    Eigen::Vector3d bottom(el.value()[0],
+                                           el.value()[1],
+                                           el.value()[2]);
+                    Eigen::Quaternion<double> frame_quat(el.value()[6],
+                                                         el.value()[3],
+                                                         el.value()[4],
+                                                         el.value()[5]);
                     Eigen::Matrix3d frame = frame_quat.matrix();
-                    double pre_scale = pose_data[7];
+                    double pre_scale = el.value()[7];
                     double relative_scale = model_scale / pre_scale;
                     // Generate Msg
-                    float grasp_width = pose_data[8];
+                    float grasp_width = el.value()[8];
                     generate_msg(global_grasp_msg, 
                                  model_name, model_scale, grasp_width,
                                  frame, bottom,
@@ -969,6 +982,12 @@ bool GraspDetector::grasp_gen(grasp_srv::GraspGen::Request  &req,
                 }
                 if(can_enable_) {
                     can_grasp(frame_array, position_array, pcd_file_name, model_scale, block_list);
+                }
+                if(bowl_enable_) {
+                    bowl_grasp(frame_array, position_array, pcd_file_name, model_scale);
+                }
+                if(square_bowl_enable_) {
+                    square_bowl_grasp(frame_array, position_array, pcd_file_name, model_scale, block_list);
                 }
                 // generate msg
                 for(int gi = 0; gi < frame_array.size(); ++gi) {

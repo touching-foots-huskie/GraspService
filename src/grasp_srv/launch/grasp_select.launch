@@ -11,7 +11,7 @@
         args="$(find grasp_srv) $(arg MODEL_PATH) $(arg GRASP_PATH)" output="screen"/>   
     
     <node name="grasp_visualizer" pkg="grasp_visualizer" type="grasp_visualizer"
-        output="screen"/>
+        args="$(arg GRASP_PATH)" output="screen"/>
 
     <node name="render_object" pkg="grasp_srv" type="render_object" 
         args="$(arg MODEL_PATH)" output="screen"/> 
@@ -103,6 +103,6 @@
     </rosparam>
     </group>
 
-    <!-- run rviz -->
-    <node name="rviz" pkg="rviz" type="rviz"/>
+    <!-- run rviz --> 
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find grasp_visualizer)/grasp.rviz"/>
 </launch>

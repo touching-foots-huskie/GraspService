@@ -12,17 +12,19 @@
 
 int main(int argc, char **argv)
 {
-  if(!ros::isInitialized())
-  {
-    ros::init(argc, argv, "grasp_visualizer", ros::init_options::AnonymousName);
-  }
+    std::string grasp_dir(argv[1]);
 
-  QApplication app(argc, argv);
+    if(!ros::isInitialized())
+    {
+        ros::init(argc, argv, "grasp_visualizer", ros::init_options::AnonymousName);
+    }
 
-  GraspVisualizer* myviz = new GraspVisualizer();
-  myviz->show();
+    QApplication app(argc, argv);
 
-  app.exec();
+    GraspVisualizer* myviz = new GraspVisualizer(grasp_dir);
+    myviz->show();
 
-  delete myviz;
+    app.exec();
+
+    delete myviz;
 }
